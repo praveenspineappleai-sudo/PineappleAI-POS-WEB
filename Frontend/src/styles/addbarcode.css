@@ -1,0 +1,153 @@
+/* Add Barcode Popup Overlay */
+.addbarcode-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001; /* Higher than new barcode popup */
+}
+
+/* Popup Container */
+.addbarcode-popup-container {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Close Button */
+.addbarcode-popup-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.addbarcode-popup-close:hover {
+  color: #333;
+}
+
+/* Popup Content */
+.addbarcode-popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Title */
+.addbarcode-popup-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  padding-right: 30px; /* Space for close button */
+}
+
+/* Subtitle */
+.addbarcode-popup-subtitle {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Input Group */
+.addbarcode-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Label */
+.addbarcode-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Input Field */
+.addbarcode-input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.addbarcode-input:focus {
+  border-color: #4a7c59;
+}
+
+.addbarcode-input::placeholder {
+  color: #aaa;
+}
+
+/* Save Button */
+.addbarcode-save-button {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  color: white;
+  background-color: #4a7c59;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.addbarcode-save-button:hover {
+  background-color: #3d6647;
+}
+
+.addbarcode-save-button:active {
+  background-color: #2f5036;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .addbarcode-popup-container {
+    padding: 25px 20px;
+    width: 95%;
+  }
+
+  .addbarcode-popup-title {
+    font-size: 16px;
+  }
+
+  .addbarcode-popup-subtitle {
+    font-size: 13px;
+  }
+
+  .addbarcode-input {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .addbarcode-save-button {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+}

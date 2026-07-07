@@ -1,0 +1,856 @@
+/* Email Verification Popup Styles */
+.email-verification-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.email-verification-container {
+  background: #FFFFFF;
+  width: 500px;
+  height: 300px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.email-verification-header {
+  padding: 6px 16px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.email-verification-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.email-verification-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9ca3af;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.email-verification-close:hover {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.email-verification-content {
+  padding: 5px 20px 4px 16px;
+  flex: 1;
+}
+
+.email-verification-content p {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: #757575;
+  line-height: 1.4;
+}
+
+.email-highlight {
+  font-weight: 600;
+  color: #111827;
+}
+
+.verification-input-group {
+  margin-bottom: 10px;
+}
+
+.verification-input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+}
+
+.code-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.code-input-container input {
+  width: 100%;
+  padding: 10px 32px 6px 10px;
+  border: 1px solid #2F7A3F;
+  opacity: 50%;
+  border-radius: 6px;
+  font-size: 14px;
+  letter-spacing: 4px;
+  text-align: left;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+  background: #f9fafb;
+}
+
+.code-input-container input:focus {
+  outline: none;
+  background: white;
+  border-color: #2F7A3F;
+  box-shadow: 0 0 0 3px rgba(47, 122, 63, 0.1);
+}
+
+.eye-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.eye-icon:hover {
+  opacity: 0.8;
+}
+
+.verification-footer {
+  margin-top: 8px;
+}
+
+.timer-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.timer {
+  font-size: 13px;
+  color: #757575;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.timer strong {
+  color: #000000;
+  font-weight: 600;
+}
+
+.resend-link {
+  font-size: 13px;
+  margin: 0;
+  color: #757575;
+  line-height: 1.4;
+}
+
+.resend-button {
+  background: none;
+  border: none;
+  color: #2F7A3F;
+  cursor: pointer;
+  font-weight: 400;
+  padding: 0;
+  font-size: 13px;
+}
+
+.resend-button strong {
+  font-weight: 600;
+}
+
+.verification-action {
+  padding: 0px 16px 30px;
+  margin-top: auto;
+}
+
+.verify-button-wrapper.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Override ProceedOrderButton styles */
+.verification-action .btn-process-order {
+  width: 100%;
+}
+
+.verification-action .btn-process-order:hover {
+  background-color: #225e2f !important;
+  border-color: #225e2f !important;
+}
+
+/* Create New Password Popup Styles */
+.create-password-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.create-password-container {
+  background: #FFFFFF;
+  width: 500px;
+  height: 250px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.create-password-header {
+  padding: 6px 16px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.create-password-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.create-password-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9ca3af;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.create-password-close:hover {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.create-password-content {
+  padding: 6px 16px 10px 16px;
+  flex: 1;
+}
+
+.create-password-content p {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  color: #757575;
+  line-height: 1.4;
+}
+
+.password-input-group {
+  margin-bottom: 15px;
+}
+
+.password-input-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+}
+
+.password-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-container input {
+  width: 100%;
+  padding: 8px 32px 8px 10px;
+  border: 1px solid #2F7A3F;
+  opacity: 50%;
+  border-radius: 8px;
+  font-size: 11px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+  background: #f9fafb;
+}
+
+.password-input-container input:focus {
+  outline: none;
+  background: white;
+  border-color: #2F7A3F;
+  box-shadow: 0 0 0 3px rgba(47, 122, 63, 0.1);
+}
+
+/* Password Actions Styles */
+.password-actions {
+  margin-top: 15px;
+}
+
+.password-action-buttons {
+  display: flex;
+  gap: 250px;
+  align-items: center;
+}
+
+.suggest-password-btn,
+.copy-password-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0px 0px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #2F7A3F;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.suggest-password-btn:hover,
+.copy-password-btn:hover {
+  color: #2F7A3F;
+}
+
+.copy-password-btn:disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.copy-password-btn:disabled:hover {
+  background-color: transparent;
+  color: #9ca3af;
+}
+
+.copy-password-container {
+  position: relative;
+  display: inline-block;
+}
+
+.password-copied-message {
+  position: absolute;
+  top: -30px;
+  right: 0;
+  color: #2F7A3F;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 8px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.action-icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+  opacity: 0.8;
+}
+
+.suggest-password-btn:hover .action-icon,
+.copy-password-btn:hover .action-icon {
+  opacity: 1;
+}
+
+.copy-password-btn:disabled .action-icon {
+  opacity: 0.5;
+}
+
+.copy-message {
+  font-size: 12px;
+  color: #2F7A3F;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.create-password-action {
+  padding: 0px 10px 30px;
+  margin-top: 0;
+}
+
+.create-password-button-wrapper {
+  width: 100%;
+}
+
+.create-password-button-wrapper.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Override ProceedOrderButton styles */
+.create-password-action .btn-process-order {
+  width: 100%;
+}
+
+.create-password-action .btn-process-order:hover {
+  background-color: #225e2f !important;
+  border-color: #225e2f !important;
+}
+
+/* Responsive adjustments for email verification */
+/* 1440px - Large Desktop */
+@media (max-width: 1440px) {
+  .email-verification-container {
+    width: 480px;
+    height: 300px;
+  }
+
+  .create-password-container {
+    width: 480px;
+    height: 270px;
+  }
+
+  .email-verification-header h2,
+  .create-password-header h2 {
+    font-size: 15.5px;
+  }
+
+  .code-input-container input {
+    font-size: 13.5px;
+    padding: 9px 30px 5px 9px;
+  }
+
+  .password-input-container input {
+    font-size: 10.5px;
+    padding: 7px 30px 7px 9px;
+  }
+}
+
+/* 1024px - Small Desktop/Tablet Landscape */
+@media (max-width: 1024px) {
+  .email-verification-container {
+    width: 460px;
+    height: 290px;
+  }
+
+  .create-password-container {
+    width: 460px;
+    height: 260px;
+  }
+
+  .email-verification-content,
+  .create-password-content {
+    padding: 4px 18px 6px 14px;
+  }
+
+  .email-verification-content p,
+  .create-password-content p {
+    font-size: 10.5px;
+  }
+
+  .verification-input-group label,
+  .password-input-group label {
+    font-size: 13.5px;
+  }
+
+  .code-input-container input {
+    font-size: 13px;
+    padding: 8px 28px 4px 8px;
+  }
+
+  .password-input-container input {
+    font-size: 10px;
+    padding: 7px 28px 7px 8px;
+  }
+
+  .password-action-buttons {
+    gap: 180px;
+    /* Reduced from 220px */
+  }
+}
+
+/* 900px - Tablet */
+@media (max-width: 900px) {
+  .email-verification-container {
+    width: 440px;
+    height: 280px;
+  }
+
+  .create-password-container {
+    width: 440px;
+    height: 250px;
+  }
+
+  .email-verification-header,
+  .create-password-header {
+    padding: 5px 14px;
+  }
+
+  .email-verification-header h2,
+  .create-password-header h2 {
+    font-size: 15px;
+  }
+
+  .email-verification-content p,
+  .create-password-content p {
+    font-size: 10px;
+  }
+
+  .verification-input-group label,
+  .password-input-group label {
+    font-size: 13px;
+  }
+
+  .code-input-container input {
+    font-size: 12.5px;
+    padding: 8px 26px 4px 8px;
+  }
+
+  .password-input-container input {
+    font-size: 9.5px;
+    padding: 6px 26px 6px 8px;
+  }
+
+  .password-action-buttons {
+    gap: 160px;
+  }
+
+  .suggest-password-btn,
+  .copy-password-btn {
+    font-size: 11.5px;
+  }
+}
+
+/* 768px - Tablet Portrait */
+@media (max-width: 768px) {
+  .email-verification-container {
+    width: 400px;
+    height: 270px;
+  }
+
+  .create-password-container {
+    width: 400px;
+    height: 240px;
+  }
+
+  .email-verification-header,
+  .create-password-header {
+    padding: 5px 12px;
+  }
+
+  .email-verification-header h2,
+  .create-password-header h2 {
+    font-size: 14.5px;
+  }
+
+  .email-verification-content,
+  .create-password-content {
+    padding: 4px 16px 6px 12px;
+  }
+
+  .email-verification-content p,
+  .create-password-content p {
+    font-size: 9.5px;
+    margin-bottom: 8px;
+  }
+
+  .verification-input-group label,
+  .password-input-group label {
+    font-size: 12.5px;
+  }
+
+  .code-input-container input {
+    font-size: 12px;
+    padding: 7px 24px 3px 7px;
+    letter-spacing: 3px;
+  }
+
+  .password-input-container input {
+    font-size: 9px;
+    padding: 6px 24px 6px 7px;
+  }
+
+  .password-action-buttons {
+    gap: 140px;
+  }
+
+  .suggest-password-btn,
+  .copy-password-btn {
+    font-size: 11px;
+    padding: 6px 0px;
+  }
+
+  .action-icon {
+    width: 11px;
+    height: 11px;
+  }
+
+  .verification-action,
+  .create-password-action {
+    padding: 0px 12px 25px;
+  }
+
+  .verification-action .btn-process-order,
+  .create-password-action .btn-process-order {
+    height: 33px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* 480px - Mobile Landscape */
+@media (max-width: 480px) {
+  .email-verification-container {
+    width: 360px;
+    height: 260px;
+  }
+
+  .create-password-container {
+    width: 360px;
+    height: 230px;
+  }
+
+  .email-verification-header,
+  .create-password-header {
+    padding: 4px 10px;
+  }
+
+  .email-verification-header h2,
+  .create-password-header h2 {
+    font-size: 14px;
+  }
+
+  .email-verification-content,
+  .create-password-content {
+    padding: 3px 14px 5px 10px;
+  }
+
+  .email-verification-content p,
+  .create-password-content p {
+    font-size: 9px;
+    margin-bottom: 7px;
+  }
+
+  .verification-input-group label,
+  .password-input-group label {
+    font-size: 12px;
+    margin-bottom: 3px;
+  }
+
+  .code-input-container input {
+    font-size: 11.5px;
+    padding: 6px 22px 2px 6px;
+    letter-spacing: 2px;
+  }
+
+  .password-input-container input {
+    font-size: 8.5px;
+    padding: 5px 22px 5px 6px;
+  }
+
+  .eye-icon {
+    width: 14px;
+    height: 14px;
+    right: 10px;
+  }
+
+  .password-action-buttons {
+    gap: 120px;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .suggest-password-btn,
+  .copy-password-btn {
+    font-size: 10.5px;
+    padding: 5px 0px;
+  }
+
+  .action-icon {
+    width: 10px;
+    height: 10px;
+  }
+
+  .timer,
+  .resend-link {
+    font-size: 11px;
+  }
+
+  .resend-button {
+    font-size: 11px;
+  }
+
+  .verification-action,
+  .create-password-action {
+    padding: 0px 10px 20px;
+  }
+
+  .verification-action .btn-process-order,
+  .create-password-action .btn-process-order {
+    height: 32px !important;
+    font-size: 12.5px !important;
+  }
+}
+
+/* 360px - Mobile Portrait */
+@media (max-width: 360px) {
+  .email-verification-container {
+    width: 320px;
+    height: 250px;
+  }
+
+  .create-password-container {
+    width: 320px;
+    height: 220px;
+  }
+
+  .email-verification-header,
+  .create-password-header {
+    padding: 3px 8px;
+  }
+
+  .email-verification-header h2,
+  .create-password-header h2 {
+    font-size: 13.5px;
+  }
+
+  .email-verification-content,
+  .create-password-content {
+    padding: 3px 12px 4px 8px;
+  }
+
+  .email-verification-content p,
+  .create-password-content p {
+    font-size: 8.5px;
+    margin-bottom: 6px;
+  }
+
+  .verification-input-group label,
+  .password-input-group label {
+    font-size: 11.5px;
+  }
+
+  .code-input-container input {
+    font-size: 11px;
+    padding: 5px 20px 1px 5px;
+    letter-spacing: 1px;
+  }
+
+  .password-input-container input {
+    font-size: 8px;
+    padding: 4px 20px 4px 5px;
+  }
+
+  .eye-icon {
+    width: 13px;
+    height: 13px;
+    right: 8px;
+  }
+
+  .password-action-buttons {
+    gap: 100px;
+  }
+
+  .suggest-password-btn,
+  .copy-password-btn {
+    font-size: 10px;
+    padding: 4px 0px;
+  }
+
+  .action-icon {
+    width: 9px;
+    height: 9px;
+  }
+
+  .timer,
+  .resend-link {
+    font-size: 10px;
+  }
+
+  .resend-button {
+    font-size: 10px;
+  }
+
+  .password-copied-message {
+    font-size: 10px;
+    top: -25px;
+    padding: 3px 6px;
+  }
+
+  .verification-action,
+  .create-password-action {
+    padding: 0px 8px 15px;
+  }
+
+  .verification-action .btn-process-order,
+  .create-password-action .btn-process-order {
+    height: 30px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 320px) {
+  .email-verification-container {
+    width: 300px;
+    height: 240px;
+  }
+
+  .create-password-container {
+    width: 300px;
+    height: 210px;
+  }
+
+  .email-verification-header h2,
+  .create-password-header h2 {
+    font-size: 13px;
+  }
+
+  .email-verification-content p,
+  .create-password-content p {
+    font-size: 8px;
+  }
+
+  .verification-input-group label,
+  .password-input-group label {
+    font-size: 11px;
+  }
+
+  .code-input-container input {
+    font-size: 10.5px;
+    padding: 4px 18px 0px 4px;
+  }
+
+  .password-input-container input {
+    font-size: 7.5px;
+    padding: 3px 18px 3px 4px;
+  }
+
+  .password-action-buttons {
+    gap: 80px;
+  }
+
+  .suggest-password-btn,
+  .copy-password-btn {
+    font-size: 9.5px;
+  }
+
+  .verification-action .btn-process-order,
+  .create-password-action .btn-process-order {
+    height: 28px !important;
+    font-size: 11.5px !important;
+  }
+}

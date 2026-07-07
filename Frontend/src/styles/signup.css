@@ -1,0 +1,255 @@
+.signup-container {
+  padding: 10px;
+  max-width: 1500px;
+  margin: 0 auto;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup-stepper {
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.signup-form {
+  max-width: 560px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.form-card {
+  width: 640px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  height: auto;
+  min-height: 280px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-group:last-of-type {
+  margin-bottom: 30px;
+}
+
+.input-label {
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(47, 122, 63, 0.5);
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-field:focus {
+  outline: none !important;
+  border-color: #2F7A3F !important;
+  box-shadow: 0 0 0 2px rgba(47, 122, 63, 0.1) !important;
+}
+
+.input-field::placeholder {
+  color: #999;
+  font-weight: 400;
+}
+
+/* Error message styling */
+.error-message {
+  color: #d32f2f;
+  font-size: 14px;
+  margin-top: 4px;
+  display: block;
+}
+
+.input-field.error {
+  border-color: #d32f2f !important;
+}
+
+/* Navigation Buttons - Vertical layout with Next on top, Back button below */
+.form-navigation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+  width: 100%;
+  gap: 20px;
+}
+
+/* Make the Next button (ProcessOrderButton) full width - FIXED SELECTOR */
+.form-navigation > button:first-child {
+  width: 100%;
+  max-width: none;
+}
+
+.form-navigation button:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(47, 122, 63, 0.2) !important;
+}
+
+/* Previous button style - plain text without border like email verification page */
+.previous-btn {
+  background: none;
+  border: none;
+  color: #2F7A3F;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.3s ease;
+  width: auto;
+  text-align: center;
+}
+
+.previous-btn:focus {
+  outline: none !important;
+  color: #000000 !important;
+}
+
+.previous-btn:hover:not(:disabled) {
+  color: #000000;
+}
+
+.previous-btn:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Responsive Design for different screen sizes */
+/* 1440px and above - Desktop Large */
+@media (min-width: 1440px) {
+  .form-navigation {
+    gap: 20px;
+  }
+}
+
+/* 1024px - Desktop/Laptop */
+@media (max-width: 1024px) {
+  .form-card {
+    width: 90%;
+    max-width: 640px;
+  }
+
+  .form-navigation > button:first-child {
+    width: 100%;
+  }
+}
+
+/* 900px - Small Desktop/Large Tablet */
+@media (max-width: 900px) {
+  .form-card {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+  }
+
+  .form-navigation > button:first-child {
+    width: 100%;
+  }
+}
+
+/* 768px - Tablet */
+@media (max-width: 768px) {
+  .signup-container {
+    padding: 15px;
+  }
+
+  .form-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 18px;
+  }
+
+  .form-navigation > button:first-child {
+    width: 100%;
+  }
+  
+  .form-navigation {
+    gap: 16px;
+  }
+}
+
+/* 480px - Mobile Large */
+@media (max-width: 480px) {
+  .signup-container {
+    padding: 10px;
+  }
+
+  .form-card {
+    width: 100%;
+    padding: 14px;
+    min-height: auto;
+  }
+
+  .input-field {
+    padding: 12px 16px;
+  }
+
+  .form-navigation > button:first-child {
+    width: 100%;
+    padding: 12px 16px;
+  }
+  
+  .form-navigation {
+    gap: 12px;
+  }
+
+  .previous-btn {
+    padding: 6px;
+    font-size: 15px;
+  }
+}
+
+/* 360px - Mobile Small */
+@media (max-width: 360px) {
+  .signup-container {
+    padding: 8px;
+  }
+
+  .form-card {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .input-field {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .input-label {
+    font-size: 15px;
+  }
+
+  .form-navigation > button:first-child {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  
+  .form-navigation {
+    gap: 10px;
+  }
+
+  .previous-btn {
+    padding: 5px;
+    font-size: 14px;
+  }
+}

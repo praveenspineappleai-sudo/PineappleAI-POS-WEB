@@ -1,0 +1,313 @@
+.signup1-container {
+  padding: 10px;
+  max-width: 1500px;
+  margin: 0 auto;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup1-stepper {
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.signup1-form {
+  max-width: 560px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.form-card1 {
+  width: 640px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  height: auto;
+  min-height: 400px;
+}
+
+.input-group1 {
+  margin-bottom: 20px;
+}
+
+.input-group1:last-of-type {
+  margin-bottom: 30px;
+}
+
+.input-label1 {
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.input-field1 {
+  width: 100%;
+  padding: 12px 45px 12px 16px;
+  border: 1px solid rgba(47, 122, 63, 0.5);
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  background-color: #fff;
+}
+
+.input-field1:focus {
+  outline: none !important;
+  border-color: #2F7A3F !important;
+  box-shadow: 0 0 0 2px rgba(47, 122, 63, 0.1) !important;
+}
+
+.input-field1::placeholder {
+  color: #999;
+}
+
+.input-field1.error {
+  border-color: #ff0000;
+}
+
+.radio-group {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.radio-option input[type="radio"] {
+  margin: 0;
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  accent-color: #2F7A3F;
+}
+
+.radio-option input[type="radio"]:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(47, 122, 63, 0.2) !important;
+  border-radius: 50%;
+}
+
+.radio-text {
+  font-size: 14px;
+  color: #333;
+  user-select: none;
+}
+
+.date-input-wrapper {
+  position: relative;
+  width: 100%;
+  display: inline-block;
+}
+
+.hidden-date-input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.calendar-button {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  height: 40px;
+  width: 37px;
+  background: #FFFFFF;
+  border: none;
+  border-left: 1px solid rgba(47, 122, 63, 0.5);
+  border-radius: 0 7px 7px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.calendar-button:hover {
+  background-color: rgba(47, 122, 63, 0.05);
+  border-left-color: #2F7A3F;
+}
+
+.calendar-button:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(47, 122, 63, 0.2) !important;
+  border-radius: 7px;
+}
+
+.calendar-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background-color: #f5f5f5;
+}
+
+.calendar-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+.form-navigation1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 200px;
+  margin-top: 30px;
+}
+
+.previous-btn {
+  padding: 12px 24px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 160px;
+}
+
+.previous-btn:hover {
+  border-color: #2F7A3F;
+  color: #2F7A3F;
+}
+
+.previous-btn:focus {
+  outline: none !important;
+  border-color: #2F7A3F !important;
+  box-shadow: 0 0 0 3px rgba(47, 122, 63, 0.2) !important;
+}
+
+.form-navigation1 button:last-child {
+  width: 160px;
+}
+
+.form-navigation1 button:last-child:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(47, 122, 63, 0.2) !important;
+}
+
+@media (max-width: 1024px) {
+  .form-card1 {
+    width: 90%;
+    max-width: 640px;
+  }
+  .form-navigation1 {
+    gap: 80px;
+  }
+}
+
+@media (max-width: 900px) {
+  .form-card1 {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+  }
+  .form-navigation1 {
+    gap: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .signup1-container {
+    padding: 15px;
+  }
+  .form-card1 {
+    width: 100%;
+    max-width: 450px;
+    padding: 18px;
+  }
+  .radio-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .form-navigation1 {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .previous-btn,
+  .form-navigation1 button:last-child {
+    width: 100%;
+    max-width: none;
+    flex: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup1-container {
+    padding: 10px;
+  }
+  .form-card1 {
+    width: 100%;
+    padding: 14px;
+  }
+  .radio-group {
+    gap: 10px;
+  }
+  .input-field1 {
+    padding-right: 40px;
+  }
+  .calendar-button {
+    width: 40px;
+    height: 40px;
+  }
+  .previous-btn,
+  .form-navigation1 button:last-child {
+    width: 100%;
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .signup1-container {
+    padding: 8px;
+  }
+  .form-card1 {
+    width: 100%;
+    padding: 12px;
+  }
+  .input-field1 {
+    padding: 10px 38px 10px 12px;
+  }
+  .calendar-button {
+    width: 38px;
+    height: 38px;
+  }
+  .radio-text {
+    font-size: 13px;
+  }
+  .previous-btn,
+  .form-navigation1 button:last-child {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}

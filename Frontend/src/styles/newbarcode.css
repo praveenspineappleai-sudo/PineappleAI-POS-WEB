@@ -1,0 +1,97 @@
+/* Barcode Popup Overlay */
+.barcode-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Popup Container */
+.barcode-popup-container {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Close Button */
+.barcode-popup-close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.barcode-popup-close:hover {
+  color: #333;
+}
+
+/* Popup Content */
+.barcode-popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Message */
+.barcode-popup-message {
+  text-align: center;
+  font-size: 16px;
+  color: #333;
+  margin: 0;
+  font-weight: 500;
+  padding: 10px 0;
+}
+
+/* Action Buttons Container */
+.barcode-popup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Button styling (inherits from buttons.css) */
+.barcode-popup-actions .btn-process-order {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .barcode-popup-container {
+    padding: 25px 20px;
+    width: 95%;
+  }
+
+  .barcode-popup-message {
+    font-size: 14px;
+  }
+
+  .barcode-popup-actions .btn-process-order {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+}

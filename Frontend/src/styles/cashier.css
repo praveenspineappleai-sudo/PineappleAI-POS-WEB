@@ -1,0 +1,555 @@
+/* Add Cashier Popup Styles */
+.add-cashier-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001;
+}
+
+.add-cashier-container {
+  background: #FFFFFF;
+  width: 420px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.add-cashier-header {
+  padding: 8px 16px 4px;
+  text-align: left;
+  position: relative;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.add-cashier-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #000000;
+}
+
+.add-cashier-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #9ca3af;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.add-cashier-close:hover {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.add-cashier-content {
+  padding: 0px 16px;
+}
+
+.add-cashier-section-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #000000;
+}
+
+.add-cashier-section-description {
+  font-size: 10px;
+  font-weight: 500;
+  color: #757575;
+  margin-bottom: 14px;
+  line-height: 100%;
+}
+
+.add-cashier-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-cashier-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-cashier-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: #000000;
+  line-height: 100%;
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.add-cashier-input {
+  padding: 10px 12px;
+  border: 1px solid #2F7A3F;
+  opacity: 50%;
+  border-radius: 6px;
+  font-size: 10px;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #f9fafb;
+}
+
+.add-cashier-input:focus {
+  outline: none;
+  border-color: #2F7A3F;
+  box-shadow: 0 0 0 3px rgba(47, 122, 63, 0.1);
+  background-color: white;
+}
+
+.add-cashier-input::placeholder {
+  color: #9ca3af;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.password-toggle-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+.add-cashier-password-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.add-cashier-suggest-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 11px;
+  font-weight: 500;
+  color: #2F7A3F;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.add-cashier-suggest-btn:hover {
+  color: #256432;
+}
+
+.add-cashier-copy-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 11px;
+  font-weight: 500;
+  color: #2F7A3F;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.add-cashier-copy-btn:hover {
+  color: #256432;
+}
+
+.add-cashier-copy-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.copy-password-container {
+  position: relative;
+  display: inline-block;
+}
+
+.password-copied-message {
+  position: absolute;
+  top: -30px;
+  right: 0;
+  color: #2F7A3F;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 8px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.action-icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+}
+
+.add-cashier-footer {
+  padding: 15px;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add-cashier-submit-btn {
+  display: none;
+}
+
+.add-cashier-footer .btn-process-order {
+  width: 100%;
+  height: 35px;
+  border-radius: 8px;
+}
+
+/* Responsive Design */
+/* 1440px - Large Desktop */
+@media (max-width: 1440px) {
+  .add-cashier-container {
+    width: 400px;
+  }
+  
+  .add-cashier-header h2 {
+    font-size: 15.5px;
+  }
+  
+  .add-cashier-section-title {
+    font-size: 13.5px;
+  }
+  
+  .add-cashier-input {
+    padding: 9px 11px;
+  }
+}
+
+/* 1024px - Small Desktop/Tablet Landscape */
+@media (max-width: 1024px) {
+  .add-cashier-container {
+    width: 380px;
+  }
+  
+  .add-cashier-header {
+    padding: 7px 15px 3px;
+  }
+  
+  .add-cashier-content {
+    padding: 0 15px;
+  }
+  
+  .add-cashier-section-title {
+    font-size: 13px;
+  }
+  
+  .add-cashier-section-description {
+    font-size: 9.5px;
+    margin-bottom: 13px;
+  }
+  
+  .add-cashier-label {
+    font-size: 11.5px;
+  }
+  
+  .add-cashier-input {
+    padding: 9px 11px;
+    font-size: 9.5px;
+  }
+  
+  .add-cashier-suggest-btn,
+  .add-cashier-copy-btn {
+    font-size: 10.5px;
+  }
+}
+
+/* 900px - Tablet */
+@media (max-width: 900px) {
+  .add-cashier-container {
+    width: 360px;
+  }
+  
+  .add-cashier-header h2 {
+    font-size: 15px;
+  }
+  
+  .add-cashier-header {
+    padding: 7px 14px 3px;
+  }
+  
+  .add-cashier-content {
+    padding: 0 14px;
+  }
+  
+  .add-cashier-section-title {
+    font-size: 12.5px;
+  }
+  
+  .add-cashier-section-description {
+    font-size: 9px;
+    margin-bottom: 12px;
+  }
+  
+  .add-cashier-label {
+    font-size: 11px;
+  }
+  
+  .add-cashier-input {
+    padding: 8px 10px;
+    font-size: 9px;
+  }
+  
+  .add-cashier-suggest-btn,
+  .add-cashier-copy-btn {
+    font-size: 10px;
+  }
+  
+  .action-icon {
+    width: 11px;
+    height: 11px;
+  }
+  
+  .add-cashier-footer {
+    padding: 14px;
+  }
+  
+  .add-cashier-footer .btn-process-order {
+    height: 34px;
+  }
+}
+
+/* 768px - Tablet Portrait */
+@media (max-width: 768px) {
+  .add-cashier-container {
+    width: 340px;
+  }
+  
+  .add-cashier-header h2 {
+    font-size: 14.5px;
+  }
+  
+  .add-cashier-header {
+    padding: 6px 13px 2px;
+  }
+  
+  .add-cashier-content {
+    padding: 0 13px;
+  }
+  
+  .add-cashier-section-title {
+    font-size: 12px;
+  }
+  
+  .add-cashier-section-description {
+    font-size: 8.5px;
+    margin-bottom: 11px;
+  }
+  
+  .add-cashier-label {
+    font-size: 10.5px;
+  }
+  
+  .add-cashier-input {
+    padding: 8px 10px;
+    font-size: 8.5px;
+  }
+  
+  .add-cashier-suggest-btn,
+  .add-cashier-copy-btn {
+    font-size: 9.5px;
+  }
+  
+  .action-icon {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .add-cashier-footer {
+    padding: 13px;
+  }
+  
+  .add-cashier-footer .btn-process-order {
+    height: 33px;
+    font-size: 13px;
+  }
+}
+
+/* 480px - Mobile Landscape */
+@media (max-width: 480px) {
+  .add-cashier-overlay {
+    padding: 12px;
+  }
+  
+  .add-cashier-container {
+    width: 320px;
+  }
+  
+  .add-cashier-header h2 {
+    font-size: 14px;
+  }
+  
+  .add-cashier-header {
+    padding: 6px 12px 2px;
+  }
+  
+  .add-cashier-content {
+    padding: 0 12px;
+  }
+  
+  .add-cashier-section-title {
+    font-size: 11.5px;
+  }
+  
+  .add-cashier-section-description {
+    font-size: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .add-cashier-label {
+    font-size: 10px;
+  }
+  
+  .add-cashier-input {
+    padding: 7px 9px;
+    font-size: 8px;
+  }
+  
+  .add-cashier-password-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .add-cashier-suggest-btn,
+  .add-cashier-copy-btn {
+    font-size: 9px;
+  }
+
+  .add-cashier-copy-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 11px;
+  font-weight: 500;
+  color: #2F7A3F;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+  
+  .action-icon {
+    width: 9px;
+    height: 9px;
+  }
+  
+  .add-cashier-footer {
+    padding: 12px;
+  }
+  
+  .add-cashier-footer .btn-process-order {
+    height: 32px;
+    font-size: 12px;
+  }
+}
+
+/* 360px - Mobile Portrait */
+@media (max-width: 360px) {
+  .add-cashier-overlay {
+    padding: 10px;
+  }
+  
+  .add-cashier-container {
+    width: 300px;
+    max-height: 88vh;
+  }
+  
+  .add-cashier-header h2 {
+    font-size: 13.5px;
+  }
+  
+  .add-cashier-header {
+    padding: 5px 10px 2px;
+  }
+  
+  .add-cashier-content {
+    padding: 0 10px;
+  }
+  
+  .add-cashier-section-title {
+    font-size: 11px;
+  }
+  
+  .add-cashier-section-description {
+    font-size: 7.5px;
+    margin-bottom: 9px;
+  }
+  
+  .add-cashier-label {
+    font-size: 9.5px;
+  }
+  
+  .add-cashier-input {
+    padding: 6px 8px;
+    font-size: 7.5px;
+  }
+  
+  .password-toggle-icon {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .add-cashier-suggest-btn,
+  .add-cashier-copy-btn {
+    font-size: 8.5px;
+  }
+  
+  .action-icon {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .password-copied-message {
+    font-size: 10px;
+    top: -25px;
+    padding: 3px 6px;
+  }
+  
+  .add-cashier-footer {
+    padding: 10px;
+  }
+  
+  .add-cashier-footer .btn-process-order {
+    height: 30px;
+    font-size: 11px;
+  }
+}

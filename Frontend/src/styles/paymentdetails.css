@@ -1,0 +1,525 @@
+/* Error message styling */
+.payment-error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 6px;
+  text-align: left;
+  padding-left: 4px;
+  font-weight: 400;
+}
+
+/* Error state for input */
+.payment-input.payment-input-error {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1);
+}
+
+.payment-input.payment-input-error:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.1);
+}
+
+/* Rest of your existing CSS remains the same */
+.payment-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001;
+  backdrop-filter: blur(2px);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.payment-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: paymentSlideIn 0.3s ease-out;
+}
+
+@keyframes paymentSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.payment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 24px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.payment-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.payment-close-btn {
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #757575;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.payment-close-btn:hover {
+  color: #333;
+}
+
+.payment-body {
+  padding: 16px 24px;
+}
+
+.payment-amount-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+}
+
+.payment-amount-label {
+  font-size: 15px;
+  color: #757575;
+  font-weight: 400;
+}
+
+.payment-amount-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.payment-input-section {
+  margin-bottom: 10px;
+}
+
+.payment-input-label {
+  display: block;
+  font-size: 15px;
+  color: #757575;
+  margin-bottom: 8px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.payment-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.payment-input:focus {
+  outline: none;
+  border-color: #2F7A3F;
+}
+
+.payment-input::placeholder {
+  color: #c1c1c1;
+}
+
+.payment-balance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0px 0px;
+  margin-top: 15px;
+  border-top: 2px solid #e9ecef;
+}
+
+.payment-balance-label {
+  font-size: 15px;
+  color: #757575;
+  font-weight: 400;
+}
+
+.payment-balance-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.payment-balance-value.negative {
+  color: #dc3545;
+}
+
+.payment-footer {
+  padding: 0 24px 24px;
+}
+
+.payment-footer .btn-check-balance {
+  width: 100% !important;
+  border-radius: 8px !important;
+}
+
+.payment-footer.confirm-mode .btn-check-balance {
+  width: 100% !important;
+  border-radius: 8px !important;
+}
+
+/* Responsive Design */
+/* paymentdetails-responsive.css - Add to the END of paymentdetails.css */
+
+/* 1440px - Large Desktop */
+@media screen and (max-width: 1440px) {
+  .payment-modal {
+    max-width: 480px;
+  }
+}
+
+/* 1024px - Tablet Landscape */
+@media screen and (max-width: 1024px) {
+  .payment-modal {
+    max-width: 460px;
+  }
+  
+  .payment-header {
+    padding: 16px 20px;
+  }
+  
+  .payment-title {
+    font-size: 18px;
+  }
+  
+  .payment-body {
+    padding: 14px 20px;
+  }
+  
+  .payment-footer {
+    padding: 0 20px 20px;
+  }
+}
+
+/* 900px - Small Tablet */
+@media screen and (max-width: 900px) {
+  .payment-modal {
+    max-width: 440px;
+  }
+  
+  .payment-amount-value {
+    font-size: 17px;
+  }
+  
+  .payment-balance-value {
+    font-size: 17px;
+  }
+}
+
+/* 768px - Tablet Portrait */
+@media screen and (max-width: 768px) {
+  .payment-overlay {
+    padding: 15px;
+  }
+  
+  .payment-modal {
+    max-width: 100%;
+    width: 95%;
+  }
+  
+  .payment-header {
+    padding: 14px 18px;
+  }
+  
+  .payment-title {
+    font-size: 17px;
+  }
+  
+  .payment-close-btn {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .payment-body {
+    padding: 14px 18px;
+  }
+  
+  .payment-footer {
+    padding: 0 18px 18px;
+  }
+  
+  .payment-amount-row {
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+  }
+  
+  .payment-amount-label {
+    font-size: 14px;
+  }
+  
+  .payment-amount-value {
+    font-size: 16px;
+  }
+  
+  .payment-input-label {
+    font-size: 14px;
+  }
+  
+  .payment-input {
+    padding: 11px 14px;
+    font-size: 14px;
+  }
+  
+  .payment-balance-row {
+    padding: 18px 0px 0px;
+    margin-top: 14px;
+  }
+  
+  .payment-balance-label {
+    font-size: 14px;
+  }
+  
+  .payment-balance-value {
+    font-size: 16px;
+  }
+}
+
+/* 480px - Mobile Landscape */
+@media screen and (max-width: 480px) {
+  .payment-overlay {
+    padding: 10px;
+  }
+  
+  .payment-modal {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .payment-header {
+    padding: 12px 16px;
+  }
+  
+  .payment-title {
+    font-size: 16px;
+  }
+  
+  .payment-close-btn {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+  }
+  
+  .payment-body {
+    padding: 12px 16px;
+  }
+  
+  .payment-footer {
+    padding: 0 16px 16px;
+  }
+  
+  .payment-amount-row {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+  }
+  
+  .payment-amount-label {
+    font-size: 13px;
+  }
+  
+  .payment-amount-value {
+    font-size: 15px;
+  }
+  
+  .payment-input-section {
+    margin-bottom: 8px;
+  }
+  
+  .payment-input-label {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  
+  .payment-input {
+    padding: 10px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+  
+  .payment-error-message {
+    font-size: 11px;
+    margin-top: 5px;
+  }
+  
+  .payment-balance-row {
+    padding: 16px 0px 0px;
+    margin-top: 12px;
+  }
+  
+  .payment-balance-label {
+    font-size: 13px;
+  }
+  
+  .payment-balance-value {
+    font-size: 15px;
+  }
+}
+
+/* 360px - Mobile Portrait */
+@media screen and (max-width: 360px) {
+  .payment-overlay {
+    padding: 8px;
+  }
+  
+  .payment-modal {
+    border-radius: 8px;
+  }
+  
+  .payment-header {
+    padding: 10px 14px;
+  }
+  
+  .payment-title {
+    font-size: 15px;
+  }
+  
+  .payment-close-btn {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .payment-body {
+    padding: 12px 14px;
+  }
+  
+  .payment-footer {
+    padding: 0 14px 14px;
+  }
+  
+  .payment-amount-row {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+  }
+  
+  .payment-amount-label {
+    font-size: 12px;
+  }
+  
+  .payment-amount-value {
+    font-size: 14px;
+  }
+  
+  .payment-input-section {
+    margin-bottom: 8px;
+  }
+  
+  .payment-input-label {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  
+  .payment-input {
+    padding: 9px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+  
+  .payment-error-message {
+    font-size: 10px;
+    margin-top: 4px;
+  }
+  
+  .payment-balance-row {
+    padding: 14px 0px 0px;
+    margin-top: 10px;
+    border-top: 1.5px solid #e9ecef;
+  }
+  
+  .payment-balance-label {
+    font-size: 12px;
+  }
+  
+  .payment-balance-value {
+    font-size: 14px;
+  }
+}
+
+/* Extra small devices - 320px */
+@media screen and (max-width: 320px) {
+  .payment-overlay {
+    padding: 5px;
+  }
+  
+  .payment-header {
+    padding: 8px 12px;
+  }
+  
+  .payment-title {
+    font-size: 14px;
+  }
+  
+  .payment-body {
+    padding: 10px 12px;
+  }
+  
+  .payment-footer {
+    padding: 0 12px 12px;
+  }
+  
+  .payment-amount-row {
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+  }
+  
+  .payment-amount-label {
+    font-size: 11px;
+  }
+  
+  .payment-amount-value {
+    font-size: 13px;
+  }
+  
+  .payment-input-label {
+    font-size: 11px;
+    margin-bottom: 5px;
+  }
+  
+  .payment-input {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+  
+  .payment-balance-row {
+    padding: 12px 0px 0px;
+    margin-top: 8px;
+  }
+  
+  .payment-balance-label {
+    font-size: 11px;
+  }
+  
+  .payment-balance-value {
+    font-size: 13px;
+  }
+}

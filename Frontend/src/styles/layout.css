@@ -1,0 +1,557 @@
+/* Layout.css - Styles for both components */
+/* Header Styles */
+.header {
+    background-color: #FFFFFF;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: calc(100% - 260px);
+    height: 70px;
+    margin-left: 260px;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.header h1 {
+    font-size: 20px;
+    font-weight: 500;
+    color: #000000;
+    margin: 0 0 5px 0;
+    text-align: left;
+}
+
+.header h3 {
+    font-size: 12px;
+    font-weight: 400;
+    color: #8D8D8D;
+    margin: 0;
+    text-align: left;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.admin-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+.admin-user span {
+    font-weight: 400;
+    color: #000000;
+    font-size: 16px;
+}
+
+.user-icon-container {
+    width: 36px;
+    height: 36px;
+    background-color: #2F7A3F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.user-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background-color: #FFFFFF;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 13px 0;
+    border-right: 1px solid #E0E0E0;
+    z-index: 100;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px 12px;
+    border-bottom: 1px solid #E0E0E0;
+    margin-bottom: 20px;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.sidebar-header:hover {
+    background-color: #f5f5f5;
+}
+
+.sidebar-logo {
+    width: 100px;
+    height: 45px;
+    object-fit: contain;
+    transition: all 0.3s ease;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 10px;
+    cursor: pointer;
+    width: 220px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.nav-item:hover {
+    background-color: #f5f5f5;
+}
+
+.nav-item.active {
+    background-color: #2F7A3F !important;
+    height: 42px;
+    border-radius: 6px;
+    margin: 0 auto;
+}
+
+.nav-item.active:hover {
+    background-color: #2F7A3F;
+}
+
+.nav-item.active span {
+    color: #FFFFFF !important;
+}
+
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    margin-right: 12px;
+    transition: margin 0.3s ease;
+}
+
+.nav-item span {
+    font-size: 14px;
+    font-weight: 400;
+    color: #000000;
+    transition: opacity 0.3s ease;
+}
+
+/* For active state, we need to adjust the icon margin when centered */
+.nav-item.active .nav-icon {
+    margin-right: 12px;
+    width: 22px;
+    height: 22px;
+}
+
+/* Page Content - Add this to your existing pages */
+.page-content {
+    margin-left: 260px;
+    padding: 100px 20px 20px 20px;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease, padding 0.3s ease;
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    background: #2F7A3F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 12px;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 20px;
+}
+
+/* Sidebar overlay for mobile */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    display: none;
+}
+
+.sidebar-logo {
+    width: 95px;
+    height: 45px;
+    object-fit: contain;
+    transition: all 0.3s ease;
+}
+
+/* Responsive Design - Tablet (1024px) */
+@media (max-width: 1024px) {
+    .header {
+        margin-left: 260px;
+        padding: 15px;
+        height: 70px;
+    }
+
+    .sidebar-nav ul {
+        gap: 12px;
+    }
+
+    .nav-item {
+        width: 220px;
+        padding: 12px 15px;
+    }
+
+    .nav-item.active {
+        width: 220px;
+    }
+
+    .page-content {
+        margin-left: 260px;
+        padding: 100px 15px 15px 15px;
+    }
+
+    .header h1 {
+        font-size: 22px;
+    }
+
+    .header h3 {
+        font-size: 13px;
+    }
+
+    .admin-user span {
+        font-size: 15px;
+    }
+
+    .user-icon-container {
+        width: 45px;
+        height: 45px;
+    }
+
+    .user-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .sidebar-logo {
+        width: 95px;
+        height: 45px;
+        object-fit: contain;
+        transition: all 0.3s ease;
+    }
+}
+
+/* Responsive Design - Mobile Landscape (900px) */
+@media (max-width: 900px) {
+    .sidebar {
+        width: 240px;
+    }
+
+    .sidebar-logo {
+        width: 95px;
+        height: 45px;
+        object-fit: contain;
+        transition: all 0.3s ease;
+    }
+
+    .header {
+        width: calc(100% - 240px);
+        margin-left: 240px;
+        height: 80px;
+        padding: 15px;
+    }
+
+    .sidebar-nav ul {
+        gap: 10px;
+    }
+
+    .nav-item {
+        width: 200px;
+        padding: 10px 12px;
+    }
+
+    .nav-item.active {
+        width: 200px;
+        height: 40px;
+    }
+
+    .page-content {
+        margin-left: 240px;
+        padding: 100px 12px 12px 12px;
+    }
+
+    .sidebar-logo {
+        width: 120px;
+        height: 55px;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .header h3 {
+        font-size: 12px;
+    }
+}
+
+/* Responsive Design - Mobile Portrait (768px) */
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .sidebar {
+        width: 250px;
+        transform: translateX(-100%);
+    }
+
+    .sidebar-logo {
+        width: 120px;
+        height: 57px;
+    }
+
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+
+    .sidebar-header {
+        padding: 0 20px 20px;
+        margin-top: 20px;
+    }
+
+    .sidebar-logo {
+        width: 140px;
+        height: 62px;
+    }
+
+    .sidebar-nav ul {
+        gap: 15px;
+    }
+
+    .nav-item {
+        width: 220px;
+        justify-content: flex-start;
+        padding: 12px 20px;
+        min-height: 45px;
+    }
+
+    .nav-item span {
+        display: block;
+        opacity: 1;
+    }
+
+    .nav-icon {
+        margin-right: 15px;
+        width: 22px;
+        height: 22px;
+    }
+
+    .nav-item.active {
+        width: 220px;
+        height: 45px;
+        border-radius: 10px;
+    }
+
+    .header {
+        width: 100%;
+        margin-left: 0;
+        padding: 12px 15px 12px 70px;
+        /* Added left padding for mobile toggle */
+        height: 80px;
+    }
+
+    .page-content {
+        margin-left: 0;
+        padding: 100px 12px 12px 12px;
+    }
+
+    .header h1 {
+        font-size: 18px;
+        margin: 0 0 3px 0;
+    }
+
+    .header h3 {
+        font-size: 11px;
+    }
+
+    .admin-user span {
+        font-size: 14px;
+    }
+
+    .user-icon-container {
+        width: 40px;
+        height: 40px;
+    }
+
+    .user-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .admin-user {
+        padding: 10px 12px;
+        gap: 8px;
+    }
+
+    .sidebar-overlay {
+        display: block;
+    }
+
+    /* Hide overlay by default */
+    .sidebar-overlay {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    /* Show overlay when mobile menu is open */
+    .sidebar.mobile-open+.sidebar-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+/* Extra small mobile devices (480px) */
+@media (max-width: 480px) {
+    .sidebar {
+        width: 220px;
+    }
+
+    .sidebar-logo {
+        width: 105px;
+        height: 50px;
+    }
+
+    .nav-item {
+        width: 190px;
+        padding: 10px 15px;
+    }
+
+    .nav-item.active {
+        width: 190px;
+    }
+
+    .sidebar-nav ul {
+        text-align: left;
+    }
+
+    .sidebar-header {
+        padding: 0 15px 15px;
+    }
+
+    .sidebar-logo {
+        width: 120px;
+        height: 55px;
+    }
+
+    .mobile-menu-toggle {
+        top: 10px;
+        left: 10px;
+        padding: 8px 10px;
+        min-width: 40px;
+        min-height: 40px;
+        font-size: 18px;
+    }
+
+    .header {
+        padding: 10px 12px 10px 60px;
+        /* Adjusted left padding */
+        height: 70px;
+    }
+
+    .header h1 {
+        font-size: 16px;
+    }
+
+    .header h3 {
+        font-size: 10px;
+    }
+
+    .admin-user span {
+        font-size: 12px;
+    }
+
+    .user-icon-container {
+        width: 35px;
+        height: 35px;
+    }
+
+    .user-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .page-content {
+        padding: 90px 10px 10px 10px;
+    }
+}
+
+/* Additional fixes for very small screens */
+@media (max-width: 360px) {
+    .sidebar-logo {
+        width: 90px;
+        height: 43px;
+    }
+
+    .header {
+        padding: 8px 10px 8px 55px;
+    }
+
+    .header h1 {
+        font-size: 14px;
+    }
+
+    .header h3 {
+        font-size: 9px;
+    }
+
+    .admin-user span {
+        font-size: 11px;
+    }
+
+    .mobile-menu-toggle {
+        padding: 6px 8px;
+        min-width: 36px;
+        min-height: 36px;
+        font-size: 16px;
+    }
+
+    .sidebar-nav ul {
+        text-align: left;
+    }
+}

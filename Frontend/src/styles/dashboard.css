@@ -1,0 +1,91 @@
+/* dashboard.css */
+.dashboard-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 1440px) and (min-width: 1025px) {
+  .dashboard-container {
+    padding: 0 0px;
+  }
+}
+
+@media screen and (max-width: 1024px) and (min-width: 901px) {
+  .dashboard-container {
+    padding: 0 0px;
+  }
+}
+
+@media screen and (max-width: 900px) and (min-width: 769px) {
+  .dashboard-container {
+    padding: 0 0px;
+  }
+}
+
+@media screen and (max-width: 768px) and (min-width: 481px) {
+  .dashboard-container {
+    padding: 0 0px;
+  }
+}
+
+@media screen and (max-width: 480px) and (min-width: 361px) {
+  .dashboard-container {
+    padding: 0 0px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .dashboard-container {
+    padding: 0 5px;
+  }
+}
+
+/* Fix header alignment for mobile */
+@media screen and (max-width: 768px) {
+  .dashboard-container {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .page-content {
+    margin-left: 0;
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Ensure header content is properly aligned */
+  header {
+    padding: 15px;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+  }
+}
+
+/* Specific fix for iPhone XR and similar devices */
+@media screen and (max-width: 414px) {
+  .dashboard-container {
+    padding: 0;
+  }
+
+  header {
+    padding: 12px 15px;
+    margin: 0;
+  }
+
+  .page-content {
+    padding: 12px 15px;
+  }
+
+  /* Ensure text doesn't get cut off */
+  header h1,
+  header h2,
+  header .subtitle {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+  }
+}

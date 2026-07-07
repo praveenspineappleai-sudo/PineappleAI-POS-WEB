@@ -1,0 +1,154 @@
+/** InvoicePopup.css**/
+.invoice-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Main popup */
+.invoice-popup {
+  background: #fff;
+  border-radius: 8px;
+  width: 340px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollable content */
+.invoice-content {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Receipt styles */
+.receipt {
+  width: 280px;
+  margin: auto;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.receipt-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.receipt-center {
+  text-align: center;
+}
+
+.receipt-divider {
+  border-top: 1px dashed #000;
+  margin: 8px 0;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0;
+}
+
+.item-name {
+  padding: 2px 0;
+  font-weight: 500;
+  /* 🔥 Improve long text handling */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+.item-values td {
+  padding: 1px 0;
+}
+
+.cashier-bill-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin: 2px 0;
+}
+
+.cashier-bill-row span {
+  white-space: nowrap;   /* prevents line break */
+}
+
+
+.receipt-net {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.receipt-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.receipt-table th,
+.receipt-table td {
+  padding: 2px 0;
+}
+
+.receipt-table th {
+  font-weight: bold;
+}
+
+.receipt-table th:nth-child(2),
+.receipt-table th:nth-child(3),
+.receipt-table th:nth-child(4),
+.receipt-table td:nth-child(2),
+.receipt-table td:nth-child(3),
+.receipt-table td:nth-child(4) {
+  text-align: right;
+}
+
+.receipt-footer {
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+/* Fixed footer buttons */
+.invoice-footer {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid #ddd;
+  background: #fff;
+}
+
+.print-btn,
+.close-btn1 {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.print-btn {
+  background: #2f7a3f;
+  color: #fff;
+}
+
+.print-btn:hover {
+  background: #256832;
+}
+
+.close-btn1 {
+  background: #999;
+  color: #fff;
+}
+
+.close-btn1:hover {
+  background: #777;
+}
+

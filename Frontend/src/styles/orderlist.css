@@ -1,0 +1,216 @@
+.order-details {
+  background: white;
+  border-radius: 12px;
+  padding: 6px 16px;
+  margin-top: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 2px 14px;
+}
+
+.order-details-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-bottom: 14px;
+}
+
+/* Custom Scrollbar Styles */
+.table-container::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 6px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #2F7A3F;
+  border-radius: 6px;
+  border: 2px solid #f1f1f1;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #245a2f;
+}
+
+/* For Firefox */
+ .table-container {
+  scrollbar-width: thin;
+  scrollbar-color: #2F7A3F #f1f1f1;
+} 
+
+.orders-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+}
+
+/* Table header row with specific background color */
+.table-header-row {
+  background-color: #F0FDF4; /* Light green background */
+}
+
+.orders-table th {
+  color: #000000; /* Dark gray text color */
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+  padding: 14px 0;
+  position: relative;
+}
+
+/* Add white separators between columns */
+.orders-table th:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  height: 24px;
+  width: 1px;
+  background-color: white;
+}
+
+.orders-table td {
+  color: #2d3748;
+  text-align: left;
+  padding: 7px 0;
+  position: relative;
+}
+
+/* Add white separators between columns for data rows too */
+.orders-table td:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  height: 24px;
+  width: 1px;
+  background-color: white;
+}
+
+/* Column gaps for all columns in header */
+.orders-table th:nth-child(1) { 
+  padding-left: 16px;
+  padding-right: 30px;
+}
+.orders-table th:nth-child(2) { 
+  padding-right: 40px;
+}
+.orders-table th:nth-child(3) { 
+  padding-right: 40px;
+}
+.orders-table th:nth-child(4) { 
+  padding-right: 40px;
+}
+.orders-table th:nth-child(5) { 
+  padding-right: 16px;
+}
+
+/* Column gaps for all columns in data rows */
+.orders-table td:nth-child(1) { 
+  padding-left: 16px;
+  padding-right: 30px;
+}
+.orders-table td:nth-child(2) { 
+  padding-right: 40px;
+}
+.orders-table td:nth-child(3) { 
+  padding-right: 40px;
+}
+.orders-table td:nth-child(4) { 
+  padding-right: 40px;
+}
+.orders-table td:nth-child(5) { 
+  padding-right: 16px;
+}
+
+.orders-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.table-footer {
+  display: flex;
+  justify-content: flex-end; 
+}
+
+.download-btn-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.download-btn-icon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1); 
+}
+
+/* Process Order Button Styles - Reduced width */
+.btn-process-order {
+  background-color: #2F7A3F;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+}
+
+.btn-process-order:hover {
+  background-color: #256532;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+/* Existing styles above remain unchanged */
+
+/* Loading row */
+.loading-row td,
+.no-orders-row td {
+  text-align: center;
+  padding: 20px;
+}
+
+/* Optional: If you want hover pulse effect for rows (if any) */
+.orders-table tbody tr:hover {
+  background: #f8fafc;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}

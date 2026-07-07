@@ -1,0 +1,343 @@
+/* AccessKey Component Styles */
+.access-key-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.access-key-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  max-width: 645px;
+  width: 100%;
+  position: relative;
+  text-align: center;
+}
+
+/* Back Arrow Button */
+.back-arrow-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.back-arrow-btn:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(47, 122, 63, 0.2) !important;
+}
+
+.back-arrow-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.back-arrow-icon {
+  width: 18px;
+  height: 24px;
+  color: #666;
+}
+
+/* Illustration Section */
+.illustration-container {
+  margin-bottom: 32px;
+  margin-top: 20px;
+}
+
+.access-key-illustration {
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+}
+
+/* Content Section */
+.content-section {
+  text-align: left;
+}
+
+.instruction-text {
+  font-size: 16px;
+  font-weight: 400;
+  color: #000000;
+  line-height: 1.5;
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+/* Input Section */
+.input-section {
+  margin-bottom: 32px;
+}
+
+.input-label {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.access-key-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid rgba(47, 122, 63, 0.5);
+  border-radius: 8px;
+  font-size: 14px;
+  color: #BFBFBF;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.access-key-input:focus {
+  outline: none !important;
+  border-color: #2F7A3F !important;
+  box-shadow: 0 0 0 3px rgba(47, 122, 63, 0.1) !important;
+}
+
+.access-key-input::placeholder {
+  color: #999;
+}
+
+/* Next Button Container */
+.next-button-container {
+  width: 100%;
+}
+
+.next-button-container .btn-next {
+  width: 100%;
+  justify-content: center;
+}
+
+.next-button-container .btn-next:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(47, 122, 63, 0.2) !important;
+}
+
+/* Responsive Design */
+/* 1024px - Tablet Landscape */
+@media (max-width: 1024px) and (min-width: 901px) {
+  .access-key-container {
+    padding: 15px;
+  }
+  
+  .access-key-card {
+    max-width: 580px;
+    padding: 50px 40px;
+  }
+  
+  .access-key-illustration {
+    max-width: 180px;
+  }
+  
+  .instruction-text {
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+  
+  .input-section {
+    margin-bottom: 38px;
+  }
+  
+  .access-key-input {
+    padding: 14px 18px;
+    font-size: 16px;
+  }
+}
+
+/* 900px - Small Tablet */
+@media (max-width: 900px) and (min-width: 769px) {
+  .access-key-container {
+    padding: 20px;
+  }
+  
+  .access-key-card {
+    max-width: 520px;
+    padding: 45px 35px;
+  }
+  
+  .illustration-container {
+    margin-bottom: 28px;
+    margin-top: 8px;
+  }
+  
+  .access-key-illustration {
+    max-width: 170px;
+  }
+  
+  .instruction-text {
+    font-size: 15px;
+    margin-bottom: 26px;
+  }
+  
+  .input-section {
+    margin-bottom: 30px;
+  }
+  
+  .input-label {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+}
+
+/* 768px - Tablet Portrait */
+@media (max-width: 768px) and (min-width: 481px) {
+  .access-key-container {
+    padding: 16px;
+  }
+  
+  .access-key-card {
+    padding: 32px 24px;
+    margin: 0;
+    max-width: 480px;
+  }
+  
+  .back-arrow-btn {
+    top: 16px;
+    left: 16px;
+    padding: 6px;
+  }
+  
+  .back-arrow-icon {
+    width: 14px;
+    height: 18px;
+  }
+  
+  .illustration-container {
+    margin-bottom: 24px;
+    margin-top: 6px;
+  }
+  
+  .access-key-illustration {
+    max-width: 160px;
+  }
+  
+  .instruction-text {
+    font-size: 15px;
+    margin-bottom: 24px;
+  }
+  
+  .input-section {
+    margin-bottom: 28px;
+  }
+  
+  .access-key-input {
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+}
+
+/* 480px - Mobile Landscape */
+@media (max-width: 480px) and (min-width: 361px) {
+  .access-key-container {
+    padding: 12px;
+  }
+  
+  .access-key-card {
+    padding: 24px 20px;
+    max-width: 400px;
+  }
+  
+  .back-arrow-btn {
+    top: 12px;
+    left: 12px;
+    padding: 4px;
+  }
+  
+  .back-arrow-icon {
+    width: 12px;
+    height: 16px;
+  }
+  
+  .illustration-container {
+    margin-bottom: 20px;
+    margin-top: 4px;
+  }
+  
+  .access-key-illustration {
+    max-width: 140px;
+  }
+  
+  .instruction-text {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .input-section {
+    margin-bottom: 24px;
+  }
+  
+  .input-label {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  
+  .access-key-input {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+}
+
+/* 360px - Mobile Portrait */
+@media (max-width: 360px) {
+  .access-key-container {
+    padding: 8px;
+    min-height: 100vh;
+  }
+  
+  .access-key-card {
+    padding: 20px 16px;
+    max-width: 320px;
+    border-radius: 8px;
+  }
+  
+  .back-arrow-btn {
+    top: 10px;
+    left: 10px;
+    padding: 4px;
+  }
+  
+  .back-arrow-icon {
+    width: 10px;
+    height: 14px;
+  }
+  
+  .illustration-container {
+    margin-bottom: 16px;
+    margin-top: 2px;
+  }
+  
+  .access-key-illustration {
+    max-width: 120px;
+  }
+  
+  .instruction-text {
+    font-size: 13px;
+    margin-bottom: 18px;
+    line-height: 1.4;
+  }
+  
+  .input-section {
+    margin-bottom: 20px;
+  }
+  
+  .input-label {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  
+  .access-key-input {
+    padding: 8px 10px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+}

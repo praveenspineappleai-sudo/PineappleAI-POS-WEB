@@ -1,0 +1,315 @@
+.signup4-container {
+  padding: 10px;
+  max-width: 1500px;
+  margin: 0 auto;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup4-stepper {
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.signup4-form {
+  max-width: 560px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.form-card4 {
+  width: 640px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  height: auto;
+  min-height: 310px;
+}
+
+.verification-description4 {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 30px;
+}
+
+.input-group4 {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-label4 {
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.verification-input-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.input-field4 {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid rgba(47, 122, 63, 0.5);
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.verification-input {
+  padding-right: 45px;
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+
+.input-field4:focus {
+  outline: none !important;
+  border-color: #2F7A3F !important;
+  box-shadow: 0 0 0 2px rgba(47, 122, 63, 0.1) !important;
+}
+
+.input-field4::placeholder {
+  color: #999;
+  letter-spacing: normal;
+  font-weight: normal;
+}
+
+.verification-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.verification-toggle:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(47, 122, 63, 0.2) !important;
+  border-radius: 4px;
+}
+
+.eye-icon4 {
+  width: 15px;
+  height: 10px;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.verification-toggle:hover .eye-icon4 {
+  opacity: 1;
+}
+
+.timer-section4 {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.timer-text4 {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.timer-countdown4 {
+  color: #2F7A3F;
+  font-weight: 600;
+}
+
+.resend-text4 {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.resend-link4 {
+  background: none;
+  border: none;
+  color: #2F7A3F;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 14px;
+  margin-left: 5px;
+  padding: 0;
+}
+
+.resend-link4:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(47, 122, 63, 0.2) !important;
+  border-radius: 2px;
+}
+
+.resend-link4:hover:not(:disabled) {
+  color: #1e5a2a;
+}
+
+.resend-link4:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+/* Navigation Buttons - Vertical layout with Verify email on top, Back button below */
+.form-navigation4 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+  width: 100%;
+  gap: 20px;
+}
+
+/* Back button style without border - just plain text like UI design */
+.previous-btn4 {
+  background: none;
+  border: none;
+  color: #2F7A3F;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px;
+  /* text-decoration: underline; */
+  transition: all 0.3s ease;
+  width: auto;
+  text-align: center;
+}
+
+.previous-btn4:focus {
+  outline: none !important;
+  color: #000000 !important;
+}
+
+.previous-btn4:hover:not(:disabled) {
+  color: #000000;
+}
+
+.previous-btn4:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Make the ProcessOrderButton (Verify email) full width */
+.form-navigation4 > button:first-child {
+  width: 100%;
+  max-width: none;
+}
+
+.form-navigation4 button:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(47, 122, 63, 0.2) !important;
+}
+
+/* Responsive Design for different screen sizes */
+/* 1440px and above - Desktop Large */
+@media (min-width: 1440px) {
+  .form-navigation4 {
+    gap: 20px;
+  }
+}
+
+/* 1024px - Desktop/Laptop */
+@media (max-width: 1024px) {
+  .form-card4 {
+    width: 90%;
+    max-width: 640px;
+  }
+}
+
+/* 900px - Small Desktop/Large Tablet */
+@media (max-width: 900px) {
+  .form-card4 {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+  }
+}
+
+/* 768px - Tablet */
+@media (max-width: 768px) {
+  .signup4-container {
+    padding: 15px;
+  }
+
+  .form-card4 {
+    width: 100%;
+    max-width: 450px;
+    padding: 18px;
+  }
+
+  .form-navigation4 {
+    gap: 16px;
+  }
+}
+
+/* 480px - Mobile Large */
+@media (max-width: 480px) {
+  .signup4-container {
+    padding: 10px;
+  }
+
+  .form-card4 {
+    width: 100%;
+    padding: 14px;
+    min-height: auto;
+  }
+
+  .form-navigation4 {
+    gap: 12px;
+  }
+
+  .previous-btn4 {
+    padding: 6px;
+    font-size: 15px;
+  }
+
+  .form-navigation4 > button:first-child {
+    padding: 12px 16px;
+  }
+}
+
+/* 360px - Mobile Small */
+@media (max-width: 360px) {
+  .signup4-container {
+    padding: 8px;
+  }
+
+  .form-card4 {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .input-field4 {
+    padding: 10px 12px;
+  }
+
+  .form-navigation4 {
+    gap: 10px;
+  }
+
+  .previous-btn4 {
+    padding: 5px;
+    font-size: 14px;
+  }
+
+  .form-navigation4 > button:first-child {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}

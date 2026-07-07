@@ -1,0 +1,347 @@
+.delete-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  text-align: center;
+}
+
+.delete-container {
+  background: #fff;
+  border-radius: 12px;
+  width: 450px;
+  max-width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: deleteSlideIn 0.3s ease-out;
+}
+
+.delete-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: none;
+  position: relative;
+}
+
+.delete-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+  text-align: center;
+}
+
+.delete-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #9ca3af;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.delete-close:hover {
+  color: #333;
+}
+
+.delete-body {
+  padding: 10px 20px 30px;
+  font-size: 14px;
+  color: #000;
+  text-align: center;
+}
+
+.delete-actions {
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  padding: 0 20px 24px;
+  border-top: none;
+}
+
+.delete-cancel-btn {
+  background: #d1d5db;
+  border: none;
+  padding: 10px 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+  transition: background-color 0.2s;
+}
+
+.delete-cancel-btn:hover {
+  background: #b8bcc4;
+}
+
+.delete-confirm-btn {
+  background: #E63946;
+  border: none;
+  padding: 10px 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  transition: background-color 0.2s;
+}
+
+
+.delete-confirm-btn:hover {
+  background: #d32f3c;
+}
+
+@keyframes deleteSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* 1440px and above - Large Desktop */
+@media (min-width: 1440px) {
+    .delete-container {
+        width: 480px;
+    }
+    
+    .delete-header {
+        padding: 18px 24px;
+    }
+    
+    .delete-header h2 {
+        font-size: 20px;
+    }
+    
+    .delete-body {
+        padding: 12px 24px 32px;
+        font-size: 15px;
+    }
+    
+    .delete-actions {
+        padding: 0 24px 28px;
+        gap: 120px;
+    }
+    
+    .delete-cancel-btn,
+    .delete-confirm-btn {
+        padding: 12px 45px;
+        font-size: 15px;
+    }
+}
+
+/* 1024px - Desktop */
+@media (max-width: 1024px) {
+    .delete-container {
+        width: 420px;
+    }
+    
+    .delete-header {
+        padding: 16px 20px;
+    }
+    
+    .delete-body {
+        padding: 10px 20px 28px;
+    }
+    
+    .delete-actions {
+        gap: 90px;
+        padding: 0 20px 24px;
+    }
+    
+    .delete-cancel-btn,
+    .delete-confirm-btn {
+        padding: 10px 35px;
+    }
+}
+
+/* 900px - Small Desktop / Large Tablet */
+@media (max-width: 900px) {
+    .delete-container {
+        width: 400px;
+    }
+    
+    .delete-actions {
+        gap: 80px;
+    }
+    
+    .delete-cancel-btn,
+    .delete-confirm-btn {
+        padding: 10px 32px;
+    }
+}
+
+/* 768px - Tablet */
+@media (max-width: 768px) {
+    .delete-container {
+        width: 380px;
+    }
+    
+    .delete-header {
+        padding: 14px 18px;
+    }
+    
+    .delete-header h2 {
+        font-size: 17px;
+    }
+    
+    .delete-close {
+        width: 28px;
+        height: 28px;
+        font-size: 22px;
+        right: 14px;
+    }
+    
+    .delete-body {
+        padding: 8px 18px 24px;
+        font-size: 13.5px;
+    }
+    
+    .delete-actions {
+        gap: 70px;
+        padding: 0 18px 20px;
+    }
+    
+    .delete-cancel-btn,
+    .delete-confirm-btn {
+        padding: 9px 30px;
+        font-size: 13.5px;
+        border-radius: 6px;
+    }
+}
+
+/* 480px - Mobile Large */
+@media (max-width: 480px) {
+    .delete-container {
+        width: 340px;
+        border-radius: 10px;
+    }
+    
+    .delete-header {
+        padding: 12px 16px;
+    }
+    
+    .delete-header h2 {
+        font-size: 16px;
+    }
+    
+    .delete-close {
+        width: 26px;
+        height: 26px;
+        font-size: 20px;
+        right: 12px;
+    }
+    
+    .delete-body {
+        padding: 8px 16px 20px;
+        font-size: 13px;
+    }
+    
+    .delete-actions {
+        gap: 50px;
+        padding: 0 16px 18px;
+    }
+    
+    .delete-cancel-btn,
+    .delete-confirm-btn {
+        padding: 8px 25px;
+        font-size: 13px;
+        border-radius: 5px;
+    }
+}
+
+/* 360px - Mobile Small */
+@media (max-width: 360px) {
+    .delete-container {
+        width: 300px;
+        border-radius: 8px;
+    }
+    
+    .delete-header {
+        padding: 10px 14px;
+    }
+    
+    .delete-header h2 {
+        font-size: 15px;
+    }
+    
+    .delete-close {
+        width: 24px;
+        height: 24px;
+        font-size: 18px;
+        right: 10px;
+    }
+    
+    .delete-body {
+        padding: 6px 14px 16px;
+        font-size: 12px;
+    }
+    
+    .delete-actions {
+        gap: 40px;
+        padding: 0 14px 16px;
+    }
+    
+    .delete-cancel-btn,
+    .delete-confirm-btn {
+        padding: 7px 20px;
+        font-size: 12px;
+        border-radius: 4px;
+    }
+}
+/* 🔴 YES button style */
+.btn-yes {
+  background-color: #E63946 !important;
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* 🔘 NO button style */
+.btn-no {
+  background-color: #d1d5db;
+  color: black;
+  padding: 8px 18px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Optional hover effect */
+.btn-yes:hover { opacity: 0.9; }
+.btn-no:hover { opacity: 0.9; }
+
+/* Keyboard highlight support */
+.highlight {
+  outline: 2px solid #000;
+}
+

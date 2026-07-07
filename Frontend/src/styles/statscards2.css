@@ -1,0 +1,218 @@
+.stats-cards-container-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 60px;
+  margin: 12px 0;
+  padding: 14px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.stats-card-2 {
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.stats-card-2:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+  border-color: #e2e8f0;
+}
+
+.stats-card-content-2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stats-title-2 {
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  margin: 0;
+  text-transform: capitalize;
+  letter-spacing: 0.025em;
+  line-height: 1.4;
+}
+
+.stats-value-2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Different colors for each card like UI design */
+.stats-card-2:nth-child(1) {
+  background: #EFF6FF; 
+}
+
+.stats-card-2:nth-child(2) {
+  background: #FFF7ED; 
+}
+
+.stats-card-2:nth-child(3) {
+  background: #FEF2F2; 
+}
+
+.stats-card-2:nth-child(4) {
+  background: #F0FDF4; 
+}
+
+/* 1440px - Large Desktop */
+@media screen and (max-width: 1440px) {
+  .stats-cards-container-2 {
+    gap: 30px;
+    padding: 15px;
+  }
+  
+  .stats-card-2 {
+    padding: 15px;
+  }
+  
+  .stats-title-2 {
+    font-size: 12px;
+  }
+  
+  .stats-value-2 {
+    font-size: 18px;
+  }
+}
+
+/* 1024px - Tablet Landscape */
+@media screen and (max-width: 1024px) {
+  .stats-cards-container-2 {
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .stats-card-2 {
+    padding: 18px;
+    border-radius: 10px;
+  }
+  
+  .stats-title-2 {
+    font-size: 11px;
+  }
+  
+  .stats-value-2 {
+    font-size: 16px;
+  }
+  
+  .stats-card-content-2 {
+    gap: 6px;
+  }
+}
+
+/* 900px - Tablet */
+@media screen and (max-width: 900px) {
+  .stats-cards-container-2 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 12px;
+  }
+  
+  .stats-card-2 {
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .stats-title-2 {
+    font-size: 12px;
+  }
+  
+  .stats-value-2 {
+    font-size: 18px;
+  }
+  
+  .stats-card-content-2 {
+    gap: 8px;
+  }
+}
+
+/* 768px - Tablet Portrait */
+@media screen and (max-width: 768px) {
+  .stats-cards-container-2 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 18px;
+    margin: 8px 0;
+  }
+  
+  .stats-card-2 {
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .stats-title-2 {
+    font-size: 11px;
+  }
+  
+  .stats-value-2 {
+    font-size: 16px;
+  }
+  
+  .stats-card-content-2 {
+    gap: 6px;
+  }
+}
+
+/* 480px - Mobile Landscape */
+@media screen and (max-width: 480px) {
+  .stats-cards-container-2 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 14px;
+    margin: 0px 0;
+  }
+  
+  .stats-card-2 {
+    padding: 12px;
+    border-radius: 6px;
+  }
+  
+  .stats-title-2 {
+    font-size: 10px;
+  }
+  
+  .stats-value-2 {
+    font-size: 14px;
+  }
+  
+  .stats-card-content-2 {
+    gap: 4px;
+  }
+}
+
+/* 360px - Mobile Portrait */
+@media screen and (max-width: 360px) {
+  .stats-cards-container-2 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 10px;
+    margin: 5px 0;
+  }
+  
+  .stats-card-2 {
+    padding: 12px;
+    border-radius: 5px;
+  }
+  
+  .stats-title-2 {
+    font-size: 9px;
+  }
+  
+  .stats-value-2 {
+    font-size: 12px;
+  }
+  
+  .stats-card-content-2 {
+    gap: 3px;
+  }
+}

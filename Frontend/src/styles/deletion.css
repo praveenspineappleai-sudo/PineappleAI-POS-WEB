@@ -1,0 +1,636 @@
+/* Account Delete Popup Styles */
+.account-delete-container {
+  background: white;
+  width: 500px;
+  height: 330px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 12px;
+  text-align: left;
+}
+
+.admin-popup-header-delete h2 {
+  text-align: left;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.delete-warning {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.delete-warning p {
+  margin: 0;
+  font-size: 14px;
+  color: #000000;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.delete-warning .warning-text {
+  font-size: 11px;
+  color: #E63946;
+  line-height: 1.4;
+  font-weight: normal;
+}
+
+.delete-form {
+  padding: 5px 16px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+}
+
+.password-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-container input {
+  width: 100%;
+  padding: 10px 32px 10px 10px;
+  border: 1px solid #2F7A3F;
+  opacity: 50%;
+  border-radius: 6px;
+  font-size: 13px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+  line-height: 1.5;
+}
+
+.password-input-container input:focus {
+  outline: none;
+  border-color: #2F7A3F;
+  box-shadow: 0 0 0 3px rgba(47, 122, 63, 0.1);
+}
+
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.password-toggle img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+}
+
+.password-toggle:hover img {
+  opacity: 1;
+}
+
+.password-input-container .icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.confirmation-checkbox {
+  margin-bottom: 12px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  /* padding-left: 35px;  */
+  cursor: pointer;
+  font-size: 12px;
+  color: #374151;
+  line-height: 1.4;
+  gap: 8px; 
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 16px;
+  width: 16px;
+  background-color: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
+  margin-right: 2px; 
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  background-color: #f9fafb;
+  border-color: #2F7A3F;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #2F7A3F;
+  border-color: #2F7A3F;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-container .checkmark:after {
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.forgot-password-link {
+  text-align: right;
+  margin-bottom: 15px;
+}
+
+.forgot-password-link a {
+  color: #2F7A3F;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.forgot-password-link a:hover {
+  text-decoration: underline;
+}
+
+.delete-action-button {
+  display: flex;
+  justify-content: center;
+}
+
+.delete-button-wrapper {
+  width: 100%;
+}
+
+.delete-button-wrapper.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Override ProceedOrderButton styles for delete context */
+.delete-action-button .btn-process-order {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  width: 100%;
+  max-width: none;
+  height: 35px !important; 
+  font-size: 13px !important;
+  border-radius: 8px;
+}
+
+.delete-action-button .btn-process-order:hover {
+  background-color: #b91c1c !important;
+  border-color: #b91c1c !important;
+}
+
+/* Responsive adjustments for account delete */
+/* 1440px - Large Desktop */
+@media (max-width: 1440px) {
+  .account-delete-container {
+    width: 480px;
+    height: 290px;
+  }
+  
+  .admin-popup-header-delete h2 {
+    font-size: 15.5px;
+  }
+  
+  .delete-warning p {
+    font-size: 13.5px;
+  }
+  
+  .delete-warning .warning-text {
+    font-size: 10.5px;
+  }
+  
+  .form-group label {
+    font-size: 13.5px;
+  }
+  
+  .password-input-container input {
+    font-size: 12.5px;
+  }
+  
+  .checkbox-container {
+    padding-left: 32px; /* Increased for more gap */
+  }
+}
+
+/* 1024px - Small Desktop/Tablet Landscape */
+@media (max-width: 1024px) {
+  .account-delete-container {
+    width: 460px;
+    height: 285px;
+  }
+  
+  .delete-warning {
+    padding: 11px 15px;
+  }
+  
+  .delete-form {
+    padding: 2px 15px;
+  }
+  
+  .admin-popup-header-delete h2 {
+    font-size: 15px;
+  }
+  
+  .delete-warning p {
+    font-size: 13px;
+  }
+  
+  .delete-warning .warning-text {
+    font-size: 10px;
+  }
+  
+  .form-group label {
+    font-size: 13px;
+  }
+  
+  .password-input-container input {
+    padding: 11px 30px 11px 9px;
+    font-size: 12px;
+  }
+  
+  .checkbox-container {
+    font-size: 11.5px;
+    padding-left: 30px; /* Increased for more gap */
+  }
+  
+  .forgot-password-link a {
+    font-size: 11.5px;
+  }
+}
+
+/* 900px - Tablet */
+@media (max-width: 900px) {
+  .account-delete-container {
+    width: 440px;
+    height: 280px;
+  }
+  
+  .delete-warning {
+    padding: 10px 14px;
+  }
+  
+  .delete-form {
+    padding: 2px 14px;
+  }
+  
+  .admin-popup-header-delete h2 {
+    font-size: 14.5px;
+  }
+  
+  .delete-warning p {
+    font-size: 12.5px;
+  }
+  
+  .delete-warning .warning-text {
+    font-size: 9.5px;
+  }
+  
+  .form-group label {
+    font-size: 12.5px;
+  }
+  
+  .password-input-container input {
+    padding: 10px 28px 10px 8px;
+    font-size: 11.5px;
+  }
+  
+  .checkbox-container {
+    font-size: 11px;
+    padding-left: 28px; /* Increased for more gap */
+  }
+  
+  .forgot-password-link a {
+    font-size: 11px;
+  }
+  
+  .delete-action-button .btn-process-order {
+    height: 34px !important;
+    font-size: 12.5px !important;
+  }
+}
+
+/* 768px - Tablet Portrait */
+@media (max-width: 768px) {
+  .account-delete-container {
+    width: 400px;
+    height: 270px;
+  }
+  
+  .delete-warning {
+    padding: 9px 13px;
+  }
+  
+  .delete-form {
+    padding: 2px 13px;
+  }
+  
+  .admin-popup-header-delete h2 {
+    font-size: 14px;
+  }
+  
+  .delete-warning p {
+    font-size: 12px;
+  }
+  
+  .delete-warning .warning-text {
+    font-size: 9px;
+    line-height: 1.3;
+  }
+  
+  .form-group label {
+    font-size: 12px;
+  }
+  
+  .password-input-container input {
+    padding: 9px 26px 9px 8px;
+    font-size: 11px;
+  }
+  
+  .password-toggle img {
+    width: 15px;
+    height: 15px;
+  }
+  
+  .checkbox-container {
+    font-size: 10.5px;
+    padding-left: 26px; /* Increased for more gap */
+  }
+  
+  .checkmark {
+    height: 15px;
+    width: 15px;
+  }
+  
+  .checkbox-container .checkmark:after {
+    left: 4px;
+    top: 1px;
+    width: 3px;
+    height: 7px;
+  }
+  
+  .forgot-password-link a {
+    font-size: 10.5px;
+  }
+  
+  .delete-action-button .btn-process-order {
+    height: 33px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* 480px - Mobile Landscape */
+@media (max-width: 480px) {
+  .account-delete-container {
+    width: 360px;
+    height: 270px;
+    max-width: 95%;
+  }
+  
+  .delete-warning {
+    padding: 8px 12px;
+  }
+  
+  .delete-form {
+    padding: 2px 12px;
+  }
+  
+  .admin-popup-header-delete h2 {
+    font-size: 13.5px;
+  }
+  
+  .delete-warning p {
+    font-size: 11.5px;
+    margin-bottom: 3px;
+  }
+  
+  .delete-warning .warning-text {
+    font-size: 8.5px;
+  }
+  
+  .form-group {
+    margin-bottom: 14px;
+  }
+  
+  .form-group label {
+    font-size: 11.5px;
+    margin-bottom: 5px;
+  }
+  
+  .password-input-container input {
+    padding: 8px 24px 8px 7px;
+    font-size: 10.5px;
+  }
+  
+  .password-toggle img {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .checkbox-container {
+    font-size: 10px;
+    padding-left: 24px; /* Increased for more gap */
+    line-height: 1.3;
+  }
+  
+  .checkmark {
+    height: 14px;
+    width: 14px;
+  }
+  
+  .checkbox-container .checkmark:after {
+    left: 4px;
+    top: 1px;
+    width: 3px;
+    height: 6px;
+  }
+  
+  .forgot-password-link {
+    margin-bottom: 14px;
+  }
+  
+  .forgot-password-link a {
+    font-size: 10px;
+  }
+  
+  .confirmation-checkbox {
+    margin-bottom: 18px;
+  }
+  
+  .delete-action-button .btn-process-order {
+    height: 32px !important;
+    font-size: 11.5px !important;
+  }
+}
+
+/* 360px - Mobile Portrait */
+@media (max-width: 360px) {
+  .account-delete-container {
+    width: 320px;
+    height: 250px;
+    max-width: 95%;
+  }
+  
+  .delete-warning {
+    padding: 7px 10px;
+  }
+  
+  .delete-form {
+    padding: 2px 10px;
+  }
+  
+  .admin-popup-header-delete h2 {
+    font-size: 13px;
+  }
+  
+  .delete-warning p {
+    font-size: 11px;
+  }
+  
+  .delete-warning .warning-text {
+    font-size: 8px;
+  }
+  
+  .form-group {
+    margin-bottom: 12px;
+  }
+  
+  .form-group label {
+    font-size: 11px;
+  }
+  
+  .password-input-container input {
+    padding: 7px 22px 7px 6px;
+    font-size: 10px;
+  }
+  
+  .password-toggle {
+    right: 6px;
+  }
+  
+  .password-toggle img {
+    width: 13px;
+    height: 13px;
+  }
+  
+  .checkbox-container {
+    font-size: 9.5px;
+    padding-left: 22px; /* Increased for more gap */
+  }
+  
+  .checkmark {
+    height: 13px;
+    width: 13px;
+  }
+  
+  .checkbox-container .checkmark:after {
+    left: 3px;
+    top: 0;
+    width: 3px;
+    height: 6px;
+  }
+  
+  .forgot-password-link {
+    margin-bottom: 12px;
+  }
+  
+  .forgot-password-link a {
+    font-size: 9.5px;
+  }
+  
+  .confirmation-checkbox {
+    margin-bottom: 16px;
+  }
+  
+  .delete-action-button .btn-process-order {
+    height: 30px !important;
+    font-size: 11px !important;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 320px) {
+  .account-delete-container {
+    width: 300px;
+    height: 240px;
+  }
+  
+  .delete-warning {
+    padding: 6px 9px;
+  }
+  
+  .delete-form {
+    padding: 2px 9px;
+  }
+  
+  .admin-popup-header-delete h2 {
+    font-size: 12.5px;
+  }
+  
+  .delete-warning p {
+    font-size: 10.5px;
+  }
+  
+  .delete-warning .warning-text {
+    font-size: 7.5px;
+  }
+  
+  .form-group label {
+    font-size: 10.5px;
+  }
+  
+  .password-input-container input {
+    padding: 6px 20px 6px 6px;
+    font-size: 9.5px;
+  }
+  
+  .checkbox-container {
+    font-size: 9px;
+    padding-left: 20px; /* Increased for more gap */
+  }
+  
+  .forgot-password-link a {
+    font-size: 9px;
+  }
+  
+  .delete-action-button .btn-process-order {
+    height: 28px !important;
+    font-size: 10.5px !important;
+  }
+}

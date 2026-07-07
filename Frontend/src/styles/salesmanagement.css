@@ -1,0 +1,578 @@
+/* salesmanagement.css */
+.sales-management-page {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  overflow-x: hidden;
+}
+
+.sales-content {
+  margin-left: 250px;
+  padding: 90px 20px 60px 20px;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease, padding 0.3s ease;
+  box-sizing: border-box;
+}
+
+.date-selector-container {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* NEW: Specific fix for Nest Hub Max (1280×800) */
+@media (max-width: 1280px) and (max-height: 850px) {
+  .sales-management-page {
+    overflow-y: auto;
+    height: 100vh;
+  }
+  
+  .sales-content {
+    min-height: auto;
+    padding: 80px 15px 50px 15px;
+    overflow: visible;
+  }
+  
+  /* Compact layout for medium-height screens */
+  .stats-cards-container {
+    margin-bottom: 10px;
+    gap: 12px;
+  }
+  
+  .stats-card {
+    padding: 10px;
+    min-height: 70px;
+  }
+  
+  .stats-title {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+  
+  .stats-value {
+    font-size: 18px;
+  }
+  
+  .order-details {
+    margin-top: 12px;
+    margin-bottom: 10px;
+  }
+  
+  .pagination-container {
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+  
+  /* Ensure all content fits with proper spacing */
+  .sales-content-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 10px;
+  }
+}
+
+/* NEW: Specific fix for 1024×600 viewport */
+@media (max-width: 1024px) and (max-height: 650px) {
+  .sales-management-page {
+    overflow-y: auto;
+    height: 100vh;
+  }
+  
+  .sales-content {
+    min-height: auto;
+    padding: 70px 12px 40px 12px;
+    overflow: visible;
+  }
+  
+  /* More compact layout for very short screens */
+  .stats-cards-container {
+    margin-bottom: 8px;
+    gap: 8px;
+    padding: 10px;
+  }
+  
+  .stats-card {
+    padding: 8px;
+    min-height: 60px;
+  }
+  
+  .stats-title {
+    font-size: 11px;
+  }
+  
+  .stats-value {
+    font-size: 16px;
+  }
+  
+  .order-details {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding: 15px;
+  }
+  
+  .pagination-container {
+    margin-top: 12px;
+    margin-bottom: 8px;
+    padding: 8px;
+  }
+  
+  .sales-content-inner {
+    gap: 8px;
+    padding-bottom: 5px;
+  }
+}
+
+/* Responsive Design - Large Desktop */
+@media (min-width: 1440px) {
+  .sales-content {
+    padding: 78px 30px 60px 30px;
+  }
+
+  .order-details {
+    margin-top: 12px;
+  }
+}
+
+/* Responsive Design - Tablet */
+@media (max-width: 1024px) {
+  .sales-content {
+    margin-left: 260px;
+    padding: 90px 15px 80px 15px;
+    overflow: visible;
+  }
+
+  /* Adjust date selector for tablet */
+  .modern-date-range-selector {
+    width: 100%;
+  }
+
+  .tab-navigation {
+    width: 30%;
+  }
+
+  .date-input-section {
+    width: 40%;
+  }
+
+  /* Stats cards adjustment */
+  .stats-cards-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* Responsive Design - Mobile Landscape */
+@media (max-width: 900px) {
+  .sales-content {
+    margin-left: 240px;
+    padding: 110px 12px 80px 12px;
+  }
+
+  .tab-navigation {
+    width: 35%;
+  }
+
+  .date-input-section {
+    width: 45%;
+  }
+
+  /* Order table adjustments */
+  .orders-table {
+    font-size: 12px;
+  }
+
+  .orders-table th:nth-child(1),
+  .orders-table td:nth-child(1) {
+    padding-left: 12px;
+    padding-right: 20px;
+  }
+
+  .orders-table th:nth-child(2),
+  .orders-table td:nth-child(2),
+  .orders-table th:nth-child(3),
+  .orders-table td:nth-child(3),
+  .orders-table th:nth-child(4),
+  .orders-table td:nth-child(4) {
+    padding-right: 25px;
+  }
+
+  .orders-table th:nth-child(5),
+  .orders-table td:nth-child(5) {
+    padding-right: 12px;
+  }
+}
+
+/* Responsive Design - Mobile Portrait (768px and below) */
+@media (max-width: 768px) {
+  .sales-content {
+    margin-left: 0;
+    padding: 90px 12px 80px 12px;
+    overflow: visible;
+    width: 100%;
+  }
+
+  .date-selector-container {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  /* Full width for date selector on mobile */
+  .modern-date-range-selector {
+    width: 100%;
+    min-width: auto !important;
+  }
+
+  .tab-navigation {
+    width: 100%;
+    margin-bottom: 15px;
+    justify-content: space-between;
+    width: 70%;
+  }
+
+  .tab-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 5px;
+    font-size: 12px;
+  }
+
+  .date-input-section {
+    width: 50%;
+  }
+
+  /* Stack date range inputs on mobile */
+  .date-range-inputs {
+    gap: 50px;
+    width: 100%;
+  }
+
+  .date-range-separator {
+    text-align: center;
+  }
+
+  /* UPDATED: Stats cards 2x2 grid layout for mobile */
+  .stats-cards-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin: 15px 0;
+    padding: 20px;
+  }
+
+  .stats-card {
+    padding: 12px;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+  }
+
+  .stats-card-content {
+    width: 100%;
+    text-align: center;
+  }
+
+  .stats-title {
+    font-size: 14px;
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .stats-value {
+    font-size: 22px;
+    line-height: 1.4;
+  }
+
+  /* Order table container with proper scrolling */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    margin: 15px 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: white;
+  }
+
+  .orders-table {
+    min-width: 650px;
+    width: 100%;
+    margin: 0;
+  }
+
+  /* Order details section */
+  .order-details {
+    margin-top: 18px;
+    padding: 22px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .order-details-header {
+    padding: 8px 8px;
+  }
+
+  .order-details-header h3 {
+    font-size: 18px;
+  }
+
+  .orders-table td {
+    padding: 8px 0;
+  }
+
+  .table-footer {
+    justify-content: center !important;
+  }
+
+  .btn-process-order {
+    width: 100%;
+    height: 50px;
+  }
+
+  /* Pagination adjustments for mobile */
+  .pagination-container {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 8px;
+    position: relative;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 20px;
+    border-radius: 10px;
+  }
+
+  .pagination-info {
+    margin-left: 0;
+    text-align: center;
+    font-size: 13px;
+    order: 2;
+  }
+
+  .pagination-controls {
+    justify-content: center;
+    order: 1;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .pagination-page,
+  .pagination-nav {
+    min-width: 35px;
+    height: 35px;
+    font-size: 15px;
+  }
+}
+
+/* Small Mobile Devices (500px and below) */
+@media (max-width: 500px) {
+  .sales-management-page {
+    overflow-y: auto;
+    height: 100vh;
+  }
+
+  .sales-content {
+    padding: 90px 8px 70px 8px;
+    min-height: auto;
+    overflow: visible;
+  }
+
+  /* Add scrollable container for the main content */
+  .sales-content-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Ensure all components fit within the scrollable area */
+  .date-selector-container,
+  .stats-cards-container,
+  .order-details {
+    max-width: 100%;
+  }
+
+  .date-range-inputs {
+    gap: 30px;
+  }
+
+  .btn-process-order {
+    width: 100%;
+    height: 50px;
+  }
+}
+
+/* Small Mobile Devices (480px and below) */
+@media (max-width: 480px) {
+  .sales-content {
+    padding: 80px 8px 70px 8px;
+  }
+
+  .date-selector-container {
+    margin-bottom: 16px;
+  }
+
+  /* Tab buttons adjustments */
+  .tab-btn {
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+
+  /* Date input fields */
+  .date-input-field {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  /* UPDATED: Stats cards 2x2 grid with tighter spacing for small screens */
+  .stats-cards-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin: 12px 0;
+    padding: 8px;
+  }
+
+  .stats-card {
+    padding: 10px 8px;
+    min-height: 75px;
+  }
+
+  .stats-title {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+
+  .stats-value {
+    font-size: 14px;
+  }
+
+  /* Order details header */
+  .order-details {
+    padding: 10px 16px;
+    margin-top: 16px;
+  }
+
+  .order-details-header h3 {
+    font-size: 15px;
+  }
+
+  /* Download button adjustments */
+  .btn-process-order {
+    width: 100%;
+    height: 50px;
+  }
+
+  /* Pagination for very small screens */
+  .pagination-controls {
+    gap: 2px;
+  }
+
+  .pagination-page,
+  .pagination-nav {
+    min-width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  .pagination-info {
+    font-size: 12px;
+  }
+}
+
+/* Extra Small Mobile Devices (340px and below) */
+@media (max-width: 340px) {
+  .sales-content {
+    padding: 85px 6px 65px 6px;
+  }
+
+  .tab-btn {
+    padding: 6px 3px;
+    font-size: 10px;
+  }
+
+  .date-input-field {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .date-range-inputs {
+    gap: 10px;
+  }
+
+  /* UPDATED: Stats cards 2x2 grid for extra small screens */
+  .stats-cards-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    margin: 10px 0;
+    padding: 6px;
+  }
+
+  .stats-card {
+    padding: 8px 6px;
+    min-height: 70px;
+  }
+
+  .stats-title {
+    font-size: 9px;
+    margin-bottom: 3px;
+    line-height: 1.2;
+  }
+
+  .stats-value {
+    font-size: 13px;
+  }
+
+  .btn-process-order {
+    width: 100%;
+    height: 50px;
+  }
+
+  .pagination-page,
+  .pagination-nav {
+    min-width: 30px;
+    height: 30px;
+    font-size: 11px;
+  }
+}
+
+/* Force scrollbar only when needed on mobile */
+@media (max-width: 768px) {
+  .sales-management-page {
+    overflow-y: auto;
+  }
+
+  .sales-content {
+    min-height: auto;
+    padding-bottom: 20px;
+  }
+
+  /* Ensure table has proper scrolling */
+  .table-container::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .table-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+
+  .table-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+}
+
+/* NEW: Custom scrollbar styling for better appearance */
+.sales-management-page::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sales-management-page::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.sales-management-page::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.sales-management-page::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

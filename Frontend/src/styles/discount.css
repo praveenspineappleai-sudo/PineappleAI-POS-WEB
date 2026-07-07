@@ -1,0 +1,896 @@
+/* discount.css - Search Customer Popup Styles */
+/* Modal Overlay */
+.discount-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Discount Modal */
+.discount-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: discountSlideIn 0.3s ease-out;
+  max-height: none;
+  overflow-y: visible;
+}
+
+@keyframes discountSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Modal Header */
+.discount-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 24px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.discount-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.discount-close-btn {
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #757575;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.discount-close-btn:hover {
+  color: #333;
+}
+
+/* Modal Body */
+.discount-body {
+  padding: 0px 24px;
+  overflow: visible;
+}
+
+/* Search Section */
+.discount-search-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2px;
+}
+
+.discount-search-input-container {
+  flex: 1;
+}
+
+.discount-search-section .search-input-container {
+  flex: 0;
+  order: 1;
+}
+
+.discount-search-section .search-input-container input {
+  width: 480px !important;
+}
+
+.discount-customer-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: #2F7A3F;
+  border-radius: 8px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.discount-customer-icon-wrapper:hover {
+  background-color: #256b32;
+}
+
+.discount-customer-icon {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+}
+
+/* Search Results Dropdown */
+.discount-search-results {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.discount-search-result {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.discount-search-result:last-child {
+  border-bottom: none;
+}
+
+.discount-search-result:hover {
+  background-color: #f8f9fa;
+}
+
+.discount-search-result.selected {
+  background-color: #A3DAAF;
+}
+
+.discount-search-result.selected:hover {
+  background-color: #8FD09F;
+}
+
+.discount-customer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.discount-customer-name {
+  font-weight: 500;
+  color: #000000;
+  font-size: 14px;
+}
+
+.discount-customer-details {
+  font-size: 12px;
+  color: #757575;
+}
+
+.discount-search-section .search-input-container {
+  flex: 0;
+  order: 1;
+}
+
+.discount-search-section .search-input-container input {
+  width: 480px !important;
+}
+
+/* Selected Customer Display */
+.discount-selected-customer {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.discount-customer-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #e9ecef;
+}
+
+.discount-customer-name-large {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 8px;
+}
+
+.discount-customer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #757575;
+  margin-bottom: 8px;
+}
+
+.discount-customer-contact span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.discount-last-purchase {
+  font-size: 13px;
+  color: #2F7A3F;
+  font-weight: 500;
+}
+
+/* Amount Sections */
+.discount-amount-sections {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 15px;
+}
+
+.discount-amount-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.discount-amount-row:last-child {
+  margin-bottom: 0;
+}
+
+.discount-amount-label {
+  font-size: 15px;
+  color: #757575;
+}
+
+.discount-amount-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Discount Slider Section */
+.discount-slider-section {
+  margin: 15px 0;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.discount-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.discount-percentage-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2F7A3F;
+}
+
+.discount-slider-container {
+  margin-bottom: 8px;
+}
+
+.discount-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #e9ecef;
+  outline: none;
+  -webkit-appearance: none;
+  margin-bottom: 8px;
+}
+
+.discount-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #2F7A3F;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.discount-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #2F7A3F;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.discount-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #757575;
+  margin-top: 4px;
+}
+
+.discount-amount-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f1f1;
+}
+
+.discount-total-row {
+  padding-top: 12px;
+  border-top: 1px solid #e9ecef;
+  margin-top: 8px;
+}
+
+.discount-total-row .discount-amount-label {
+  font-weight: 600;
+  color: #000000;
+}
+
+.discount-total-row .discount-amount-value {
+  font-weight: 700;
+  color: #2F7A3F;
+  font-size: 16px;
+}
+
+/* Modal Footer */
+.discount-footer {
+  padding: 0 24px 24px;
+}
+
+.discount-footer button,
+.discount-footer .btn-process-order {
+  width: 100%;
+}
+
+/* Scrollbar Styles - Only for search results */
+.discount-search-results::-webkit-scrollbar {
+  width: 6px;
+}
+
+.discount-search-results::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.discount-search-results::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.discount-search-results::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.discount-search-results {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+/* Responsive Design */
+/* discount-responsive.css - Add to the END of discount.css */
+
+/* 1440px - Large Desktop */
+@media screen and (max-width: 1440px) {
+  .discount-modal {
+    max-width: 580px;
+  }
+  
+  .discount-search-section .search-input-container input {
+    width: 460px !important;
+  }
+}
+
+/* 1024px - Tablet Landscape */
+@media screen and (max-width: 1024px) {
+  .discount-modal {
+    max-width: 540px;
+  }
+  
+  .discount-header {
+    padding: 16px 20px;
+  }
+  
+  .discount-title {
+    font-size: 18px;
+  }
+  
+  .discount-body {
+    padding: 0px 20px;
+  }
+  
+  .discount-footer {
+    padding: 0 20px 20px;
+  }
+  
+  .discount-search-section .search-input-container input {
+    width: 420px !important;
+  }
+  
+  .discount-customer-icon-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .discount-customer-icon {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* 900px - Small Tablet */
+@media screen and (max-width: 900px) {
+  .discount-modal {
+    max-width: 500px;
+  }
+  
+  .discount-search-section .search-input-container input {
+    width: 380px !important;
+  }
+  
+  .discount-amount-sections {
+    padding: 14px;
+  }
+  
+  .discount-slider-section {
+    padding: 14px;
+  }
+}
+
+/* 768px - Tablet Portrait */
+@media screen and (max-width: 768px) {
+  .discount-overlay {
+    padding: 15px;
+  }
+  
+  .discount-modal {
+    width: 600px;
+  }
+  
+  .discount-header {
+    padding: 14px 18px;
+  }
+  
+  .discount-title {
+    font-size: 17px;
+  }
+  
+  .discount-close-btn {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .discount-body {
+    padding: 0px 18px;
+  }
+  
+  .discount-footer {
+    padding: 0 18px 18px;
+  }
+  
+  .discount-search-section {
+    gap: 10px;
+  }
+  
+  .discount-search-section .search-input-container input {
+    width: 100% !important;
+    min-width: unset !important;
+  }
+  
+  .discount-search-input-container {
+    flex: 1;
+  }
+  
+  .discount-customer-icon-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .discount-search-results {
+    max-height: 180px;
+  }
+  
+  .discount-customer-name-large {
+    font-size: 15px;
+  }
+  
+  .discount-customer-contact {
+    font-size: 12px;
+  }
+  
+  .discount-last-purchase {
+    font-size: 12px;
+  }
+  
+  .discount-amount-sections {
+    padding: 12px;
+  }
+  
+  .discount-amount-label {
+    font-size: 14px;
+  }
+  
+  .discount-amount-value {
+    font-size: 14px;
+  }
+  
+  .discount-slider-section {
+    padding: 12px;
+  }
+  
+  .discount-percentage-value {
+    font-size: 15px;
+  }
+  
+  .discount-total-row .discount-amount-value {
+    font-size: 15px;
+  }
+}
+
+/* 480px - Mobile Landscape */
+@media screen and (max-width: 480px) {
+  .discount-overlay {
+    padding: 10px;
+  }
+  
+  .discount-modal {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .discount-header {
+    padding: 12px 16px;
+  }
+  
+  .discount-title {
+    font-size: 16px;
+  }
+  
+  .discount-close-btn {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+  }
+  
+  .discount-body {
+    padding: 0px 16px;
+  }
+  
+  .discount-footer {
+    padding: 0 16px 16px;
+  }
+  
+  .discount-search-section {
+    gap: 8px;
+  }
+  
+  .discount-customer-icon-wrapper {
+    width: 38px;
+    height: 38px;
+  }
+  
+  .discount-customer-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .discount-search-results {
+    max-height: 160px;
+    margin-bottom: 12px;
+  }
+  
+  .discount-search-result {
+    padding: 10px 12px;
+  }
+  
+  .discount-customer-name {
+    font-size: 13px;
+  }
+  
+  .discount-customer-details {
+    font-size: 11px;
+  }
+  
+  .discount-customer-card {
+    padding: 10px;
+  }
+  
+  .discount-customer-name-large {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  
+  .discount-customer-contact {
+    font-size: 11px;
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+  
+  .discount-last-purchase {
+    font-size: 11px;
+  }
+  
+  .discount-amount-sections {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .discount-amount-row {
+    margin-bottom: 10px;
+  }
+  
+  .discount-amount-label {
+    font-size: 13px;
+  }
+  
+  .discount-amount-value {
+    font-size: 13px;
+  }
+  
+  .discount-slider-section {
+    margin: 12px 0;
+    padding: 12px;
+  }
+  
+  .discount-slider-header {
+    margin-bottom: 10px;
+  }
+  
+  .discount-percentage-value {
+    font-size: 14px;
+  }
+  
+  .discount-slider {
+    height: 5px;
+  }
+  
+  .discount-slider::-webkit-slider-thumb {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .discount-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .discount-slider-labels {
+    font-size: 11px;
+  }
+  
+  .discount-amount-display {
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+  
+  .discount-total-row {
+    padding-top: 10px;
+    margin-top: 6px;
+  }
+  
+  .discount-total-row .discount-amount-value {
+    font-size: 14px;
+  }
+}
+
+/* 360px - Mobile Portrait */
+@media screen and (max-width: 360px) {
+  .discount-overlay {
+    padding: 8px;
+  }
+  
+  .discount-modal {
+    border-radius: 8px;
+  }
+  
+  .discount-header {
+    padding: 10px 14px;
+  }
+  
+  .discount-title {
+    font-size: 15px;
+  }
+  
+  .discount-close-btn {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .discount-body {
+    padding: 0px 14px;
+  }
+  
+  .discount-footer {
+    padding: 0 14px 14px;
+  }
+  
+  .discount-search-section {
+    gap: 6px;
+    margin-bottom: 0px;
+  }
+  
+  .discount-customer-icon-wrapper {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .discount-customer-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .discount-search-results {
+    max-height: 140px;
+    margin-bottom: 10px;
+  }
+  
+  .discount-search-result {
+    padding: 8px 10px;
+  }
+  
+  .discount-customer-info {
+    gap: 3px;
+  }
+  
+  .discount-customer-name {
+    font-size: 12px;
+  }
+  
+  .discount-customer-details {
+    font-size: 10px;
+  }
+  
+  .discount-selected-customer {
+    margin-bottom: 12px;
+  }
+  
+  .discount-customer-card {
+    padding: 8px;
+    border-radius: 6px;
+  }
+  
+  .discount-customer-name-large {
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+  
+  .discount-customer-contact {
+    font-size: 10px;
+    gap: 3px;
+    margin-bottom: 5px;
+  }
+  
+  .discount-last-purchase {
+    font-size: 10px;
+  }
+  
+  .discount-amount-sections {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+  }
+  
+  .discount-amount-row {
+    margin-bottom: 8px;
+  }
+  
+  .discount-amount-label {
+    font-size: 12px;
+  }
+  
+  .discount-amount-value {
+    font-size: 12px;
+  }
+  
+  .discount-slider-section {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 6px;
+  }
+  
+  .discount-slider-header {
+    margin-bottom: 8px;
+  }
+  
+  .discount-percentage-value {
+    font-size: 13px;
+  }
+  
+  .discount-slider-container {
+    margin-bottom: 6px;
+  }
+  
+  .discount-slider {
+    height: 4px;
+  }
+  
+  .discount-slider::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .discount-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .discount-slider-labels {
+    font-size: 10px;
+    margin-top: 3px;
+  }
+  
+  .discount-amount-display {
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+  
+  .discount-amount-display .discount-amount-label,
+  .discount-amount-display .discount-amount-value {
+    font-size: 11px;
+  }
+  
+  .discount-total-row {
+    padding-top: 8px;
+    margin-top: 5px;
+  }
+  
+  .discount-total-row .discount-amount-label {
+    font-size: 12px;
+  }
+  
+  .discount-total-row .discount-amount-value {
+    font-size: 13px;
+  }
+}
+
+/* Extra small devices - 320px */
+@media screen and (max-width: 320px) {
+  .discount-overlay {
+    padding: 5px;
+  }
+  
+  .discount-header {
+    padding: 8px 12px;
+  }
+  
+  .discount-title {
+    font-size: 14px;
+  }
+  
+  .discount-body {
+    padding: 0px 12px;
+  }
+  
+  .discount-footer {
+    padding: 0 12px 12px;
+  }
+  
+  .discount-customer-icon-wrapper {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .discount-customer-icon {
+    width: 16px;
+    height: 16px;
+  }
+}

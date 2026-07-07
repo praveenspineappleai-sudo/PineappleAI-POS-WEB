@@ -1,0 +1,83 @@
+/* Common base button */
+.btn {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* Check Balance Button */
+.btn-check-balance {
+  width: 558px;
+  height: 45px;
+  background-color: #2f7a3f;
+  color: #fff;
+}
+
+/* Sign In Button */
+.btn-signin {
+  width: 558px;
+  height: 45px;
+  background-color: #2f7a3f;
+  color: #fff;
+}
+
+.btn-logout {
+  border: none;        /* removes border */
+  outline: none;       /* removes focus outline */
+  background: none;    /* optional, if you want transparent background */
+  cursor: pointer;     /* keep pointer */
+  display: flex;
+  align-items: center;
+   color: #FF3D00;  
+  gap: 10px;
+  position: absolute;
+  top: 15px;
+  right: 40px;
+}
+
+
+.btn-logout img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Next Button */
+.btn-next {
+  width: 210px;
+  height: 45px;
+  border-radius: 7px;
+  background-color: #2f7a3f;
+  color: #fff;
+}
+
+/* Save Button */
+.btn-save {
+  width: 582px;
+  height: 44px;
+  background-color: #ffffff;
+  border: 2px solid #2f7a3f;
+  color: #2f7a3f;
+}
+
+/* Process Order Button */
+.btn-process-order {
+  width: 549px;
+  height: 44px;
+  background-color: #2f7a3f;
+  color: #fff;
+}
+
+/* Icon Buttons (Add/Delete) */
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}

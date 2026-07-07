@@ -1,0 +1,370 @@
+/* src/styles/stepper.css */
+.stepper-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Mobile design - hidden by default */
+.stepper-mobile {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+}
+
+.stepper-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.stepper-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  min-width: 0; /* Allow flex items to shrink */
+  box-sizing: border-box;
+}
+
+.step-number-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.step-connector {
+  flex: 1;
+  height: 2px;
+  background-color: #e0e0e0;
+  min-width: 20px;
+}
+
+.step-connector-left {
+  margin-right: 8px;
+}
+
+.step-connector-right {
+  margin-left: 8px;
+}
+
+.stepper-step:first-child .step-connector-left,
+.stepper-step:last-child .step-connector-right {
+  visibility: hidden;
+}
+
+.step-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 2px solid #e0e0e0;
+  flex-shrink: 0;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+.step-digit {
+  font-size: 14px;
+  font-weight: 600;
+  color: #757575;
+}
+
+.step-checkmark {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Active step styling */
+.stepper-step.active .step-number {
+  background-color: white;
+  border-color: #2F7A3F;
+  transform: scale(1.05);
+}
+
+.stepper-step.active .step-digit {
+  color: #2F7A3F;
+}
+
+.stepper-step.active .step-connector-left,
+.stepper-step.active .step-connector-right {
+  background-color: #e0e0e0;
+}
+
+/* Completed step styling */
+.stepper-step.completed .step-number {
+  background-color: #2F7A3F;
+  border-color: #2F7A3F;
+}
+
+/* Connect completed steps with green line */
+.stepper-step.completed .step-connector-left {
+  background-color: #2F7A3F;
+}
+
+/* If next step exists and current is completed, make right connector green */
+.stepper-step.completed:not(:last-child) .step-connector-right {
+  background-color: #2F7A3F;
+}
+
+.step-content {
+  text-align: center;
+  width: 100%;
+  max-width: 160px;
+  margin-top: 8px;
+  padding: 0 2px;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.step-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+  color: #333;
+  line-height: 1.2;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.stepper-step.active .step-title {
+  color: #2F7A3F;
+  font-weight: 700;
+}
+
+.stepper-step.completed .step-title {
+  color: #2F7A3F;
+}
+
+.step-subtitle {
+  font-size: 12px;
+  color: #757575;
+  margin: 0;
+  line-height: 1.3;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.stepper-step.active .step-subtitle {
+  color: #666;
+}
+
+.stepper-step.completed .step-subtitle {
+  color: #2F7A3F;
+}
+
+/* Mobile Stepper Styles */
+.mobile-step-indicator {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.mobile-step-circle {
+  position: relative;
+}
+
+.mobile-step-progress {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.mobile-step-inner {
+  width: 70px;
+  height: 70px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-step-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2F7A3F;
+}
+
+.mobile-step-content {
+  text-align: left;
+  padding: 0;
+  max-width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mobile-step-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.mobile-step-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .stepper-container {
+    padding: 15px 8px;
+    overflow: visible;
+  }
+  
+  /* Hide desktop stepper on mobile */
+  .stepper-steps {
+    display: none;
+  }
+  
+  /* Show mobile stepper */
+  .stepper-mobile {
+    display: flex;
+  }
+}
+
+/* Tablet responsive */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .stepper-container {
+    padding: 20px 8px;
+  }
+  
+  /* Hide desktop stepper on tablet */
+  .stepper-steps {
+    display: none;
+  }
+  
+  /* Show mobile design on tablet too */
+  .stepper-mobile {
+    display: flex;
+  }
+  
+  /* Tablet specific adjustments */
+  .stepper-mobile {
+    gap: 18px;
+  }
+  
+  .mobile-step-content {
+    padding: 0;
+  }
+  
+  .mobile-step-progress {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .mobile-step-inner {
+    width: 78px;
+    height: 78px;
+  }
+  
+  .mobile-step-text {
+    font-size: 16px;
+  }
+  
+  .mobile-step-title {
+    font-size: 22px;
+  }
+  
+  .mobile-step-subtitle {
+    font-size: 16px;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .stepper-container {
+    padding: 10px 5px;
+  }
+  
+  .stepper-mobile {
+    gap: 12px;
+  }
+  
+  .mobile-step-content {
+    padding: 0;
+  }
+  
+  .mobile-step-progress {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .mobile-step-inner {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .mobile-step-text {
+    font-size: 13px;
+  }
+  
+  .mobile-step-title {
+    font-size: 18px;
+  }
+  
+  .mobile-step-subtitle {
+    font-size: 13px;
+  }
+}
+
+/* Large screen optimization - Keep desktop design */
+@media (min-width: 1025px) {
+  .stepper-container {
+    padding: 25px 15px;
+  }
+  
+  .step-content {
+    max-width: 200px;
+  }
+  
+  .step-title {
+    font-size: 16px;
+  }
+  
+  .step-subtitle {
+    font-size: 13px;
+  }
+  
+  .step-number {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .step-digit {
+    font-size: 15px;
+  }
+  
+  .step-checkmark {
+    font-size: 18px;
+  }
+}

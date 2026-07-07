@@ -1,0 +1,729 @@
+/* customerdetails.css - Responsive Version */
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Customer Modal */
+.customer-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 580px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: modalSlideIn 0.3s ease-out;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Modal Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 24px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: #757575;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 5px 24px;
+}
+
+/* Search Section */
+.customer-search-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2px;
+}
+
+.customer-search-input-container {
+  flex: 1;
+}
+
+.customer-search-section .search-input-container {
+  flex: 0;
+  order: 1;
+}
+
+.customer-search-section .search-input-container input {
+  width: 480px !important;
+}
+
+.customer-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: #2F7A3F;
+  border-radius: 8px;
+  flex-shrink: 0;
+  order: 2;
+  margin-left: auto;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.customer-icon-wrapper:hover {
+  background-color: #266630;
+}
+
+.customer-icon {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+}
+
+/* Search Results Dropdown */
+.search-results-dropdown {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.search-result-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* Selected customer in dropdown with green background */
+.search-result-item.selected {
+  background-color: #A3DAAF;
+}
+
+.search-result-item.selected:hover {
+  background-color: #8FD09F;
+}
+
+.customer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.customer-name {
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+.customer-details {
+  font-size: 12px;
+  color: #757575;
+}
+
+/* Selected Customer Display */
+.selected-customer {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.customer-card {
+  background: #A3DAAF;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.customer-name-large {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 8px;
+}
+
+.customer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #757575;
+}
+
+.customer-contact span {
+  display: flex;
+  gap: 6px;
+}
+
+/* Total Amount Section */
+.total-amount-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.total-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #757575;
+}
+
+.total-amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* Modal Footer */
+.modal-footer {
+  padding: 0 24px 24px;
+}
+
+.modal-footer button,
+.modal-footer .btn-process-order {
+  width: 100%;
+}
+
+/* Scrollbar Styles */
+.search-results-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-results-dropdown::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.search-results-dropdown::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.search-results-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Firefox scrollbar */
+.search-results-dropdown {
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+/* Responsive Design */
+/* 1440px and above */
+/* @media (min-width: 1440px) {
+  .customer-modal {
+    max-width: 600px;
+  }
+  
+  .modal-body {
+    padding: 10px 28px;
+  }
+  
+  .modal-header {
+    padding: 12px 28px;
+  }
+  
+  .modal-footer {
+    padding: 0 28px 28px;
+  }
+} */
+
+/* 1024px to 1439px */
+/* @media (max-width: 1439px) and (min-width: 1024px) {
+  .customer-modal {
+    max-width: 550px;
+  }
+  
+  .modal-body {
+    padding: 8px 22px;
+  }
+  
+  .modal-header {
+    padding: 10px 22px;
+  }
+  
+  .modal-footer {
+    padding: 0 22px 22px;
+  }
+} */
+
+/* 900px to 1023px */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .customer-modal {
+    max-width: 500px;
+  }
+  
+  .modal-body {
+    padding: 8px 20px;
+  }
+  
+  .modal-header {
+    padding: 10px 20px;
+  }
+  
+  .modal-footer {
+    padding: 0 20px 20px;
+  }
+  
+  .search-section {
+    gap: 15px;
+  }
+  
+  .customer-icon-wrapper {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* 768px to 899px */
+@media (max-width: 899px) and (min-width: 480px) {
+  .customer-modal {
+    max-width: 480px;
+  }
+  
+  .modal-body {
+    padding: 8px 18px;
+  }
+  
+  .modal-header {
+    padding: 10px 18px;
+  }
+  
+  .modal-footer {
+    padding: 0 18px 18px;
+  }
+  
+  .search-section {
+    gap: 12px;
+  }
+  
+  .customer-icon-wrapper {
+    width: 38px;
+    height: 38px;
+  }
+  
+  .customer-icon {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .modal-title {
+    font-size: 18px;
+  }
+  
+  .total-label {
+    font-size: 15px;
+  }
+  
+  .total-amount {
+    font-size: 17px;
+  }
+}
+
+/* 480px to 767px - Mobile Landscape & Small Tablets */
+@media (max-width: 767px) and (min-width: 480px) {
+  .modal-overlay {
+    padding: 15px;
+  }
+  
+  .customer-modal {
+    max-width: 420px;
+  }
+  
+  .modal-body {
+    padding: 8px 16px;
+  }
+  
+  .modal-header {
+    padding: 8px 16px;
+  }
+  
+  .modal-footer {
+    padding: 0 16px 16px;
+  }
+  
+  /* Keep the same row layout for search section on mobile landscape */
+  .search-section {
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .customer-icon-wrapper {
+    order: 2;
+    width: 42px;
+    height: 42px;
+  }
+  
+  .search-section .search-input-container {
+    order: 1;
+  }
+  
+  .modal-title {
+    font-size: 18px;
+  }
+  
+  .close-btn {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .total-label {
+    font-size: 15px;
+  }
+  
+  .total-amount {
+    font-size: 16px;
+  }
+  
+  .customer-name-large {
+    font-size: 15px;
+  }
+  
+  .customer-contact {
+    font-size: 12px;
+  }
+}
+
+/* 375px to 479px - Mobile Portrait (iPhone SE, etc.) */
+@media (max-width: 479px) and (min-width: 375px) {
+  .modal-overlay {
+    padding: 10px;
+  }
+  
+  .customer-modal {
+    max-width: 100%;
+    border-radius: 10px;
+  }
+  
+  .modal-body {
+    padding: 6px 14px;
+  }
+  
+  .modal-header {
+    padding: 8px 14px;
+  }
+  
+  .modal-footer {
+    padding: 0 14px 14px;
+  }
+  
+  /* Keep row layout but adjust spacing for mobile portrait */
+  .search-section {
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .customer-icon-wrapper {
+    order: 2;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .search-section .search-input-container {
+    order: 1;
+  }
+  
+  .modal-title {
+    font-size: 17px;
+  }
+  
+  .close-btn {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+  }
+  
+  .total-amount-section {
+    padding: 10px 12px;
+  }
+  
+  .total-label {
+    font-size: 14px;
+  }
+  
+  .total-amount {
+    font-size: 15px;
+  }
+  
+  .customer-name-large {
+    font-size: 14px;
+  }
+  
+  .customer-contact {
+    font-size: 11px;
+  }
+  
+  .customer-card {
+    padding: 12px;
+  }
+  
+  .search-result-item {
+    padding: 10px 12px;
+  }
+  
+  .customer-name {
+    font-size: 13px;
+  }
+  
+  .customer-details {
+    font-size: 11px;
+  }
+}
+
+/* 360px to 374px - Small Mobile */
+@media (max-width: 374px) and (min-width: 360px) {
+  .modal-overlay {
+    padding: 8px;
+  }
+  
+  .customer-modal {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  
+  .modal-body {
+    padding: 5px 12px;
+  }
+  
+  .modal-header {
+    padding: 6px 12px;
+  }
+  
+  .modal-footer {
+    padding: 0 12px 12px;
+  }
+  
+  /* Keep row layout with tighter spacing */
+  .search-section {
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .customer-icon-wrapper {
+    order: 2;
+    width: 38px;
+    height: 38px;
+  }
+  
+  .customer-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .search-section .search-input-container {
+    order: 1;
+  }
+  
+  .modal-title {
+    font-size: 16px;
+  }
+  
+  .close-btn {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .total-amount-section {
+    padding: 8px 10px;
+  }
+  
+  .total-label {
+    font-size: 14px;
+  }
+  
+  .total-amount {
+    font-size: 15px;
+  }
+  
+  .customer-name-large {
+    font-size: 14px;
+  }
+  
+  .customer-contact {
+    font-size: 11px;
+  }
+}
+
+/* Below 360px - Very Small Mobile */
+@media (max-width: 359px) {
+  .modal-overlay {
+    padding: 5px;
+  }
+  
+  .customer-modal {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  
+  .modal-body {
+    padding: 5px 10px;
+  }
+  
+  .modal-header {
+    padding: 6px 10px;
+  }
+  
+  .modal-footer {
+    padding: 0 10px 10px;
+  }
+  
+  /* Keep row layout but with minimum spacing */
+  .search-section {
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+  }
+  
+  .customer-icon-wrapper {
+    order: 2;
+    width: 36px;
+    height: 36px;
+  }
+  
+  .customer-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .search-section .search-input-container {
+    order: 1;
+  }
+  
+  .modal-title {
+    font-size: 15px;
+  }
+  
+  .close-btn {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+  }
+  
+  .total-amount-section {
+    padding: 6px 8px;
+    flex-direction: row;
+    gap: 0;
+  }
+  
+  .total-label {
+    font-size: 13px;
+  }
+  
+  .total-amount {
+    font-size: 14px;
+  }
+  
+  .customer-name-large {
+    font-size: 13px;
+  }
+  
+  .customer-contact {
+    font-size: 10px;
+  }
+  
+  .customer-card {
+    padding: 8px;
+  }
+  
+  .search-result-item {
+    padding: 8px 10px;
+  }
+  
+  .customer-name {
+    font-size: 12px;
+  }
+  
+  .customer-details {
+    font-size: 10px;
+  }
+}
+/* Search results dropdown scrolling */
+.search-results-dropdown-scrollable {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+/* Each search result item styling */
+.search-result-item-default {
+  padding: 10px;
+  cursor: pointer;
+  background-color: white;
+  transition: background-color 100ms ease-in-out;
+}
+
+/* Highlighted search result item */
+.search-result-item-highlight {
+  background-color: #d1d5db; /* same as inline style before */
+
+}
+
+
+
+

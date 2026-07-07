@@ -1,0 +1,188 @@
+/* Header2 Styles */
+.header2 {
+    background-color: #FFFFFF;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 75px;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.header2-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.header2 h1 {
+    font-size: 20px;
+    font-weight: 500;
+    color: #000000;
+    margin: 0 0 5px 0;
+    text-align: left;
+}
+
+.header2 h3 {
+    font-size: 12px;
+    font-weight: 400;
+    color: #8D8D8D;
+    margin: 0;
+    text-align: left;
+}
+
+.header2-right {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+/* Responsive Design */
+/* 1440px and above */
+@media (min-width: 1440px) {
+    .header2 {
+        padding: 15px 40px;
+        height: 75px;
+    }
+    
+    .header2 h1 {
+        font-size: 24px;
+        margin: 0 0 8px 0;
+    }
+    
+    .header2 h3 {
+        font-size: 14px;
+    }
+}
+
+/* 1024px - 1439px */
+@media (max-width: 1439px) and (min-width: 1024px) {
+    .header2 {
+        padding: 15px 30px;
+        height: 75px;
+    }
+    
+    .header2 h1 {
+        font-size: 22px;
+        margin: 0 0 6px 0;
+    }
+    
+    .header2 h3 {
+        font-size: 13px;
+    }
+}
+
+/* 900px - 1023px */
+@media (max-width: 1023px) and (min-width: 900px) {
+    .header2 {
+        padding: 12px 25px;
+        height: 70px;
+    }
+    
+    .header2 h1 {
+        font-size: 20px;
+        margin: 0 0 5px 0;
+    }
+    
+    .header2 h3 {
+        font-size: 12px;
+    }
+}
+
+/* 768px - 899px */
+@media (max-width: 899px) and (min-width: 768px) {
+    .header2 {
+        padding: 12px 20px;
+        height: 65px;
+    }
+    
+    .header2 h1 {
+        font-size: 18px;
+        margin: 0 0 4px 0;
+    }
+    
+    .header2 h3 {
+        font-size: 11px;
+    }
+}
+
+/* 480px - 767px */
+@media (max-width: 767px) and (min-width: 480px) {
+    .header2 {
+        padding: 10px 25px 10px 15px; /* Increased right padding */
+        height: 60px;
+    }
+    
+    .header2 h1 {
+        font-size: 16px;
+        margin: 0 0 3px 0;
+    }
+    
+    .header2 h3 {
+        font-size: 10px;
+    }
+    
+    .header2-left {
+        max-width: 70%;
+    }
+    
+    .header2-right {
+        margin-right: 10px; /* Added right margin for logout button */
+    }
+}
+
+/* 360px - 479px */
+@media (max-width: 479px) and (min-width: 360px) {
+    .header2 {
+        padding: 8px 20px 8px 12px; /* Increased right padding */
+        height: 55px;
+    }
+    
+    .header2 h1 {
+        font-size: 14px;
+        margin: 0 0 2px 0;
+    }
+    
+    .header2 h3 {
+        font-size: 9px;
+    }
+    
+    .header2-left {
+        max-width: 65%;
+    }
+    
+    .header2-right {
+        margin-right: 8px; /* Added right margin for logout button */
+    }
+}
+
+/* Below 360px */
+@media (max-width: 359px) {
+    .header2 {
+        padding: 5px 15px 5px 10px; /* Increased right padding */
+        height: 50px;
+    }
+    
+    .header2 h1 {
+        font-size: 13px;
+        margin: 0 0 2px 0;
+    }
+    
+    .header2 h3 {
+        font-size: 8px;
+    }
+    
+    .header2-left {
+        max-width: 60%;
+    }
+    
+    .header2-right {
+        margin-right: 5px; /* Added right margin for logout button */
+    }
+}

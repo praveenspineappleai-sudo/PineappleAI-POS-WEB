@@ -1,0 +1,1177 @@
+/* addproduct.css - Updated for 2-row attribute layout */
+.add-product-page {
+    min-height: 100vh;
+    background-color: #f8fafc;
+    overflow-x: hidden;
+    text-align: left;
+    display: flex;
+}
+
+/* Main content area that should scroll */
+.add-product-content {
+    margin-left: 240px;
+    padding: 80px 30px 30px 30px;
+    min-height: calc(100vh - 100px);
+    transition: margin-left 0.3s ease, padding 0.3s ease;
+    box-sizing: border-box;
+    flex: 1;
+    overflow-y: auto; /* Enable vertical scrolling */
+    height: 100vh; /* Full viewport height */
+    
+    /* Transparent scrollbar styling */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* For Firefox */
+}
+
+/* Webkit scrollbar styles for Chrome, Edge, Safari */
+.add-product-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.add-product-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.add-product-content::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.add-product-content::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Hide header user section */
+.add-product-page .header>div:last-child,
+.add-product-page .header-content>div:last-child,
+.add-product-page .header-right,
+.add-product-page .user-info,
+.add-product-page .admin-section,
+.add-product-page [class*="user"],
+.add-product-page [class*="admin"] {
+    display: none !important;
+}
+
+.form-containers-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 1300px;
+    margin: 0 auto;
+    min-height: 100%; /* Ensure it takes full height */
+}
+
+.form-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+.container-header {
+    padding: 10px 20px 8px 20px;
+    border-bottom: none;
+    background: transparent;
+}
+
+.container-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0;
+}
+
+.container-content {
+    padding: 0px 20px 5px 20px;
+}
+
+/* Basic Details Grid - Based on UI Design */
+.basic-details-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* Form Elements - Base Styles */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+}
+
+.form-group label {
+    font-size: 16px;
+    font-weight: 400;
+    color: #000000;
+    margin-bottom: 5px;
+}
+
+/* Name Field */
+.name-field .form-input {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #374151;
+    background: white;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+/* Description Field */
+.description-field .form-textarea {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #374151;
+    background: white;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 50px;
+    font-family: inherit;
+}
+
+/* Category Field - Based on UI Design */
+.category-field .category-input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.category-field .select-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.category-field .category-input {
+    width: 100%;
+    padding: 10px 35px 10px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #374151;
+    background: white;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.category-field .category-input:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.category-field .dropdown-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+}
+
+.category-field .add-button-container {
+    flex-shrink: 0;
+}
+
+.category-field .add-button-container button {
+    margin: 0;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* VALIDATION ERROR STYLES - ADDED */
+.validation-error {
+    color: #ff4444;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+    font-weight: 500;
+}
+
+.name-field .form-input.error,
+.description-field .form-textarea.error,
+.category-field .category-input.error {
+    border-color: #ff4444;
+}
+
+.name-field .form-input.error:focus,
+.description-field .form-textarea.error:focus,
+.category-field .category-input.error:focus {
+    border-color: #ff4444;
+    box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2);
+}
+/* END VALIDATION ERROR STYLES */
+
+.category-error {
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
+.category-hint {
+    color: #2F7A3F;
+    font-size: 11px;
+    margin-top: 4px;
+    display: block;
+    font-style: italic;
+}
+
+/* Product Attributes Grid - 2-ROW LAYOUT */
+.product-attributes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.attribute-row {
+    display: flex;
+    gap: 20px;
+}
+
+.attribute-row.first-row {
+    align-items: flex-end;
+}
+
+.attribute-row.second-row {
+    align-items: flex-start;
+}
+
+/* Make form groups in attribute rows flexible */
+.attribute-row .form-group {
+    flex: 1;
+    margin-bottom: 8px;
+}
+
+/* Special empty field for alignment */
+.attribute-row .form-group.empty-field {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Color Field */
+.color-field .color-input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.color-field .select-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.color-field .color-input {
+    width: 100%;
+    padding: 8px 35px 8px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #374151;
+    background: white;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.color-field .color-input:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.color-field .dropdown-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+}
+
+.color-field .add-button-container {
+    flex-shrink: 0;
+}
+
+.color-field .add-button-container button {
+    margin: 0;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Size Field */
+.size-field .size-input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.size-field .select-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.size-field .size-input {
+    width: 100%;
+    padding: 8px 35px 8px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #374151;
+    background: white;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.size-field .size-input:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.size-field .dropdown-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+}
+
+.size-field .add-button-container {
+    flex-shrink: 0;
+}
+
+.size-field .add-button-container button {
+    margin: 0;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Regular input fields in product attributes */
+.attribute-row .form-input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #374151;
+    background: white;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+/* Input focus states */
+.form-input:focus,
+.form-textarea:focus,
+.category-field .category-input:focus,
+.color-field .color-input:focus,
+.size-field .size-input:focus {
+    outline: none;
+    border-color: #2F7A3F;
+    box-shadow: 0 0 0 2px rgba(47, 122, 63, 0.5);
+}
+
+/* Placeholder styles */
+.form-input::placeholder,
+.form-textarea::placeholder,
+.category-field .category-input::placeholder,
+.color-field .color-input::placeholder,
+.size-field .size-input::placeholder {
+    color: #BFBFBF;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    margin-right: 20px;
+    padding-bottom: 5px;
+}
+
+.form-actions button {
+    width: 180px;
+    height: 40px;
+}
+
+/* Product Cards Grid - HORIZONTAL SCROLL */
+.product-cards-grid {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* Custom Scrollbar for Product Cards */
+.product-cards-grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.product-cards-grid::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.product-cards-grid::-webkit-scrollbar-thumb {
+    background: #92B99A;
+    border-radius: 4px;
+}
+
+.product-cards-grid::-webkit-scrollbar-thumb:hover {
+    background: #2F7A3F;
+}
+
+.product-card {
+    background: #F5F8F5;
+    border-radius: 8px;
+    border: 1px solid #92B99A;
+    padding: 10px 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-width: 240px;
+    flex-shrink: 0;
+}
+
+.product-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.product-card-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #000000;
+    margin: 0;
+}
+
+.product-card-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* Dynamic product card content based on visible attributes */
+.product-card-content:has(.product-attribute:nth-child(3)) {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.product-card-content:has(.product-attribute:nth-child(4)) {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.product-card-content:has(.product-attribute:nth-child(5)) {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.product-attribute {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.attr-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.attr-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.attr-label {
+    font-size: 11px;
+    color: #4a5568;
+    font-weight: 500;
+}
+
+.attr-value {
+    font-size: 13px;
+    color: #000000;
+    font-weight: 600;
+}
+
+/* Delete Button Styles */
+.delete-variant-btn {
+    background: #E63946;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: 28px;
+    transition: all 0.2s ease;
+}
+
+.delete-variant-btn:hover {
+    background: #d32f3c;
+    transform: scale(1.05);
+}
+
+.delete-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+/* Final Actions - UPDATED FOR EDIT MODE */
+.final-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding-top: 5px;
+    margin-right: 20px;
+    padding-bottom: 5px;
+}
+
+.cancel-btn,
+.final-add-btn {
+    padding: 10px 40px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.cancel-btn {
+    background: #e5e7eb;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.cancel-btn:hover {
+    background: #d1d5db;
+    border-color: #9ca3af;
+}
+
+/* UPDATE BUTTON STYLES - MATCHING UI DESIGN (WHITE WITH GREEN BORDER) */
+.final-add-btn {
+    background: white; 
+    color: #2F7A3F; 
+    border: 1px solid #2F7A3F; 
+    min-width: 140px;
+    height: 40px;
+    padding: 10px 40px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.final-add-btn:hover {
+    background: #e5f0e7; 
+    color: #1e4f28; 
+    border-color: 1e4f28; 
+    transform: translateY(0);
+}
+
+.final-add-btn:active {
+    background: #e5f0e7;
+    color: #1e4f28;
+    border-color: #1e4f28;
+    transform: translateY(0);
+}
+
+.final-add-btn:disabled {
+    background: #f5f5f5;
+    color: #92B99A;
+    border-color: #92B99A;
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none;
+}
+
+/* RESPONSIVE DESIGN */
+
+/* 1440px - Desktop Large */
+@media (max-width: 1440px) {
+    .add-product-content {
+        padding: 80px 25px 25px 25px;
+    }
+
+    .form-containers-wrapper {
+        max-width: 1200px;
+        gap: 15px;
+    }
+    
+    .name-field .form-input,
+    .description-field .form-textarea,
+    .category-field .category-input-container {
+        max-width: 450px;
+    }
+    
+    .attribute-row {
+        gap: 15px;
+    }
+    
+    /* Update button responsive */
+    .final-add-btn {
+        min-width: 130px;
+        font-size: 15px;
+        padding: 10px 25px;
+    }
+}
+
+/* 1024px - Desktop/Tablet Landscape */
+@media (max-width: 1024px) {
+    .add-product-content {
+        margin-left: 250px;
+        padding: 90px 20px 20px 20px;
+    }
+
+    .form-containers-wrapper {
+        max-width: 100%;
+        gap: 15px;
+    }
+
+    .container-header {
+        padding: 20px 20px 3px 20px;
+    }
+
+    .container-title {
+        font-size: 20px;
+    }
+
+    .container-content {
+        padding: 20px 20px 2px 20px;
+    }
+
+    .basic-details-grid {
+        gap: 5px;
+    }
+
+    .product-attributes-grid {
+        gap: 12px;
+    }
+    
+    .attribute-row {
+        gap: 15px;
+    }
+
+    .form-group label {
+        font-size: 18px;
+    }
+
+    .name-field .form-input,
+    .description-field .form-textarea,
+    .category-field .category-input-container {
+        max-width: 400px;
+    }
+
+    .form-actions {
+        margin-right: 15px;
+        margin-top: 3px;
+        margin-bottom: 5px;
+    }
+
+    .form-actions button {
+        width: 160px;
+        height: 38px;
+    }
+
+    .product-card {
+        min-width: 220px;
+        padding: 9px 13px;
+    }
+
+    .product-card-header {
+        margin-bottom: 10px;
+    }
+
+    .product-card-title {
+        font-size: 15px;
+    }
+
+    .delete-variant-btn {
+        padding: 4px 8px;
+        height: 26px;
+    }
+
+    .delete-icon {
+        width: 10px;
+        height: 10px;
+    }
+
+    .attr-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .attr-label {
+        font-size: 10px;
+    }
+
+    .attr-value {
+        font-size: 12px;
+    }
+
+    .final-actions {
+        margin-right: 15px;
+    }
+
+    .cancel-btn,
+    .final-add-btn {
+        padding: 9px 35px;
+        font-size: 13px;
+        margin-top: 20px;
+        margin-bottom: 5px;
+    }
+    
+    /* Update button responsive */
+    .final-add-btn {
+        min-width: 120px;
+        font-size: 14px;
+        padding: 9px 20px;
+        height: 38px;
+    }
+}
+
+/* 768px - Tablet Portrait */
+@media (max-width: 768px) {
+    .add-product-content {
+        margin-left: 0;
+        padding: 90px 16px 16px 16px;
+        height: calc(100vh - 80px); /* Adjust height for mobile */
+    }
+
+    .form-containers-wrapper {
+        gap: 15px;
+    }
+
+    .container-header {
+        padding: 15px 20px 3px 20px;
+    }
+
+    .container-content {
+        padding: 15px 20px 2px 20px;
+    }
+
+    .basic-details-grid {
+        gap: 5px;
+    }
+
+    .container-title {
+        font-size: 18px;
+    }
+
+    /* Make inputs full width on mobile */
+    .name-field .form-input,
+    .description-field .form-textarea,
+    .category-field .category-input-container {
+        max-width: 100%;
+    }
+
+    /* Stack product attributes on mobile */
+    .product-attributes-grid {
+        gap: 8px;
+    }
+    
+    .attribute-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .attribute-row .form-group {
+        width: 100%;
+    }
+    
+    .attribute-row .form-group.empty-field {
+        display: none;
+    }
+
+    .form-group label {
+        font-size: 16px;
+    }
+
+    .form-actions {
+        margin-right: 10px;
+        margin-top: 3px;
+        margin-bottom: 5px;
+    }
+
+    .form-actions button {
+        width: 140px;
+        height: 36px;
+    }
+
+    .product-cards-grid {
+        gap: 12px;
+    }
+
+    .product-card {
+        min-width: 240px;
+        padding: 10px 15px;
+    }
+
+    .product-card-header {
+        margin-bottom: 12px;
+    }
+
+    .product-card-title {
+        font-size: 16px;
+    }
+
+    .delete-variant-btn {
+        padding: 5px 10px;
+        height: 28px;
+    }
+
+    .delete-icon {
+        width: 12px;
+        height: 12px;
+    }
+
+    .attr-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .attr-label {
+        font-size: 11px;
+    }
+
+    .attr-value {
+        font-size: 13px;
+    }
+
+    .final-actions {
+        margin-right: 10px;
+        gap: 10px;
+    }
+
+    .cancel-btn,
+    .final-add-btn {
+        padding: 8px 25px;
+        font-size: 13px;
+        margin-top: 20px;
+        margin-bottom: 5px;
+    }
+    
+    /* Update button responsive */
+    .final-add-btn {
+        min-width: 110px;
+        font-size: 13px;
+        padding: 8px 20px;
+        height: 36px;
+        font-weight: 600;
+        letter-spacing: normal;
+    }
+}
+
+/* 480px - Mobile Landscape */
+@media (max-width: 480px) {
+    .add-product-content {
+        padding: 80px 12px 12px 12px;
+        height: calc(100vh - 70px); /* Adjust height for mobile */
+    }
+
+    .form-containers-wrapper {
+        gap: 15px;
+    }
+
+    .form-container {
+        border-radius: 6px;
+    }
+
+    .container-header {
+        padding: 10px 15px 2px 15px;
+    }
+
+    .container-title {
+        font-size: 13px;
+    }
+
+    .container-content {
+        padding: 10px 15px 2px 15px;
+    }
+
+    .basic-details-grid {
+        gap: 3px;
+    }
+
+    .product-attributes-grid {
+        gap: 5px;
+    }
+    
+    .attribute-row {
+        gap: 3px;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        margin-bottom: 1px;
+    }
+
+    .form-input,
+    .form-textarea,
+    .category-field .category-input,
+    .color-field .color-input,
+    .size-field .size-input {
+        padding: 6px 8px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+
+    .form-textarea {
+        min-height: 45px;
+    }
+
+    .form-actions {
+        margin-right: 8px;
+        margin-top: 3px;
+        margin-bottom: 5px;
+    }
+
+    .form-actions button {
+        width: 100%;
+        max-width: 130px;
+        height: 34px;
+        font-size: 12px;
+    }
+
+    .product-cards-grid {
+        gap: 12px;
+    }
+
+    .product-card {
+        min-width: 240px;
+        padding: 10px 15px;
+    }
+
+    .product-card-header {
+        margin-bottom: 12px;
+    }
+
+    .product-card-title {
+        font-size: 16px;
+    }
+
+    .delete-variant-btn {
+        padding: 5px 10px;
+        height: 28px;
+    }
+
+    .delete-icon {
+        width: 12px;
+        height: 12px;
+    }
+
+    .attr-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .attr-label {
+        font-size: 11px;
+    }
+
+    .attr-value {
+        font-size: 13px;
+    }
+
+    .final-actions {
+        margin-right: 8px;
+        gap: 8px;
+    }
+
+    .cancel-btn,
+    .final-add-btn {
+        padding: 8px 20px;
+        font-size: 12px;
+        margin-top: 20px;
+        margin-bottom: 5px;
+    }
+    
+    /* Update button responsive */
+    .final-add-btn {
+        min-width: 100px;
+        font-size: 12px;
+        padding: 8px 15px;
+        height: 34px;
+        font-weight: 600;
+        letter-spacing: normal;
+        text-transform: uppercase;
+    }
+
+    .category-hint {
+        font-size: 10px;
+    }
+}
+
+/* 360px - Mobile Portrait */
+@media (max-width: 360px) {
+    .add-product-content {
+        padding: 80px 10px 10px 10px;
+        height: calc(100vh - 60px); /* Adjust height for mobile */
+    }
+
+    .form-containers-wrapper {
+        gap: 15px;
+    }
+
+    .container-header {
+        padding: 10px 15px 2px 15px;
+    }
+
+    .container-title {
+        font-size: 12px;
+    }
+
+    .container-content {
+        padding: 10px 15px 2px 15px;
+    }
+
+    .basic-details-grid {
+        gap: 3px;
+    }
+
+    .product-attributes-grid {
+        gap: 3px;
+    }
+    
+    .attribute-row {
+        gap: 3px;
+    }
+
+    .form-group label {
+        font-size: 12px;
+    }
+
+    .form-input,
+    .form-textarea,
+    .category-field .category-input,
+    .color-field .color-input,
+    .size-field .size-input {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+
+    .form-textarea {
+        min-height: 40px;
+    }
+
+    .form-actions {
+        margin-right: 5px;
+        margin-top: 3px;
+        margin-bottom: 5px;
+    }
+
+    .form-actions button {
+        width: 100%;
+        max-width: 120px;
+        height: 32px;
+        font-size: 11px;
+    }
+
+    .product-cards-grid {
+        gap: 8px;
+    }
+
+    .product-card {
+        min-width: 240px;
+        padding: 10px 15px;
+    }
+
+    .product-card-header {
+        margin-bottom: 12px;
+    }
+
+    .product-card-title {
+        font-size: 16px;
+    }
+
+    .product-card-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .product-attribute {
+        gap: 8px;
+    }
+
+    .delete-variant-btn {
+        padding: 5px 10px;
+        height: 28px;
+    }
+
+    .delete-icon {
+        width: 12px;
+        height: 12px;
+    }
+
+    .attr-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .attr-label {
+        font-size: 11px;
+    }
+
+    .attr-value {
+        font-size: 13px;
+    }
+
+    .final-actions {
+        margin-right: 5px;
+        gap: 6px;
+    }
+
+    .cancel-btn,
+    .final-add-btn {
+        padding: 7px 18px;
+        font-size: 11px;
+        margin-bottom: 5px;
+    }
+    
+    /* Update button responsive */
+    .final-add-btn {
+        min-width: 90px;
+        font-size: 11px;
+        padding: 7px 12px;
+        height: 32px;
+        font-weight: 600;
+        letter-spacing: normal;
+    }
+
+    .category-hint {
+        font-size: 9px;
+    }
+}
