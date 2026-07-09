@@ -2,8 +2,10 @@
 import { getToken } from "./AuthAPI";
 import Cookies from "js-cookie";
 
-const ORDER_BASE_URL = "http://192.168.0.123:5000/api/orders";
-const SALES_BASE_URL = "http://192.168.0.123:5000/api/sales";
+import { API_BASE_URL as BASE_URL } from '../config/apiConfig';
+
+const ORDER_BASE_URL = `${BASE_URL}/api/orders`;
+const SALES_BASE_URL = `${BASE_URL}/api/sales`;
 
 /**
  * 🧾 ✅ Create Order (POST)

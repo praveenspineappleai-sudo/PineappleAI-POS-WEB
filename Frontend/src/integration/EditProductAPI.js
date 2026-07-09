@@ -2,7 +2,9 @@
 import { getToken } from './AuthAPI';
 import Cookies from 'js-cookie';
 /// API base URL
-const API_BASE_URL = 'http://192.168.0.123:5000/api';
+import { API_BASE_URL as BASE_URL } from '../config/apiConfig';
+
+const API_BASE_URL = `${BASE_URL}/api`;
 // Update product with price endpoint
 export const updateProductWithPrice = async (productId, priceId, productData) => {
     try {

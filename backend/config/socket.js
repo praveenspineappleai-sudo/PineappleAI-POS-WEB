@@ -9,12 +9,12 @@ const initSocket = (server) => {
   io = socketIO(server, {
     cors: {
       origin: [
-        "http://192.168.0.123:5000",
+        "http://192.168.0.178:5000",
         "https://pos-web-dev.pineappleai.cloud",
-        "https://superadmin-pos-mobile-dev.pineappleai.cloud",
+        "httpsd://superadmin-pos-mobile-dev.pineappleai.cloud",
         "http://localhost:3000",
         "http://localhost:5000",
-        "http://192.168.0.123:5000",
+        "http://192.168.0.178:5000",
         "exp://192.168.1.9:8081", // Expo development
       ],
       methods: ["GET", "POST"],

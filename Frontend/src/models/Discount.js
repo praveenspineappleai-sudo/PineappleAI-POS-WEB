@@ -1,6 +1,7 @@
 //path: src/models/Discount.js
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/apiConfig';
 import Search from '../components/Search';
 import ProcessOrderButton from '../components/buttons/ProceedOrderButton';
 import AddCustomer from './AddCustomer';
@@ -78,7 +79,7 @@ const Discount = ({ isOpen, onClose, totalAmount, customer, onProceedOrder }) =>
     try {
       setLoading(true);
 
-      const response = await axios.get(`http://192.168.0.123:5000/api/searchcustomers/customers/search?query=${encodeURIComponent(term)}`);
+      const response = await axios.get(`${API_BASE_URL}/api/searchcustomers/customers/search?query=${encodeURIComponent(term)}`);
 
       if (response.data && Array.isArray(response.data)) {
         setSearchResults(response.data);

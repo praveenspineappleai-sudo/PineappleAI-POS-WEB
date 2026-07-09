@@ -60,11 +60,11 @@ const sendBillLink = async (phone, orderNo, businessName) => {
     // Assuming the server is reachable at the host configured in env or hardcoded for now based on user context
     // Ideally this base URL should be in .env but I will use the one observed in server.js cors or default to relative
     
-    // User mentioned: http://192.168.0.123:5000 or cloud URL. 
+    // User mentioned: http://192.168.0.178:5000 or cloud URL. 
     // I'll try to find a best guess or use a placeholder that they can configure. 
     // For now, I'll use the local IP as per their request in the chat history context, or better, make it dynamic if possible.
     // But simpliest is:
-    const baseUrl = "http://192.168.0.123:5000"; // Or https://pos-web-dev.pineappleai.cloud for prod
+    const baseUrl = "http://192.168.0.178:5000"; // Or https://pos-web-dev.pineappleai.cloud for prod
     const link = `${baseUrl}/api/public/bills/${orderNo}`;
     
     const message = `Thank you for shopping at ${businessName}. View your bill here: ${link}`;

@@ -2,7 +2,9 @@
 import { getToken } from "./AuthAPI";
 import Cookies from "js-cookie";
 
-const API_BASE_URL = "'https://192.168.0.123:5000/api/customers";
+import { API_BASE_URL as BASE_URL } from '../config/apiConfig';
+
+const API_BASE_URL = `${BASE_URL}/api/customers`;
 
 /**
  * ✅ Create a new customer (POST request)
@@ -121,8 +123,7 @@ export const searchCustomer = async (query) => {
       return [];
     }
 
-    const response = await fetch(`http://192.168.0.123
-:5000/api/searchcustomers/customers/search?query=${query}`,
+    const response = await fetch(`${BASE_URL}/api/searchcustomers/customers/search?query=${query}`,
       {
         method: "GET",
         headers: {

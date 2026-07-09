@@ -273,7 +273,7 @@ const io = initSocket(server);
 app.use(
   cors({
     origin: [
-      "http://192.168.0.123:5000",
+      "http://192.168.0.178:5000",
       "https://pos-web-dev.pineappleai.cloud",
       "https://superadmin-pos-mobile-dev.pineappleai.cloud",
       "http://localhost:3000",

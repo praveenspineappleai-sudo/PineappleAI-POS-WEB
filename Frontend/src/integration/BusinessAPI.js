@@ -1,4 +1,4 @@
-//BusinessAPI.js
+import { API_BASE_URL } from '../config/apiConfig';
 
 
 ///path:src/integration/BusinessAPI.js
@@ -8,7 +8,7 @@ export const getBusinessDetails = async (businessName) => {
     const token = localStorage.getItem("token");
 
     const res = await fetch(
-      `http://192.168.0.123:5000/api/business-details?business_name=${encodeURIComponent(businessName)}`,
+      `${API_BASE_URL}/api/business-details?business_name=${encodeURIComponent(businessName)}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

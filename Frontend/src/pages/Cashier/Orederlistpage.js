@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';// React imports for state management, lifecycle, and refs
 import { useNavigate } from 'react-router-dom';// For navigation after order completion
+import { API_BASE_URL } from '../../config/apiConfig';
 import { getBusinessDetails } from "../../integration/BusinessAPI";// API call to fetch business details for invoice
 import Header2 from '../../components/layout/Header2';// Custom header component for page title and subtitle
 import Search from '../../components/Search';/// Custom search component for product search input
@@ -68,51 +69,48 @@ const OrderListPage = () => {
   }
 
   try {
-    // 🔹 1. TRY BARCODE SEARCH FIRST (NO TOKEN)
-  
-    try {
-       let cleanedTerm = term.replace(/\s+/g, '').trim(); // remove spaces
+    let cleanedTerm = term.replace(/\s+/g, '').trim(); // remove spaces
+    const isNumericOnly = /^\d+$/.test(cleanedTerm); // Check if input is all digits (barcode)
 
-      // If user typed as "10423", convert to "104 2 3"
-        if (/^\d{3,}$/.test(cleanedTerm)) { // at least 3 digits
-          const productId = cleanedTerm.slice(0, -2); // all except last 2 digits
-          const sizeId = cleanedTerm.slice(-2, -1); // second last digit
-          const colorId = cleanedTerm.slice(-1);     // last digit
-          cleanedTerm = `${productId} ${sizeId} ${colorId}`;
-        }
+    // 🔹 1. TRY BARCODE SEARCH ONLY IF INPUT IS ALL DIGITS AND LENGTH >= 3
+    if (isNumericOnly && cleanedTerm.length >= 3) {
+      try {
+        const productId = cleanedTerm.slice(0, -2); // all except last 2 digits
+        const sizeId = cleanedTerm.slice(-2, -1); // second last digit
+        const colorId = cleanedTerm.slice(-1);     // last digit
+        const formattedBarcode = `${productId} ${sizeId} ${colorId}`;
 
-      const barcodeUrl = `http://192.168.0.123:5000/api/barcode-search/barcodes/search/${encodeURIComponent(cleanedTerm)}`;
+        const barcodeUrl = `${API_BASE_URL}/api/barcode-search/barcodes/search/${encodeURIComponent(formattedBarcode)}`;
 
-      const barcodeRes = await fetch(barcodeUrl);
+        const barcodeRes = await fetch(barcodeUrl);
 
-       if (barcodeRes.ok) {
+        if (barcodeRes.ok) {
           const barcodeData = await barcodeRes.json();
 
           if (barcodeData.product_name) {
             const formatted = [{
-            sku: barcodeData.price_id,
-            name: barcodeData.product_name,
-            price: parseFloat(barcodeData.price),
-            stock: barcodeData.quantity ?? "N/A"
+              sku: barcodeData.price_id,
+              name: barcodeData.product_name,
+              price: parseFloat(barcodeData.price),
+              stock: barcodeData.quantity ?? "N/A"
             }];
 
-          setProducts(formatted);
-          setSearchResults(formatted);
-          setSearchSelectedIndex(0);
-          return; // ⛔ STOP — barcode success
+            setProducts(formatted);
+            setSearchResults(formatted);
+            setSearchSelectedIndex(0);
+            return; // ⛔ STOP — barcode success
           }
 
-        if (barcodeData.message) {
-          setProducts([]);
-          setSearchResults([]);
-          return; // ⛔ STOP — barcode checked but no product
+          if (barcodeData.message) {
+            setProducts([]);
+            setSearchResults([]);
+            return; // ⛔ STOP — barcode checked but no product
+          }
         }
+      } catch (err) {
+        console.log("Barcode search failed:", err.message);
       }
-    } catch (err) {
-       console.log("Barcode search failed, trying name search...");
     }
-
-
 
     // 🔹 2. NAME SEARCH (TOKEN OPTIONAL)
     const token = localStorage.getItem("token");
@@ -126,8 +124,7 @@ const OrderListPage = () => {
       headers.Authorization = `Bearer ${token}`;
     }
 
-    const nameUrl = `http://192.168.0.123
-:5000/api/products?name=${encodeURIComponent(term)}`;
+    const nameUrl = `${API_BASE_URL}/api/products?name=${encodeURIComponent(term)}`;
 
     const nameRes = await fetch(nameUrl, { headers });
 

@@ -1,6 +1,7 @@
 // src/pages/sales/SalesManagement.js
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../config/apiConfig';
 
 import Header from '../../components/layout/Header';
 import Sidebar from '../../components/layout/Sidebar';
@@ -50,7 +51,7 @@ const SalesManagement = () => {
   //------------------------------------------
 
   const buildSalesStatsUrl = useCallback(() => {
-    const base = 'http://192.168.0.123:5000/api/sales/stats';
+    const base = `${API_BASE_URL}/api/sales/stats`;
     const qp = new URLSearchParams();
 
     if (selectedRange === 'today') {

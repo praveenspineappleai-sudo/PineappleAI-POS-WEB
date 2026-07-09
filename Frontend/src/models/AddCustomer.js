@@ -11,7 +11,9 @@ import customerIcon from "../assets/icons/customer.png";
 import axios from "axios";
 import { useToast } from "../contexts/ToastContext";
 
-const API_BASE_URL ='http://192.168.0.123:5000/api/customers/create';
+import { API_BASE_URL as BASE_URL } from '../config/apiConfig';
+
+const API_BASE_URL = `${BASE_URL}/api/customers/create`;
 
 const AddCustomer = ({ isOpen, onClose, totalAmount, onProceedOrder }) => {
   const navigate = useNavigate();

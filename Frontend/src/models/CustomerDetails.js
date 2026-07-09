@@ -1,6 +1,7 @@
 // src/models/CustomerDetails.js
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config/apiConfig';
 import Search from '../components/Search';
 import ProcessOrderButton from '../components/buttons/ProceedOrderButton';
 import AddCustomer from './AddCustomer';
@@ -76,8 +77,7 @@ const CustomerDetails = ({
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://192.168.0.123
-:5000/api/searchcustomers/customers/search?query=${encodeURIComponent(phoneTerm)}`,);
+        `${API_BASE_URL}/api/searchcustomers/customers/search?query=${encodeURIComponent(phoneTerm)}`,);
 
       let data = [];
       if (response.data && Array.isArray(response.data)) {

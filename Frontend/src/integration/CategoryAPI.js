@@ -1,7 +1,9 @@
 // CategoryAPI.js - Fixed API integration for categories
 import { getToken } from './AuthAPI';
 
-const API_BASE_URL = 'http://192.168.0.123:5000/api';
+import { API_BASE_URL as BASE_URL } from '../config/apiConfig';
+
+const API_BASE_URL = `${BASE_URL}/api`;
 
 /**
  * Fetch all categories from the API

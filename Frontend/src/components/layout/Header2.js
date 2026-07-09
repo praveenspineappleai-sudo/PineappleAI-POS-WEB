@@ -1,6 +1,7 @@
 ///path src/components/layout/Header2.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../config/apiConfig';
 import '../../styles/header2.css';
 import LogoutButton from '../buttons/LogoutButton';
 import { logout } from '../../integration/LogoutAPI';
@@ -23,8 +24,8 @@ const Header2 = ({
   // Function to fetch system info (like database name) from backend
   const fetchSystemInfo = async () => {
     try {
-      // Fetch from local backend
-      const response = await fetch('http://localhost:5000/api/system-info');
+      // Fetch from backend
+      const response = await fetch(`${API_BASE_URL}/api/system-info`);
       const result = await response.json();
       if (result.success && result.data) {
         setDbName(result.data.dbName || "");

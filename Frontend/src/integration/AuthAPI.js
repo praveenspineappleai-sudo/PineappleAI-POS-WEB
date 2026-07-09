@@ -1,7 +1,9 @@
 // AuthAPI.js
 import Cookies from 'js-cookie';
 
-const API_BASE_URL = 'http://192.168.0.123:5000/api/auth';
+import { API_BASE_URL as BASE_URL } from '../config/apiConfig';
+
+const API_BASE_URL = `${BASE_URL}/api/auth`;
 
 
 // Set cookie options
