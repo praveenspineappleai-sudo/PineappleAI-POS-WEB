@@ -936,7 +936,7 @@ const AddProduct = () => {
                                     )}
                                     {categoryError && <span className="category-error">{categoryError}</span>}
                                     {!showProductAttributes && !editMode && (
-                                        <span className="category-hint">*Select a category to view and add relevant product attributes.</span>
+                                        <span className="category-hint">*Select a category to view and add relevant product attributes automation check.</span>
                                     )}
                                 </div>
                             </div>
@@ -947,7 +947,7 @@ const AddProduct = () => {
                     {showProductAttributes && (
                         <div className="form-container">
                             <div className="container-header">
-                                <h3 className="container-title">attributes</h3>
+                                <h3 className="container-title">Product attributes</h3>
                             </div>
                             <div className="container-content">
                                 <div className="product-attributes-grid">
