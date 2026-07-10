@@ -947,7 +947,7 @@ const AddProduct = () => {
                     {showProductAttributes && (
                         <div className="form-container">
                             <div className="container-header">
-                                <h3 className="container-title">Product attributes</h3>
+                                <h3 className="container-title">attributes</h3>
                             </div>
                             <div className="container-content">
                                 <div className="product-attributes-grid">
