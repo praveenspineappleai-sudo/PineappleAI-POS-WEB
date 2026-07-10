@@ -936,7 +936,7 @@ const AddProduct = () => {
                                     )}
                                     {categoryError && <span className="category-error">{categoryError}</span>}
                                     {!showProductAttributes && !editMode && (
-                                        <span className="category-hint">*Select a category to view and add relevant product attributes. Dev automation.</span>
+                                        <span className="category-hint">*Select a category to view and add relevant product attributes.</span>
                                     )}
                                 </div>
                             </div>
