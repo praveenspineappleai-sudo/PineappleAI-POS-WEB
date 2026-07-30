@@ -97,10 +97,41 @@
   width: 80px;
 }
 
+.th-with-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
 .th-with-icon {
   display: flex;
   align-items: center;
   gap: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.th-with-icon:hover {
+  color: #2F7A3F;
+}
+
+.sort-arrow {
+  color: #2F7A3F;
+  font-weight: bold;
+}
+
+.active-tag {
+  font-size: 10px;
+  color: #2F7A3F;
+  background-color: #DCFCE7;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .limit-icon {
@@ -108,10 +139,86 @@
   height: 16px;
   opacity: 0.7;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.limit-icon:hover {
+.limit-icon:hover,
+.limit-icon.active-filter {
   opacity: 1;
+  filter: invert(38%) sepia(48%) saturate(839%) hue-rotate(86deg) brightness(94%) contrast(92%);
+}
+
+.filter-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  min-width: 190px;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: 6px 0;
+  font-size: 12px;
+  font-weight: normal;
+  text-align: left;
+}
+
+.dropdown-header-title {
+  padding: 6px 14px 4px 14px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+
+.dropdown-item {
+  padding: 8px 14px;
+  color: #334155;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f5f9;
+  color: #2F7A3F;
+}
+
+.dropdown-item.active {
+  background-color: #f0fdf4;
+  color: #2F7A3F;
+  font-weight: 600;
+}
+
+.dropdown-item.active::after {
+  content: "✓";
+  color: #2F7A3F;
+  font-weight: bold;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 4px 0;
+}
+
+.dropdown-item.reset-item {
+  color: #ef4444;
+  font-size: 11px;
+  border-top: 1px solid #f1f5f9;
+  margin-top: 4px;
+}
+
+.dropdown-item.reset-item:hover {
+  background-color: #fef2f2;
+  color: #dc2626;
 }
 
 .product-table td {

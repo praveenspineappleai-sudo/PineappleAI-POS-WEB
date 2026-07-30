@@ -1,12 +1,24 @@
-const { sequelize } = require('../config/db'); // Import the Sequelize instance
-const cashier_customerModel = require('../models/customerModel'); // Import the model function
-const Customer = cashier_customerModel(sequelize, require('sequelize').DataTypes); // Initialize the model
+const db = require('../models');
+const Customer = db.Customer;
 
 // Create a new customer
 exports.createCustomer = async (req, res) => {
   try {
-    const customer = await Customer.create(req.body);
-    res.status(201).json({ success: true, message: 'Customer created successfully', data: customer });
+    const customerPayload = { ...req.body };
+
+    if (customerPayload.phone_no) {
+      const digits = String(customerPayload.phone_no).replace(/\D/g, '');
+      customerPayload.phone_no = digits.startsWith('0') && digits.length === 10 ? digits.slice(1) : digits;
+    }
+
+    const customer = await Customer.create(customerPayload);
+    const customerResponse = customer.toJSON ? customer.toJSON() : customer;
+
+    res.status(201).json({
+      success: true,
+      message: 'Customer created successfully',
+      data: customerResponse,
+    });
   } catch (error) {
     console.error('Error in createCustomer:', error);
     res.status(400).json({ success: false, error: error.message });

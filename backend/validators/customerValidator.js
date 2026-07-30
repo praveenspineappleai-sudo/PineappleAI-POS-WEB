@@ -5,8 +5,9 @@ const { body } = require('express-validator'); // Importing 'body' from 'express
 // Customer Name Validation
 const validateName = (isCreate = true) => { // Function to validate customer name, with an option for create/update
   let validator = body('name') // Specifies that we're validating the 'customer_name' field
-    .isLength({ min: 3, max: 50 }).withMessage('Must be 3-50 chars.') // Checks if the name is between 3 and 50 characters long.
-    .matches(/^[a-zA-Z\s]+$/).withMessage('Only letters and spaces allowed.'); // Ensures only letters and spaces are allowed
+    .trim()
+    .notEmpty().withMessage('Name is required.')
+    .isLength({ min: 2, max: 50 }).withMessage('Name must be 2-50 characters.');
 
   if (isCreate) { // If this is a creation request
     validator = validator.notEmpty().withMessage('Name is required.'); // Ensures the name field is not empty
@@ -18,8 +19,9 @@ const validateName = (isCreate = true) => { // Function to validate customer nam
 // Phone Number Validation
 const validatePhoneNo = (isCreate = true) => { // Function to validate phone number, with an option for create/update
   let validator = body('phone_no') // Specifies that we're validating the 'customer_phoneno' field
-    .isNumeric().withMessage('Only numbers allowed.') // Ensures the phone number contains only numbers.
-    .matches(/^[1-9]\d{8}$/).withMessage('Must be 9 digits, no leading 0.'); // Ensures it has exactly 9 digits and does not start with 0.
+    .trim()
+    .notEmpty().withMessage('Phone is required.')
+    .matches(/^0?\d{9}$/).withMessage('Enter a valid phone number (9 digits, with or without leading 0).');
 
   if (isCreate) { // If this is a creation request
     validator = validator.notEmpty().withMessage('Phone is required.'); // Ensures the phone number field is not empty

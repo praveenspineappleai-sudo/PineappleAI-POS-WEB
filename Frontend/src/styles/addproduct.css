@@ -15,12 +15,16 @@
     transition: margin-left 0.3s ease, padding 0.3s ease;
     box-sizing: border-box;
     flex: 1;
-    overflow-y: auto; /* Enable vertical scrolling */
-    height: 100vh; /* Full viewport height */
-    
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    height: 100vh;
+    /* Full viewport height */
+
     /* Transparent scrollbar styling */
-    scrollbar-width: thin; /* For Firefox */
-    scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* For Firefox */
+    scrollbar-width: thin;
+    /* For Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    /* For Firefox */
 }
 
 /* Webkit scrollbar styles for Chrome, Edge, Safari */
@@ -58,7 +62,8 @@
     gap: 5px;
     max-width: 1300px;
     margin: 0 auto;
-    min-height: 100%; /* Ensure it takes full height */
+    min-height: 100%;
+    /* Ensure it takes full height */
 }
 
 .form-container {
@@ -215,6 +220,7 @@
     border-color: #ff4444;
     box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2);
 }
+
 /* END VALIDATION ERROR STYLES */
 
 .category-error {
@@ -583,9 +589,9 @@
 
 /* UPDATE BUTTON STYLES - MATCHING UI DESIGN (WHITE WITH GREEN BORDER) */
 .final-add-btn {
-    background: white; 
-    color: #2F7A3F; 
-    border: 1px solid #2F7A3F; 
+    background: white;
+    color: #2F7A3F;
+    border: 1px solid #2F7A3F;
     min-width: 140px;
     height: 40px;
     padding: 10px 40px;
@@ -595,9 +601,9 @@
 }
 
 .final-add-btn:hover {
-    background: #e5f0e7; 
-    color: #1e4f28; 
-    border-color: 1e4f28; 
+    background: #e5f0e7;
+    color: #1e4f28;
+    border-color: 1e4f28;
     transform: translateY(0);
 }
 
@@ -629,17 +635,17 @@
         max-width: 1200px;
         gap: 15px;
     }
-    
+
     .name-field .form-input,
     .description-field .form-textarea,
     .category-field .category-input-container {
         max-width: 450px;
     }
-    
+
     .attribute-row {
         gap: 15px;
     }
-    
+
     /* Update button responsive */
     .final-add-btn {
         min-width: 130px;
@@ -679,7 +685,7 @@
     .product-attributes-grid {
         gap: 12px;
     }
-    
+
     .attribute-row {
         gap: 15px;
     }
@@ -752,7 +758,7 @@
         margin-top: 20px;
         margin-bottom: 5px;
     }
-    
+
     /* Update button responsive */
     .final-add-btn {
         min-width: 120px;
@@ -767,7 +773,8 @@
     .add-product-content {
         margin-left: 0;
         padding: 90px 16px 16px 16px;
-        height: calc(100vh - 80px); /* Adjust height for mobile */
+        height: calc(100vh - 80px);
+        /* Adjust height for mobile */
     }
 
     .form-containers-wrapper {
@@ -801,7 +808,7 @@
     .product-attributes-grid {
         gap: 8px;
     }
-    
+
     .attribute-row {
         flex-direction: column;
         gap: 5px;
@@ -810,7 +817,7 @@
     .attribute-row .form-group {
         width: 100%;
     }
-    
+
     .attribute-row .form-group.empty-field {
         display: none;
     }
@@ -882,7 +889,7 @@
         margin-top: 20px;
         margin-bottom: 5px;
     }
-    
+
     /* Update button responsive */
     .final-add-btn {
         min-width: 110px;
@@ -898,7 +905,8 @@
 @media (max-width: 480px) {
     .add-product-content {
         padding: 80px 12px 12px 12px;
-        height: calc(100vh - 70px); /* Adjust height for mobile */
+        height: calc(100vh - 70px);
+        /* Adjust height for mobile */
     }
 
     .form-containers-wrapper {
@@ -928,7 +936,7 @@
     .product-attributes-grid {
         gap: 5px;
     }
-    
+
     .attribute-row {
         gap: 3px;
     }
@@ -1017,7 +1025,7 @@
         margin-top: 20px;
         margin-bottom: 5px;
     }
-    
+
     /* Update button responsive */
     .final-add-btn {
         min-width: 100px;
@@ -1038,7 +1046,8 @@
 @media (max-width: 360px) {
     .add-product-content {
         padding: 80px 10px 10px 10px;
-        height: calc(100vh - 60px); /* Adjust height for mobile */
+        height: calc(100vh - 60px);
+        /* Adjust height for mobile */
     }
 
     .form-containers-wrapper {
@@ -1064,7 +1073,7 @@
     .product-attributes-grid {
         gap: 3px;
     }
-    
+
     .attribute-row {
         gap: 3px;
     }
@@ -1160,7 +1169,7 @@
         font-size: 11px;
         margin-bottom: 5px;
     }
-    
+
     /* Update button responsive */
     .final-add-btn {
         min-width: 90px;
@@ -1174,4 +1183,169 @@
     .category-hint {
         font-size: 9px;
     }
+}
+
+/* ===================== Custom Attribute Input (Dropdown + Plus Button) ===================== */
+.custom-attr-input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.custom-attr-input-container .select-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.custom-attr-select {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    padding-right: 32px;
+}
+
+.custom-attr-dropdown-icon {
+    pointer-events: none;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    opacity: 0.5;
+}
+
+/* The round + button next to custom attributes */
+.attr-add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    border: 2px solid #f0a500;
+    background: #fff8e7;
+    color: #f0a500;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.12s;
+    box-shadow: 0 2px 8px rgba(240, 165, 0, 0.13);
+    line-height: 1;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.attr-add-btn:hover {
+    background: #f0a500;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(240, 165, 0, 0.28);
+    transform: scale(1.08);
+}
+
+.attr-add-btn:active {
+    transform: scale(0.97);
+}
+
+/* Cart card custom attribute row */
+.product-attribute.custom-attr-card {
+    border-left: 3px solid #f0a500;
+    background: linear-gradient(90deg, #fff8e7 0%, #fff 100%);
+}
+
+/* ===================== Inline Add-Value Modal ===================== */
+.add-value-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.38);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeInOverlay 0.18s ease;
+}
+
+@keyframes fadeInOverlay {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.add-value-modal {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+    min-width: 340px;
+    max-width: 94vw;
+    padding: 0;
+    overflow: hidden;
+    animation: slideUpModal 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUpModal {
+    from {
+        transform: translateY(40px) scale(0.96);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.add-value-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px 12px 22px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.add-value-modal-header h4 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a2e;
+    text-transform: capitalize;
+}
+
+.add-value-modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #888;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+    border-radius: 50%;
+    transition: background 0.15s, color 0.15s;
+}
+
+.add-value-modal-close:hover {
+    background: #f3f4f6;
+    color: #333;
+}
+
+.add-value-modal-body {
+    padding: 18px 22px 10px 22px;
+}
+
+.add-value-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 10px 22px 18px 22px;
+}
+
+.custom-attr-select {
+    cursor: pointer;
+    background-color: #ffffff !important;
 }

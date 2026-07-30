@@ -11,13 +11,13 @@ import customerIcon from '../assets/icons/customer.png';
 import { useToast } from '../contexts/ToastContext';
 
 
-const CustomerDetails = ({ 
-  isOpen, 
-  onClose, 
-  totalAmount = 0, 
-  onProceedOrder, 
-  onCustomerSelect, 
-  selectedCustomer 
+const CustomerDetails = ({
+  isOpen,
+  onClose,
+  totalAmount = 0,
+  onProceedOrder,
+  onCustomerSelect,
+  selectedCustomer
 }) => {
 
   const [searchTerm, setSearchTerm] = useState('');// State for the search input
@@ -51,12 +51,12 @@ const CustomerDetails = ({
     mountedRef.current = true;
     return () => { mountedRef.current = false; };
   }, []);
-   // Normalize customer data from various possible API response formats
+  // Normalize customer data from various possible API response formats
   const normalizeCustomer = (c) => {
     if (!c) return null;
     const id = c.id ?? c.customer_id ?? c.customerId ?? c._id ?? null;
-    const customerName = c.customerName || `${c.first_name || ''} ${c.last_name || ''}`.trim() || c.name || c.fullName || '';
-    const phoneNumber = c.phoneNumber || c.phone || c.contact || c.mobile || '';
+    const customerName = c.customerName || c.customer_name || `${c.first_name || ''} ${c.last_name || ''}`.trim() || c.name || c.fullName || '';
+    const phoneNumber = c.phoneNumber || c.phone_no || c.phone || c.contact || c.mobile || '';
     return {
       ...c,
       id,
@@ -126,12 +126,12 @@ const CustomerDetails = ({
 
 
   // Handle proceeding order from add customer modal
- const handleAddCustomerProceed = (createdCustomer) => {
+  const handleAddCustomerProceed = (createdCustomer) => {
     if (!createdCustomer) {
       setShowAddCustomer(false);
       return;
     }
-   // Normalize and select the newly created customer, then show discount modal
+    // Normalize and select the newly created customer, then show discount modal
     const norm = normalizeCustomer(createdCustomer);
     setLocalSelectedCustomer(norm);
     onCustomerSelect?.(norm);
@@ -214,7 +214,7 @@ const CustomerDetails = ({
       const key = e.key;
       if (key === 'Delete' && searchFocused) { e.preventDefault(); handleClose(); return; }
       if (key === 'ArrowRight' && searchFocused) { e.preventDefault(); setShowAddCustomer(true); return; }
-      if (['ArrowDown','ArrowUp','PageDown','PageUp'].includes(key)) { e.preventDefault(); moveSelection(key); setSearchFocused(false); return; }
+      if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp'].includes(key)) { e.preventDefault(); moveSelection(key); setSearchFocused(false); return; }
       if (key === 'Enter') {
         e.preventDefault();
         if (searchResults.length > 0 && highlightIndex >= 0) {
@@ -222,7 +222,7 @@ const CustomerDetails = ({
           if (candidate) { handleCustomerSelect(candidate); setSearchFocused(false); return; }
         }
         // Always proceed
-         handleProceedOrder(); return; 
+        handleProceedOrder(); return;
       }
     };
 
@@ -242,7 +242,7 @@ const CustomerDetails = ({
         const item = container.children[highlightIndex];
         if (item) item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
-    } catch (err) {}
+    } catch (err) { }
   }, [highlightIndex, searchResults]);
 
   if (!isOpen && !showAddCustomer && !showDiscount) return null;
@@ -268,7 +268,7 @@ const CustomerDetails = ({
                   />
                 </div>
                 <div className="customer-icon-wrapper" onClick={handleCustomerIconClick} role="button" tabIndex={0}
-                     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleCustomerIconClick(); }}>
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleCustomerIconClick(); }}>
                   <img src={customerIcon} alt="Customer" className="customer-icon" />
                 </div>
               </div>
@@ -276,7 +276,7 @@ const CustomerDetails = ({
               {!loading && searchResults.length > 0 && (
                 <div className="search-results-dropdown search-results-dropdown-scrollable" role="list" aria-label="Customer search results" ref={resultsRef}>
                   {searchResults.map((customer, index) => (
-                    <div key={customer.id ?? index} className={`search-result-item search-result-item-default ${highlightIndex===index?'search-result-item-highlight':''}`} onClick={()=>handleCustomerSelect(customer)} onMouseEnter={()=>setHighlightIndex(index)} role="listitem" tabIndex={-1}>
+                    <div key={customer.id ?? index} className={`search-result-item search-result-item-default ${highlightIndex === index ? 'search-result-item-highlight' : ''}`} onClick={() => handleCustomerSelect(customer)} onMouseEnter={() => setHighlightIndex(index)} role="listitem" tabIndex={-1}>
                       <div className="customer-info">
                         <div className="customer-name">{customer.customerName || customer.name}</div>
                         <div className="customer-details">{customer.phoneNumber || customer.phone}</div>
@@ -295,11 +295,11 @@ const CustomerDetails = ({
               )}
               <div className="total-amount-section">
                 <span className="total-label">Total amount</span>
-                <span className="total-amount">Rs {Number(totalAmount||0).toLocaleString()}.00</span>
+                <span className="total-amount">Rs {Number(totalAmount || 0).toLocaleString()}.00</span>
               </div>
             </div>
             <div className="modal-footer">
-              <ProcessOrderButton onClick={handleProceedOrder} title="Proceed order"/>
+              <ProcessOrderButton onClick={handleProceedOrder} title="Proceed order" />
             </div>
           </div>
         </div>
@@ -320,7 +320,7 @@ const CustomerDetails = ({
         onProceedOrder={handleDiscountProceedOrder}
       />
 
-    
+
 
 
 

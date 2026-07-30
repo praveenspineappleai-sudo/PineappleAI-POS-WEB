@@ -6,6 +6,7 @@ const {
   CashierDetail,
   Otp,
 } = require("../models");
+const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
@@ -42,15 +43,20 @@ function generateOtp() {
 exports.login = async (req, res) => {
   try {
     const { email, password, rememberMe } = req.body;
+    const identifier = (email || "").trim();
 
-    if (!email || !password) {
+    if (!identifier || !password) {
       return res
         .status(400)
-        .json({ message: "Email and password are required" });
+        .json({ message: "Email or username and password are required" });
     }
 
-    // Step 1: Find the user
-    const user = await User.findOne({ where: { email } });
+    // Step 1: Find the user by email or username
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [{ email: identifier }, { username: identifier }],
+      },
+    });
     if (!user)
       return res.status(401).json({ message: "Invalid email or password" });
     if (user.status !== "active")
@@ -64,22 +70,55 @@ exports.login = async (req, res) => {
     let businessId = null;
     let businessName = null;
 
-    if (user.role === "owner") {
-      // Fetch business through owner details
+    const roleLower = (user.role || "").toLowerCase();
+
+    if (
+      roleLower === "owner" ||
+      roleLower === "admin" ||
+      roleLower === "superadmin" ||
+      roleLower === "super_admin" ||
+      roleLower === "super admin"
+    ) {
+      // 1. Try owner details
       const owner = await OwnerDetail.findOne({
         where: { user_id: user.id },
         include: [{ model: BusinessDetail, as: "businessDetail" }],
       });
 
-      if (!owner?.businessDetail) {
+      if (owner?.businessDetail) {
+        businessId = owner.businessDetail.id;
+        businessName = owner.businessDetail.name;
+      } else {
+        // 2. Try cashier details
+        const cashier = await CashierDetail.findOne({
+          where: { user_id: user.id },
+        });
+        if (cashier) {
+          const business = await BusinessDetail.findOne({
+            where: { owner_id: cashier.owner_id },
+          });
+          if (business) {
+            businessId = business.id;
+            businessName = business.name;
+          }
+        }
+      }
+
+      // 3. Fallback for superadmin / admin without specific business link
+      if (!businessId && (roleLower.includes("admin") || roleLower.includes("super"))) {
+        const defaultBusiness = await BusinessDetail.findOne();
+        if (defaultBusiness) {
+          businessId = defaultBusiness.id;
+          businessName = defaultBusiness.name;
+        }
+      }
+
+      if (!businessId && roleLower === "owner") {
         return res
           .status(400)
           .json({ message: "No business associated with this owner" });
       }
-
-      businessId = owner.businessDetail.id;
-      businessName = owner.businessDetail.name;
-    } else if (user.role === "cashier") {
+    } else if (roleLower === "cashier") {
       // Fetch cashier details to get owner_id
       const cashier = await CashierDetail.findOne({
         where: { user_id: user.id },

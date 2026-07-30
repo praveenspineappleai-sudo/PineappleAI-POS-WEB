@@ -78,10 +78,10 @@ const Login = () => {
           console.log('Login successful:', result.data);
 
           // Get user role from response
-          const userRole = result.data.user.role;
+          const userRole = (result.data.user?.role || '').toLowerCase();
 
           // Navigate based on user role - replace current history entry
-          if (userRole === 'owner' || userRole === 'admin') {
+          if (['owner', 'admin', 'superadmin', 'super_admin', 'super admin'].includes(userRole)) {
             navigate('/dashboard', { replace: true });
           } else if (userRole === 'cashier') {
             navigate('/order-list', { replace: true });

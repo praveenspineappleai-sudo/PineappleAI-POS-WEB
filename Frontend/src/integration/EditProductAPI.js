@@ -27,6 +27,13 @@ export const updateProductWithPrice = async (productId, priceId, productData) =>
             business_id: parseInt(businessId),
         };
 
+        // Copy any dynamic custom attributes
+        Object.keys(productData).forEach(key => {
+            if (!['name', 'description', 'category_id', 'color_id', 'size_id', 'quantity', 'cost_price', 'selling_price'].includes(key)) {
+                updatePayload[key] = productData[key];
+            }
+        });
+
         console.log('📤 Sending to update product:', {
             productId,
             priceId,

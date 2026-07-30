@@ -62,106 +62,106 @@ const OrderListPage = () => {
   const mountedRef = useRef(false);
 
   const fetchProducts = async (term) => {
-  if (!term || term.trim() === '') {
-    setProducts([]);
-    setSearchResults([]);
-    return;
-  }
-
-  try {
-    let cleanedTerm = term.replace(/\s+/g, '').trim(); // remove spaces
-    const isNumericOnly = /^\d+$/.test(cleanedTerm); // Check if input is all digits (barcode)
-
-    // 🔹 1. TRY BARCODE SEARCH ONLY IF INPUT IS ALL DIGITS AND LENGTH >= 3
-    if (isNumericOnly && cleanedTerm.length >= 3) {
-      try {
-        const productId = cleanedTerm.slice(0, -2); // all except last 2 digits
-        const sizeId = cleanedTerm.slice(-2, -1); // second last digit
-        const colorId = cleanedTerm.slice(-1);     // last digit
-        const formattedBarcode = `${productId} ${sizeId} ${colorId}`;
-
-        const barcodeUrl = `${API_BASE_URL}/api/barcode-search/barcodes/search/${encodeURIComponent(formattedBarcode)}`;
-
-        const barcodeRes = await fetch(barcodeUrl);
-
-        if (barcodeRes.ok) {
-          const barcodeData = await barcodeRes.json();
-
-          if (barcodeData.product_name) {
-            const formatted = [{
-              sku: barcodeData.price_id,
-              name: barcodeData.product_name,
-              price: parseFloat(barcodeData.price),
-              stock: barcodeData.quantity ?? "N/A"
-            }];
-
-            setProducts(formatted);
-            setSearchResults(formatted);
-            setSearchSelectedIndex(0);
-            return; // ⛔ STOP — barcode success
-          }
-
-          if (barcodeData.message) {
-            setProducts([]);
-            setSearchResults([]);
-            return; // ⛔ STOP — barcode checked but no product
-          }
-        }
-      } catch (err) {
-        console.log("Barcode search failed:", err.message);
-      }
-    }
-
-    // 🔹 2. NAME SEARCH (TOKEN OPTIONAL)
-    const token = localStorage.getItem("token");
-
-    const headers = {
-      "Content-Type": "application/json"
-    };
-
-    // token irundha mattum add pannrom
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-
-    const nameUrl = `${API_BASE_URL}/api/products?name=${encodeURIComponent(term)}`;
-
-    const nameRes = await fetch(nameUrl, { headers });
-
-    if (!nameRes.ok) {
+    if (!term || term.trim() === '') {
       setProducts([]);
       setSearchResults([]);
       return;
     }
 
-    const nameData = await nameRes.json();
+    try {
+      let cleanedTerm = term.replace(/\s+/g, '').trim(); // remove spaces
+      const isNumericOnly = /^\d+$/.test(cleanedTerm); // Check if input is all digits (barcode)
 
-    if (Array.isArray(nameData) && nameData.length > 0) {
-      const formattedList = nameData.map(item => ({
-      sku: item.price_id,          
-      name: item.product_name || item.name,
-      price: parseFloat(item.price || item.selling_price),
-      stock: item.quantity ?? "N/A"
-    }));
+      // 🔹 1. TRY BARCODE SEARCH ONLY IF INPUT IS ALL DIGITS AND LENGTH >= 3
+      if (isNumericOnly && cleanedTerm.length >= 3) {
+        try {
+          const productId = cleanedTerm.slice(0, -2); // all except last 2 digits
+          const sizeId = cleanedTerm.slice(-2, -1); // second last digit
+          const colorId = cleanedTerm.slice(-1);     // last digit
+          const formattedBarcode = `${productId} ${sizeId} ${colorId}`;
+
+          const barcodeUrl = `${API_BASE_URL}/api/barcode-search/barcodes/search/${encodeURIComponent(formattedBarcode)}`;
+
+          const barcodeRes = await fetch(barcodeUrl);
+
+          if (barcodeRes.ok) {
+            const barcodeData = await barcodeRes.json();
+
+            if (barcodeData.product_name) {
+              const formatted = [{
+                sku: barcodeData.price_id,
+                name: barcodeData.product_name,
+                price: parseFloat(barcodeData.price),
+                stock: barcodeData.quantity ?? "N/A"
+              }];
+
+              setProducts(formatted);
+              setSearchResults(formatted);
+              setSearchSelectedIndex(0);
+              return; // ⛔ STOP — barcode success
+            }
+
+            if (barcodeData.message) {
+              setProducts([]);
+              setSearchResults([]);
+              return; // ⛔ STOP — barcode checked but no product
+            }
+          }
+        } catch (err) {
+          console.log("Barcode search failed:", err.message);
+        }
+      }
+
+      // 🔹 2. NAME SEARCH (TOKEN OPTIONAL)
+      const token = localStorage.getItem("token");
+
+      const headers = {
+        "Content-Type": "application/json"
+      };
+
+      // token irundha mattum add pannrom
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+
+      const nameUrl = `${API_BASE_URL}/api/products?name=${encodeURIComponent(term)}`;
+
+      const nameRes = await fetch(nameUrl, { headers });
+
+      if (!nameRes.ok) {
+        setProducts([]);
+        setSearchResults([]);
+        return;
+      }
+
+      const nameData = await nameRes.json();
+
+      if (Array.isArray(nameData) && nameData.length > 0) {
+        const formattedList = nameData.map(item => ({
+          sku: item.price_id,
+          name: item.product_name || item.name,
+          price: parseFloat(item.price || item.selling_price),
+          stock: item.quantity ?? "N/A"
+        }));
 
 
 
-      setProducts(formattedList);
-      setSearchResults(formattedList);
-      setSearchSelectedIndex(0);
-      return;
+        setProducts(formattedList);
+        setSearchResults(formattedList);
+        setSearchSelectedIndex(0);
+        return;
+      }
+
+      // 🔹 NOTHING FOUND
+      setProducts([]);
+      setSearchResults([]);
+
+    } catch (err) {
+      console.error("Product Search Error:", err);
+      setProducts([]);
+      setSearchResults([]);
     }
-
-    // 🔹 NOTHING FOUND
-    setProducts([]);
-    setSearchResults([]);
-
-  } catch (err) {
-    console.error("Product Search Error:", err);
-    setProducts([]);
-    setSearchResults([]);
-  }
-};
+  };
 
 
   const handleSearch = (term) => {
@@ -192,10 +192,10 @@ const OrderListPage = () => {
         prev.map(item =>
           item.sku === product.sku
             ? {
-                ...item,
-                quantity: item.quantity + 1,
-                total: (item.quantity + 1) * item.price
-              }
+              ...item,
+              quantity: item.quantity + 1,
+              total: (item.quantity + 1) * item.price
+            }
             : item
         )
       );
@@ -282,14 +282,14 @@ const OrderListPage = () => {
     setIsPaymentModalOpen(true);
   };
 
-const handleOrderComplete = async (cashAmount) => {
-  const paidCash = Number(cashAmount) || 0;
-  setCashPaid(paidCash);
+  const handleOrderComplete = async (cashAmount) => {
+    const paidCash = Number(cashAmount) || 0;
+    setCashPaid(paidCash);
 
-  if (!selectedCustomer) {
-  showToast("Warning", "Please select a customer", "warning", 3000);
-  return;
-}
+    if (!selectedCustomer) {
+      showToast("Warning", "Please select a customer", "warning", 3000);
+      return;
+    }
 
 
 
@@ -299,11 +299,12 @@ const handleOrderComplete = async (cashAmount) => {
     }));
 
     //payload structure for order creation API
+    const activeBusinessName = localStorage.getItem('business_name') || 'PAI FOOD CITY';
     const payload = {
-      customer_id: selectedCustomer.customer_id,
+      customer_id: selectedCustomer.customer_id || selectedCustomer.id,
       discounted_price: finalAmount,
-      paid_amount: paidCash,   // 
-      business_name: localStorage.getItem('business_name') || "Cargills",
+      paid_amount: paidCash,
+      business_name: activeBusinessName,
       send_email: true,
       products: productPayload
     };
@@ -313,48 +314,49 @@ const handleOrderComplete = async (cashAmount) => {
     // ✅ HANDLE API RESPONSE
     if (result.success) {
       showToast("Success", "Order saved successfully!", "success", 3000);
-    
-    /// ✅ FETCH BUSINESS DETAILS FOR INVOICE
-    const businessName = localStorage.getItem("business_name");
 
-    const businessInfo = await getBusinessDetails(businessName);
-    // ✅ SAFETY CHECK
-    if (!businessInfo) {
-       showToast("Error", "Failed to load business info", "error", 3000);
-      return;
-    }
+      /// ✅ FETCH BUSINESS DETAILS FOR INVOICE
+      const businessName = localStorage.getItem("business_name");
 
-    // ✅ CALCULATE BALANCE
-    const balanceAmount = paidCash > finalAmount 
-      ? paidCash - finalAmount 
-      : 0;
+      const businessInfo = await getBusinessDetails(businessName);
+      // ✅ SAFETY CHECK
+      if (!businessInfo) {
+        showToast("Error", "Failed to load business info", "error", 3000);
+        return;
+      }
+
+      // ✅ CALCULATE BALANCE
+      const balanceAmount = paidCash > finalAmount
+        ? paidCash - finalAmount
+        : 0;
 
 
-    // Prepare invoice data
-    const invoiceData = {
-      order_no: result.data?.order_no || Date.now(),
-      products: orderList.map(item => ({
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price
-    })),
-      totalAmount: totalAmount,
-      discounted_price: finalAmount,
-      cash_amount: paidCash,
-      balance: balanceAmount
-    };
+      // Prepare invoice data
+      const invoiceData = {
+        order_no: result.data?.order_no || Date.now(),
+        products: orderList.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        totalAmount: totalAmount,
+        discounted_price: finalAmount,
+        cash_amount: paidCash,
+        balance: balanceAmount
+      };
 
-    // ✅ SHOW INVOICE POPUP
-    setSelectedOrder(invoiceData);
-    setShowInvoice(true);
-    //
-    setBusinessDetailsFromAPI({
-    business_name: businessInfo.business_name,
-    business_address: businessInfo.address,
-    owner_phone: businessInfo.owner_phone
-    });
-    // ✅ SET CASHIER NAME FOR INVOICE
-    setCashierNameFromAPI(businessInfo.cashier_name);
+      // ✅ SHOW INVOICE POPUP
+      setSelectedOrder(invoiceData);
+      setShowInvoice(true);
+      //
+      const activeBusinessName = localStorage.getItem('business_name') || businessInfo?.business_name || 'Foodcity';
+      setBusinessDetailsFromAPI({
+        business_name: businessInfo?.business_name || activeBusinessName,
+        business_address: businessInfo?.address || businessInfo?.business_address || '',
+        owner_phone: businessInfo?.owner_phone || businessInfo?.ownerPhone || ''
+      });
+      // ✅ SET CASHIER NAME FOR INVOICE
+      setCashierNameFromAPI(businessInfo.cashier_name);
 
       // Reset order state after completion
       window.dispatchEvent(new Event('orderCreated'));
@@ -374,11 +376,11 @@ const handleOrderComplete = async (cashAmount) => {
       }, 80);
     } else {
       showToast(
-    "Error",
-    result.error || "Order failed. Please try again.",
-    "error",
-    3000
-  );
+        "Error",
+        result.error || "Order failed. Please try again.",
+        "error",
+        3000
+      );
     }
   };
 
@@ -438,13 +440,13 @@ const handleOrderComplete = async (cashAmount) => {
           setOrderSelectedIndex(prev => Math.min(prev + 1, orderList.length - 1));
           return;
         }
-      
+
         if (key === 'ArrowUp') {
           e.preventDefault();
           setOrderSelectedIndex(prev => Math.max(prev - 1, 0));
           return;
         }
-      
+
         if (key === 'PageDown') {
           e.preventDefault();
           setOrderSelectedIndex(prev => Math.min(prev + 5, orderList.length - 1));
@@ -481,10 +483,10 @@ const handleOrderComplete = async (cashAmount) => {
           // if ANY modal is open → DO NOT move to search
           if (isCustomerModalOpen || isPaymentModalOpen || isDeleteConfirmationOpen) {
             e.preventDefault();
-            return; 
-        }
-             // ESC valid only when order section active
-        if (
+            return;
+          }
+          // ESC valid only when order section active
+          if (
             activeSection === "order" &&
             orderContainerRef.current?.contains(document.activeElement)
           ) {
@@ -516,16 +518,16 @@ const handleOrderComplete = async (cashAmount) => {
     window.addEventListener('keydown', handleGlobalKey);
     return () => window.removeEventListener('keydown', handleGlobalKey);
   }, [activeSection,
-     searchResults,
-      searchSelectedIndex,
-       orderList,
-        orderSelectedIndex,
-         addToOrder,
-          isCustomerModalOpen,
-           isPaymentModalOpen,
-            isDeleteConfirmationOpen,
-             handleProcessOrderClick
-            ]);
+    searchResults,
+    searchSelectedIndex,
+    orderList,
+    orderSelectedIndex,
+    addToOrder,
+    isCustomerModalOpen,
+    isPaymentModalOpen,
+    isDeleteConfirmationOpen,
+    handleProcessOrderClick
+  ]);
 
   useEffect(() => {
     setSearchSelectedIndex(prev => Math.min(prev, Math.max(0, searchResults.length - 1)));
@@ -571,7 +573,7 @@ const handleOrderComplete = async (cashAmount) => {
                     {searchResults.map((product, index) => (
                       <tr
                         key={product.sku}
-          
+
                         className={`product-row ${searchSelectedIndex === index ? "highlight-row" : ""}`}
                         onMouseEnter={() => {
                           setSearchSelectedIndex(index);
@@ -583,7 +585,7 @@ const handleOrderComplete = async (cashAmount) => {
                           const input = document.getElementById("searchInput");
                           if (input) input.focus();
                         }}
-                        
+
                       >
                         <td>{product.sku}</td>
                         <td>{product.name}</td>
@@ -618,7 +620,7 @@ const handleOrderComplete = async (cashAmount) => {
             tabIndex={0}
             onFocus={handleOrderContainerFocus}
             onMouseEnter={() => setActiveSection('order')}
-            
+
             aria-label="Order items"
           >
             {orderList.length === 0 ? (
@@ -636,7 +638,7 @@ const handleOrderComplete = async (cashAmount) => {
                     setOrderSelectedIndex(index);
                     setActiveSection('order');
                   }}
-                  
+
                 >
                   <div className="item-details">
                     <div className="item-name">{item.name}</div>
@@ -696,9 +698,9 @@ const handleOrderComplete = async (cashAmount) => {
         isOpen={isPaymentModalOpen}// state to control visibility of payment details popup
         onClose={() => setIsPaymentModalOpen(false)}// function to close payment details popup
         onBackToDiscount={() => {
-              setIsPaymentModalOpen(false);  // close payment
-              setIsDiscountModalOpen(true);  // open discount popup — CHANGE THIS if your state name is different
-      }}
+          setIsPaymentModalOpen(false);  // close payment
+          setIsDiscountModalOpen(true);  // open discount popup — CHANGE THIS if your state name is different
+        }}
         totalAmount={finalAmount}// pass the discounted price to payment details
         customer={selectedCustomer}// pass selected customer to payment details
         discountPercentage={discountPercentage}// pass discount percentage to payment details
@@ -714,18 +716,18 @@ const handleOrderComplete = async (cashAmount) => {
       />
 
       {showInvoice && selectedOrder && businessDetailsFromAPI && (
-      <InvoicePopup
-        orderData={selectedOrder}// order details from this page
-        businessData={businessDetailsFromAPI}// business details fetched from API
-        cashierName={cashierNameFromAPI}// cashier name fetched from API
-        onClose={() => setShowInvoice(false)}// function to close the invoice popup
-      />
+        <InvoicePopup
+          orderData={selectedOrder}// order details from this page
+          businessData={businessDetailsFromAPI}// business details fetched from API
+          cashierName={cashierNameFromAPI}// cashier name fetched from API
+          onClose={() => setShowInvoice(false)}// function to close the invoice popup
+        />
       )}
 
 
-   
+
     </div>
-    
+
 
   );
 };

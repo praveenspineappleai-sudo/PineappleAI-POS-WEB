@@ -564,6 +564,7 @@ const { Op } = require("sequelize");
 const { checkLowStock } = require("./notificationController");
 // At the top of your productController.js file
 const { sequelize } = require("../models"); // Adjust the path based on your project structure
+const rawDb = require("../config/database");
 
 // ✅ Fetch products for a business (only show readable names)
 const getAllProducts = async (req, res) => {
@@ -1072,30 +1073,44 @@ const addPricing = async (req, res) => {
       return res.status(404).json({ error: "Product not found" });
     }
 
+    // Retrieve category attributes to map keys back to DB attribute names
+    const [dbAttrs] = await rawDb.query(
+      'SELECT id, attribute_name FROM attributes WHERE category_id = ?',
+      [product.categorys_id]
+    );
+
+    const attrMap = {};
+    dbAttrs.forEach(attr => {
+      const key = attr.attribute_name.toLowerCase().replace(/\s+/g, '_');
+      attrMap[key] = attr;
+    });
+
     for (const variant of variations) {
       const { color_id, size_id, quantity, cost_price, selling_price } =
         variant;
 
+      const parsedQuantity = Number(quantity);
+      const parsedCostPrice = Number(cost_price);
+      const parsedSellingPrice = Number(selling_price);
+
       // Validate required fields
       if (
-        !color_id ||
-        !size_id ||
-        !quantity ||
-        cost_price == null ||
-        selling_price == null
+        !Number.isFinite(parsedQuantity) ||
+        !Number.isFinite(parsedCostPrice) ||
+        !Number.isFinite(parsedSellingPrice)
       ) {
         return res.status(400).json({
           error:
-            "All variation fields are required (color_id, size_id, quantity, cost_price, selling_price)",
+            "Quantity, cost price, and selling price are required for each variation",
         });
       }
 
       console.log("Processing variant:", {
         color_id,
         size_id,
-        quantity,
-        cost_price,
-        selling_price,
+        quantity: parsedQuantity,
+        cost_price: parsedCostPrice,
+        selling_price: parsedSellingPrice,
       });
 
       // Generate or use manual barcode
@@ -1131,20 +1146,30 @@ const addPricing = async (req, res) => {
 
       // Insert into prices table with correct column names
       const priceData = {
-        cost_price: cost_price, // Match database column name
-        selling_price: selling_price, // Match database column name
-        quantity,
+        cost_price: parsedCostPrice, // Match database column name
+        selling_price: parsedSellingPrice, // Match database column name
+        quantity: parsedQuantity,
         barcode_id: barcode.id,
         product_id,
-        color_id,
-        size_id,
+        color_id: color_id ?? null,
+        size_id: size_id ?? null,
         created_at: new Date(),
         updated_at: new Date(),
       };
 
       console.log("About to create price with data:", priceData);
 
-      await Price.create(priceData);
+      const createdPrice = await Price.create(priceData);
+
+      // Save custom attributes for this variant
+      for (const [key, val] of Object.entries(variant)) {
+        if (attrMap[key] && val !== undefined && val !== null && val !== '') {
+          await rawDb.query(
+            'INSERT INTO product_attribute_values (product_id, price_id, attribute_name, attribute_value) VALUES (?, ?, ?, ?)',
+            [product_id, createdPrice.id, attrMap[key].attribute_name, String(val)]
+          );
+        }
+      }
     }
 
     // 🧩 Trigger low stock notifications
@@ -1339,7 +1364,7 @@ const getPrice = async (req, res) => {
     const { id } = req.params;
 
     const price = await Price.findByPk(id, {
-      include: [{ model: Barcode }],
+      include: [{ model: Barcode, as: "Barcode" }],
     });
 
     if (!price) {
@@ -1356,10 +1381,23 @@ const getPrice = async (req, res) => {
         }
       : null;
 
+    // Fetch custom attributes
+    const [customAttrs] = await rawDb.query(
+      'SELECT attribute_name, attribute_value FROM product_attribute_values WHERE product_id = ? AND price_id = ?',
+      [price.product_id, id]
+    );
+
+    const customAttributes = {};
+    customAttrs.forEach(attr => {
+      const key = attr.attribute_name.toLowerCase().replace(/\s+/g, '_');
+      customAttributes[key] = attr.attribute_value;
+    });
+
     res.status(200).json({
       success: true,
       price,
       barcode: barcodeDetails,
+      customAttributes,
     });
   } catch (error) {
     console.error("Error fetching price details:", error);
@@ -1499,6 +1537,34 @@ const updateProductWithPrice = async (req, res) => {
           barcode_no: newBarcodeNo,
           barcode_image: newBarcodePath,
         };
+      }
+    }
+
+    // ✅ Update custom attributes
+    const [dbAttrs] = await rawDb.query(
+      'SELECT id, attribute_name FROM attributes WHERE category_id = ?',
+      [categorys_id]
+    );
+
+    const attrMap = {};
+    dbAttrs.forEach(attr => {
+      const key = attr.attribute_name.toLowerCase().replace(/\s+/g, '_');
+      attrMap[key] = attr;
+    });
+
+    // Delete existing custom attributes for this variant/price
+    await rawDb.query(
+      'DELETE FROM product_attribute_values WHERE product_id = ? AND price_id = ?',
+      [productId, priceId]
+    );
+
+    // Save new custom attributes
+    for (const [key, val] of Object.entries(req.body)) {
+      if (attrMap[key] && val !== undefined && val !== null && val !== '') {
+        await rawDb.query(
+          'INSERT INTO product_attribute_values (product_id, price_id, attribute_name, attribute_value) VALUES (?, ?, ?, ?)',
+          [productId, priceId, attrMap[key].attribute_name, String(val)]
+        );
       }
     }
 

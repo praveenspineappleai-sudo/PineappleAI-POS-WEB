@@ -141,7 +141,7 @@ module.exports = (sequelize, DataTypes) => {
       // Foreign key referencing the Color model
       color_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "colors", // Reference to the 'colors' table
           key: "id",
@@ -151,7 +151,7 @@ module.exports = (sequelize, DataTypes) => {
       // Foreign key referencing the Size model
       size_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "sizes", // Reference to the 'sizes' table
           key: "id",

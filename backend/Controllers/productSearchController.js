@@ -188,11 +188,13 @@ exports.getProducts = async (req, res) => {
       include: [
         {
           model: Product,
+          as: "product",
           where: productWhere,
           required: true,
           attributes: [
             "id",
             "name",
+            "description",
             "categorys_id",
             "created_at",
             "updated_at",
@@ -200,34 +202,54 @@ exports.getProducts = async (req, res) => {
           include: [
             {
               model: Category,
+              as: "Category",
               attributes: ["id", "category_name"],
               required: true,
             },
           ],
         },
-        { model: Size, attributes: ["id", "size"], required: false },
-        { model: Color, attributes: ["id", "colour_name"], required: false },
-        { model: Barcode, attributes: ["barcode_no"], required: false, as: 'Barcode' }, // ✅ Include Barcode
+        { model: Size, as: "Size", attributes: ["id", "size"], required: false },
+        { model: Color, as: "Color", attributes: ["id", "colour_name"], required: false },
+        { model: Barcode, attributes: ["barcode_no"], required: false, as: "Barcode" }, // ✅ Include Barcode
       ],
-      order: [[Product, "name", "ASC"]],
+      order: [[{ model: Product, as: "product" }, "name", "ASC"]],
     });
 
     if (!prices || prices.length === 0) return res.status(200).json([]);
 
+    const priceIds = prices.map(p => p.id);
+    let customAttrMap = {};
+    if (priceIds.length > 0) {
+      const rawDb = require("../config/database");
+      const [customAttrs] = await rawDb.query(
+        'SELECT price_id, attribute_name, attribute_value FROM product_attribute_values WHERE price_id IN (?)',
+        [priceIds]
+      );
+      
+      customAttrs.forEach(attr => {
+        if (!customAttrMap[attr.price_id]) {
+          customAttrMap[attr.price_id] = {};
+        }
+        const key = attr.attribute_name.toLowerCase().replace(/\s+/g, '_');
+        customAttrMap[attr.price_id][key] = attr.attribute_value;
+      });
+    }
+
     // --- Format ---
     const formatted = prices.map((price) => {
-      let productName = price.Product?.name || "";
+      let productName = price.product?.name || "";
       if (productName.startsWith(prefix)) {
         productName = productName.replace(prefix, ""); // remove business prefix
       }
 
       return {
-        id: price.Product?.id || null,
+        id: price.product?.id || null,
         name: productName,
-        categorys_id: price.Product?.categorys_id || null,
-        category_name: price.Product?.Category?.category_name || "",
-        created_at: price.Product?.created_at || null,
-        updated_at: price.Product?.updated_at || null,
+        description: price.product?.description || "",
+        categorys_id: price.product?.categorys_id || null,
+        category_name: price.product?.Category?.category_name || "",
+        created_at: price.product?.created_at || null,
+        updated_at: price.product?.updated_at || null,
         price_id: price.id,
         quantity: price.quantity || 0,
         cost_price: price.cost_price || 0,
@@ -235,6 +257,7 @@ exports.getProducts = async (req, res) => {
         size: price.Size?.size || null,
         color: price.Color?.colour_name || null,
         barcode: price.Barcode?.barcode_no || "", // ✅ Add barcode to response
+        customAttributes: customAttrMap[price.id] || {}, // ✅ Add custom attributes
       };
     });
 
@@ -263,6 +286,7 @@ exports.deleteProduct = async (req, res) => {
       include: [
         {
           model: Product,
+          as: "product",
           required: true,
           where: { name: { [Op.like]: `%${business_id}%` } }, // optional filter to prevent cross-business deletion
         },

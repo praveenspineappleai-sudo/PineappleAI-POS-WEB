@@ -10,6 +10,7 @@ import priceIcon from '../assets/icons/price.png';
 import sizeIcon from '../assets/icons/size.png';
 import quantityIcon from '../assets/icons/quantity.png';
 import barcodeIcon from '../assets/icons/barcode.png';
+import limitIcon from '../assets/icons/limit.png';
 import '../styles/viewproduct.css';
 
 const ViewProduct = ({ isOpen, onClose, addedProducts, basicDetails, onNext, onDeleteVariant, showNextButton = true, showBarcodeButton = false }) => {
@@ -149,6 +150,23 @@ const ViewProduct = ({ isOpen, onClose, addedProducts, basicDetails, onNext, onD
         return !!loadingBarcodes[index];
     };
 
+    // Helper function to extract all custom attributes (object or flat keys)
+    const getCombinedCustomAttributes = (product) => {
+        if (!product) return {};
+        const combined = { ...(product.customAttributes || {}) };
+        const standardKeys = [
+            'id', 'variantKey', 'color', 'size', 'quantity', 'sellingPrice',
+            'costPrice', 'barcode', 'name', 'category', 'description', 'customAttributes',
+            'status', 'created_at', 'priceId', 'category_id', 'color_id', 'size_id'
+        ];
+        Object.keys(product).forEach(key => {
+            if (!standardKeys.includes(key) && product[key] !== undefined && product[key] !== null && product[key] !== '') {
+                combined[key] = product[key];
+            }
+        });
+        return combined;
+    };
+
     // Helper function to render product attributes conditionally
     const renderProductAttribute = (product, icon, label, value, showCondition = true) => {
         if (!showCondition || !value || value === 'N/A' || value === 'Default' || value === '') {
@@ -159,7 +177,7 @@ const ViewProduct = ({ isOpen, onClose, addedProducts, basicDetails, onNext, onD
             <div className="product-attribute">
                 <img src={icon} alt={label} className="attr-icon" />
                 <div className="attr-details">
-                    <span className="attr-label">{label}</span>
+                    <span className="attr-label" style={{ textTransform: 'capitalize' }}>{label}</span>
                     <span className="attr-value">{value}</span>
                 </div>
             </div>
@@ -240,12 +258,29 @@ const ViewProduct = ({ isOpen, onClose, addedProducts, basicDetails, onNext, onD
                                                             product.size,
                                                             product.size && product.size !== 'N/A' && product.size !== 'Default'
                                                         )}
+
+                                                        {/* Custom attributes (both from customAttributes object and dynamically added custom fields) */}
+                                                        {(() => {
+                                                            const customAttrs = getCombinedCustomAttributes(product);
+                                                            return Object.entries(customAttrs).map(([attrKey, attrVal]) => (
+                                                                renderProductAttribute(
+                                                                    product,
+                                                                    limitIcon,
+                                                                    attrKey.replace(/_/g, ' '),
+                                                                    attrVal,
+                                                                    Boolean(attrVal && attrVal !== 'N/A' && attrVal !== 'Default')
+                                                                )
+                                                            ));
+                                                        })()}
                                                         
                                                         {/* Always show quantity */}
                                                         {renderProductAttribute(product, quantityIcon, 'Quantity', product.quantity, true)}
                                                         
-                                                        {/* Always show price */}
+                                                        {/* Always show selling price */}
                                                         {renderProductAttribute(product, priceIcon, 'Price', `Rs ${product.sellingPrice}`, true)}
+
+                                                        {/* Always show cost price */}
+                                                        {renderProductAttribute(product, priceIcon, 'Cost Price', `Rs ${product.costPrice}`, product.costPrice !== undefined && product.costPrice !== null && product.costPrice !== '')}
                                                     </div>
                                                     {barcodeError && index === 0 && (
                                                         <div className="barcode-error-message">

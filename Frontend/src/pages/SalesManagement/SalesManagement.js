@@ -44,7 +44,11 @@ const SalesManagement = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const businessName = localStorage.getItem('business_name') || 'Cargills';
+  const businessName = localStorage.getItem('business_name') || 'PAI';
+
+  //------------------------------------------
+  // BUILD URL
+  //------------------------------------------
 
   //------------------------------------------
   // BUILD URL
@@ -55,102 +59,28 @@ const SalesManagement = () => {
     const qp = new URLSearchParams();
 
     if (selectedRange === 'today') {
-      qp.append('startDate', selectedDate);
-      qp.append('endDate', selectedDate);
+      qp.append('period', 'today');
+      if (typeof selectedDate === 'string') {
+        qp.append('startDate', selectedDate);
+        qp.append('endDate', selectedDate);
+      }
     } else if (selectedRange === 'weekly' && selectedDate?.startDate && selectedDate?.endDate) {
+      qp.append('period', 'weekly');
       qp.append('startDate', selectedDate.startDate);
       qp.append('endDate', selectedDate.endDate);
     } else if (selectedRange === 'monthly') {
       qp.append('period', 'monthly');
+      if (typeof selectedDate === 'string' && selectedDate.includes('-')) {
+        qp.append('month', selectedDate);
+      }
     } else {
-      qp.append('period', 'monthly');
+      qp.append('period', selectedRange);
     }
 
     qp.append('business_name', businessName);
 
     return `${base}?${qp.toString()}`;
   }, [selectedRange, selectedDate, businessName]);
-
-  //------------------------------------------
-  // Helpers
-  //------------------------------------------
-
-  const extractOrdersFromStats = (json) => {
-    if (!json) return [];
-    if (Array.isArray(json.orderDetails)) return json.orderDetails;
-    if (Array.isArray(json.orders)) return json.orders;
-    if (Array.isArray(json.data)) return json.data;
-    return [];
-  };
-
-  const getOrderTimestamp = (o) => {
-    const possible =
-      o.order_date ||
-      o.created_at ||
-      o.date ||
-      o.transaction_date ||
-      o.createdAt ||
-      o.created;
-    if (!possible) return null;
-    const t = Date.parse(possible);
-    return Number.isNaN(t) ? null : t;
-  };
-
-  const mergeAndDedupeOrders = (arr1 = [], arr2 = []) => {
-    const map = new Map();
-
-    const pushWithSource = (item, source) => {
-      const key =
-        item.order_no ||
-        item.order_id ||
-        item.id ||
-        item.bill_no ||
-        JSON.stringify(item);
-      const copy = { ...item, _source: source };
-      if (!map.has(key)) map.set(key, copy);
-      else {
-        const existing = map.get(key);
-        if (Object.keys(copy).length > Object.keys(existing).length) {
-          map.set(key, copy);
-        }
-      }
-    };
-
-    (arr1 || []).forEach(o => pushWithSource(o, 'stats'));
-    (arr2 || []).forEach(o => pushWithSource(o, 'orders_api'));
-
-    const merged = Array.from(map.values());
-
-    merged.sort((a, b) => {
-      const ta = getOrderTimestamp(a) ?? 0;
-      const tb = getOrderTimestamp(b) ?? 0;
-      return tb - ta;
-    });
-
-    return merged;
-  };
-
-  //------------------------------------------
-  // 🔥 FRONTEND FILTER HELPERS (ADDED)
-  //------------------------------------------
-
-  const isSameMonth = (date, month, year) => {
-    const d = new Date(date);
-    return d.getMonth() === month && d.getFullYear() === year;
-  };
-
-  const isBetweenDates = (date, start, end) => {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-
-    const s = new Date(start);
-    s.setHours(0, 0, 0, 0);
-
-    const e = new Date(end);
-    e.setHours(23, 59, 59, 999);
-
-    return d >= s && d <= e;
-  };
 
   //------------------------------------------
   // MAIN FETCH FUNCTION
@@ -160,41 +90,39 @@ const SalesManagement = () => {
     setLoading(true);
     setError('');
 
-    let statsJson = null;
-    let ordersFromStats = [];
-    let ordersFromList = [];
-
     try {
       const url = buildSalesStatsUrl();
       const res = await fetch(url, { method: 'GET', headers: { Accept: 'application/json' } });
 
       if (res.ok) {
-        statsJson = await res.json();
+        const statsJson = await res.json();
 
         setStatsData({
-          totalSales: statsJson.totalSales ?? statsJson.total_sales ?? 0,
-          totalOrders: statsJson.totalOrders ?? statsJson.total_orders ?? 0,
-          newCustomers: statsJson.newCustomers ?? statsJson.new_customers ?? 0,
-          totalProfit: statsJson.totalProfit ?? statsJson.total_profit ?? 0,
+          totalSales: statsJson.totalSales ?? 0,
+          totalOrders: statsJson.totalOrders ?? 0,
+          newCustomers: statsJson.newCustomers ?? 0,
+          totalProfit: statsJson.totalProfit ?? 0,
           currency: 'Rs'
         });
 
-        ordersFromStats = extractOrdersFromStats(statsJson);
+        const fetchedOrders = Array.isArray(statsJson.orderDetails)
+          ? statsJson.orderDetails
+          : Array.isArray(statsJson.orders)
+          ? statsJson.orders
+          : [];
+
+        setOrders(fetchedOrders);
+      } else {
+        const errJson = await res.json().catch(() => ({}));
+        setError(errJson.message || 'Failed to fetch sales statistics');
+        setOrders([]);
       }
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Error connecting to server');
+      setOrders([]);
+    } finally {
+      setLoading(false);
     }
-
-    try {
-      ordersFromList = await getOrdersList();
-      if (!Array.isArray(ordersFromList)) ordersFromList = [];
-    } catch {
-      ordersFromList = [];
-    }
-
-    const merged = mergeAndDedupeOrders(ordersFromStats, ordersFromList);
-    setOrders(merged);
-    setLoading(false);
   }, [buildSalesStatsUrl]);
 
   //------------------------------------------
@@ -207,42 +135,13 @@ const SalesManagement = () => {
   }, [selectedRange, selectedDate, fetchSalesStats]);
 
   //------------------------------------------
-  //  FRONTEND FILTER APPLY (MAIN FIX)
-  //------------------------------------------
 
-  const filteredOrders = useMemo(() => {
-    if (selectedRange === 'today') return orders;
-
-    // MONTHLY FIX
-    if (selectedRange === 'monthly') {
-      const d = new Date(selectedDate);
-      return orders.filter(o =>
-        isSameMonth(getOrderTimestamp(o), d.getMonth(), d.getFullYear())
-      );
-    }
-
-    // WEEKLY FIX
-    if (selectedRange === 'weekly' && selectedDate?.startDate && selectedDate?.endDate) {
-      return orders.filter(o =>
-        isBetweenDates(
-          getOrderTimestamp(o),
-          selectedDate.startDate,
-          selectedDate.endDate
-        )
-      );
-    }
-
-    return orders;
-  }, [orders, selectedRange, selectedDate]);
-
-  //------------------------------------------
-
-  const visibleOrders = filteredOrders.slice(
+  const visibleOrders = orders.slice(
     (currentPage - 1) * entriesPerPage,
     currentPage * entriesPerPage
   );
 
-  const totalPages = Math.max(1, Math.ceil(filteredOrders.length / entriesPerPage));
+  const totalPages = Math.max(1, Math.ceil(orders.length / entriesPerPage));
 
   const handleRangeChange = (range, date) => {
     setSelectedRange(range);
@@ -273,6 +172,7 @@ const SalesManagement = () => {
         />
 
         <StatsCards
+          selectedRange={selectedRange}
           stats={{
             monthlySales: statsData.totalSales,
             monthlyOrders: statsData.totalOrders,
@@ -288,7 +188,7 @@ const SalesManagement = () => {
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          totalEntries={filteredOrders.length}
+          totalEntries={orders.length}
           entriesPerPage={entriesPerPage}
           onPageChange={setCurrentPage}
           showPrevNext

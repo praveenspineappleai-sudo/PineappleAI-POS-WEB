@@ -11,7 +11,8 @@ import DeleteConfirmationPopup from '../../models/DeleteConfirmation';
 import AddAttributes from '../../models/AddAttributes';
 import NewBarcode from '../../models/NewBarcode';
 import AddBarcode from '../../models/AddBarcode';
-import { fetchCategories, createCategory, getCategoryName } from '../../integration/CategoryAPI';
+import { fetchCategories, createCategory, getCategoryName, createAttributesBulk, getCategoryAttributes, getAttributeValues, addAttributeValue } from '../../integration/CategoryAPI';
+import { normalizeCategoryAttributeDefinitions } from './categoryAttributeUtils';
 import { fetchColors, createColor, getColorName } from '../../integration/ColorsAPI';
 import { fetchSizes, createSize, getSizeName } from '../../integration/SizeAPI';
 import {
@@ -29,6 +30,7 @@ import quantityIcon from '../../assets/icons/quantity.png';
 import deleteIcon from '../../assets/icons/delete.png';
 import dropdownIcon from '../../assets/icons/dropdown.png';
 import '../../styles/addproduct.css';
+import '../../styles/addcategory.css';
 
 // Validation function for product name
 const validateProductName = (name) => {
@@ -36,7 +38,6 @@ const validateProductName = (name) => {
         return { isValid: false, message: 'Product name is required' };
     }
 
-    // Check if name contains only numbers
     if (/^\d+$/.test(name.trim())) {
         return {
             isValid: false,
@@ -44,7 +45,6 @@ const validateProductName = (name) => {
         };
     }
 
-    // Check if name contains only special characters (no letters or numbers)
     const onlySpecialChars = /^[^a-zA-Z0-9]+$/.test(name.trim());
     if (onlySpecialChars) {
         return {
@@ -53,7 +53,6 @@ const validateProductName = (name) => {
         };
     }
 
-    // Check if name contains at least one letter (alphabet character)
     const hasLetter = /[a-zA-Z]/.test(name.trim());
     if (!hasLetter) {
         return {
@@ -65,6 +64,16 @@ const validateProductName = (name) => {
     return { isValid: true, message: '' };
 };
 
+// Get icon for custom attribute
+const getAttributeIcon = (labelName) => {
+    const label = labelName.toLowerCase();
+    if (label.includes('size')) return sizeIcon;
+    if (label.includes('color') || label.includes('colour')) return colorIcon;
+    if (label.includes('price')) return priceIcon;
+    if (label.includes('quantity')) return quantityIcon;
+    return null;
+};
+
 const AddProduct = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -73,21 +82,18 @@ const AddProduct = () => {
     const editMode = location.state?.editMode || false;
     const editProductData = location.state?.productData || null;
 
-    // Basic details state
     const [basicDetails, setBasicDetails] = useState({
         name: editProductData?.name || '',
         category: editProductData?.category || '',
         description: editProductData?.description || ''
     });
 
-    // Validation state
     const [validationErrors, setValidationErrors] = useState({
         name: '',
         category: '',
         description: ''
     });
 
-    // Product attributes state
     const [productAttributes, setProductAttributes] = useState({
         quantity: editProductData?.quantity || '',
         costPrice: editProductData?.costPrice || '',
@@ -97,7 +103,19 @@ const AddProduct = () => {
         barcode: editProductData?.barcode || ''
     });
 
-    // Data states
+    // Store custom attributes values for the current product
+    const [customAttributeValues, setCustomAttributeValues] = useState(
+        editProductData?.customAttributes || {}
+    );
+
+    // Store available values for each custom attribute (from DB)
+    const [attributeOptions, setAttributeOptions] = useState({});
+    // Loading state for each attribute's options
+    const [attributeOptionsLoading, setAttributeOptionsLoading] = useState({});
+
+    // Inline "Add new value" modal state
+    const [addValueModal, setAddValueModal] = useState({ open: false, attribute: null, inputVal: '', saving: false });
+
     const [allCategories, setAllCategories] = useState([]);
     const [categoriesRaw, setCategoriesRaw] = useState([]);
     const [colors, setColors] = useState([]);
@@ -105,39 +123,33 @@ const AddProduct = () => {
     const [sizes, setSizes] = useState([]);
     const [sizesRaw, setSizesRaw] = useState([]);
 
-    // Loading states
     const [loadingCategories, setLoadingCategories] = useState(false);
     const [loadingColors, setLoadingColors] = useState(false);
     const [loadingSizes, setLoadingSizes] = useState(false);
     const [categoryError, setCategoryError] = useState(null);
 
-    // Modal states
     const [newProductModalOpen, setNewProductModalOpen] = useState(false);
     const [newProductModalType, setNewProductModalType] = useState(null);
     const [selectPopupOpen, setSelectPopupOpen] = useState(false);
     const [selectPopupType, setSelectPopupType] = useState(null);
     const [addAttributesOpen, setAddAttributesOpen] = useState(false);
 
-    // Product management states
     const [addedProducts, setAddedProducts] = useState([]);
     const [viewProductOpen, setViewProductOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showProductAttributes, setShowProductAttributes] = useState(false);
 
-    // Delete confirmation state
     const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
     const [productToDelete, setProductToDelete] = useState(null);
 
-    // Category creation states - REMOVED: newCategoryName, categoryAttributes, isCreatingNewCategory
-    const [isCreatingCategory, setIsCreatingCategory] = useState(false); // For API creation
+    const [isCreatingCategory, setIsCreatingCategory] = useState(false);
+    const [isNewCategory, setIsNewCategory] = useState(false);
 
-    // Barcode states - IMPORTANT: Track whether barcode was generated or custom
     const [barcodePopupOpen, setBarcodePopupOpen] = useState(false);
     const [addBarcodePopupOpen, setAddBarcodePopupOpen] = useState(false);
     const [pendingProduct, setPendingProduct] = useState(null);
-    const [barcodeMode, setBarcodeMode] = useState(null); // 'generated' or 'custom'
+    const [barcodeMode, setBarcodeMode] = useState(null);
 
-    // Category custom attributes - persisted in localStorage
     const [categoryCustomAttributes, setCategoryCustomAttributes] = useState(() => {
         try {
             const saved = localStorage.getItem('categoryCustomAttributes');
@@ -148,16 +160,12 @@ const AddProduct = () => {
         }
     });
 
-    // Default attributes that ALWAYS show for ALL categories
     const defaultAttributes = [
-        { labelName: 'Size', fieldName: 'size', type: 'select', icon: sizeIcon },
-        { labelName: 'Colour', fieldName: 'color', type: 'select', icon: colorIcon },
         { labelName: 'Quantity', fieldName: 'quantity', type: 'number', alwaysShow: true },
         { labelName: 'Cost Price', fieldName: 'costPrice', type: 'number', alwaysShow: true },
         { labelName: 'Selling Price', fieldName: 'sellingPrice', type: 'number', alwaysShow: true }
     ];
 
-    // Save categoryCustomAttributes to localStorage whenever it changes
     useEffect(() => {
         try {
             localStorage.setItem('categoryCustomAttributes', JSON.stringify(categoryCustomAttributes));
@@ -166,7 +174,6 @@ const AddProduct = () => {
         }
     }, [categoryCustomAttributes]);
 
-    // Get attributes for current category - FIXED VERSION (no duplicate color)
     const getCurrentCategoryAttributes = () => {
         const allAttrs = [...defaultAttributes];
 
@@ -174,27 +181,23 @@ const AddProduct = () => {
             const categoryLower = basicDetails.category.toLowerCase();
             const customAttrs = categoryCustomAttributes[categoryLower];
 
-            // Add custom attributes if any
             if (customAttrs?.length > 0) {
                 customAttrs.forEach(customAttr => {
                     const labelName = customAttr.labelName?.toLowerCase() || '';
                     const fieldName = labelName.replace(/\s+/g, '_');
-                    
-                    // Skip if it's already in default attributes (check both color and colour variants)
+
                     const isDefault = [
-                        'size', 
-                        'color', 
-                        'colour',
-                        'quantity', 
-                        'costprice', 
+                        'quantity',
+                        'costprice',
                         'sellingprice'
                     ].includes(fieldName);
-                    
+
                     if (!isDefault) {
                         allAttrs.push({
+                            id: customAttr.id,
                             labelName: customAttr.labelName,
                             fieldName: fieldName,
-                            type: 'text',
+                            type: customAttr.type || 'text',
                             isCustom: true
                         });
                     }
@@ -205,7 +208,6 @@ const AddProduct = () => {
         return allAttrs;
     };
 
-    // Load categories - SIMPLIFIED VERSION
     const loadCategories = async () => {
         setLoadingCategories(true);
         setCategoryError(null);
@@ -216,7 +218,6 @@ const AddProduct = () => {
                 const categoryNames = categories.map(cat => getCategoryName(cat));
                 const validCategoryNames = categoryNames.filter(name => name?.trim() !== '');
                 setAllCategories(validCategoryNames);
-                
             } else {
                 setCategoriesRaw([]);
                 setAllCategories([]);
@@ -231,7 +232,6 @@ const AddProduct = () => {
         }
     };
 
-    // Load colors
     const loadColors = async () => {
         setLoadingColors(true);
         try {
@@ -254,7 +254,6 @@ const AddProduct = () => {
         }
     };
 
-    // Load sizes
     const loadSizes = async () => {
         setLoadingSizes(true);
         try {
@@ -277,14 +276,12 @@ const AddProduct = () => {
         }
     };
 
-    // Load initial data
     useEffect(() => {
         loadCategories();
         loadColors();
         loadSizes();
     }, []);
 
-    // Show product attributes when basic details are filled
     useEffect(() => {
         if (editMode) {
             setShowProductAttributes(true);
@@ -296,7 +293,145 @@ const AddProduct = () => {
         }
     }, [basicDetails, editMode]);
 
-    // Validate basic details
+    useEffect(() => {
+        if (basicDetails.category && !editMode && isNewCategory) {
+            const categoryLower = basicDetails.category.toLowerCase();
+            const existingAttributes = categoryCustomAttributes[categoryLower];
+
+            if (!existingAttributes || existingAttributes.length === 0) {
+                const timer = setTimeout(() => {
+                    setAddAttributesOpen(true);
+                    setIsNewCategory(false);
+                }, 500);
+
+                return () => clearTimeout(timer);
+            } else {
+                setIsNewCategory(false);
+            }
+        }
+    }, [basicDetails.category, categoryCustomAttributes, editMode, isNewCategory]);
+
+    useEffect(() => {
+        const loadCategoryAttributesFromServer = async () => {
+            const categoryName = basicDetails.category?.trim();
+            if (!categoryName) return;
+
+            const categoryLower = categoryName.toLowerCase();
+            const catObj = categoriesRaw.find(c =>
+                (c.name || c.category_name || '').toLowerCase() === categoryLower
+            );
+
+            if (!catObj?.id) return;
+
+            try {
+                const attributes = await getCategoryAttributes(catObj.id);
+                const normalizedAttrs = normalizeCategoryAttributeDefinitions(attributes);
+
+                if (normalizedAttrs.length === 0) return;
+
+                setCategoryCustomAttributes(prev => {
+                    const existingAttrs = prev[categoryLower] || [];
+                    const mergedAttrs = [...existingAttrs];
+
+                    normalizedAttrs.forEach(attr => {
+                        const existingIndex = mergedAttrs.findIndex(existingAttr => {
+                            if (existingAttr.id && attr.id && existingAttr.id === attr.id) return true;
+                            return (existingAttr.labelName || '').toLowerCase() === (attr.labelName || '').toLowerCase();
+                        });
+
+                        if (existingIndex >= 0) {
+                            mergedAttrs[existingIndex] = { ...mergedAttrs[existingIndex], ...attr };
+                        } else {
+                            mergedAttrs.push(attr);
+                        }
+                    });
+
+                    return { ...prev, [categoryLower]: mergedAttrs };
+                });
+            } catch (error) {
+                console.error('Failed to load category attributes from server:', error);
+            }
+        };
+
+        loadCategoryAttributesFromServer();
+    }, [basicDetails.category, categoriesRaw]);
+
+    // Load attribute values from DB whenever custom attributes change (category selected)
+    useEffect(() => {
+        const loadAttributeOptions = async () => {
+            const categoryLower = basicDetails.category?.toLowerCase();
+            if (!categoryLower) return;
+            const customAttrs = categoryCustomAttributes[categoryLower] || [];
+            if (customAttrs.length === 0) return;
+
+            const catObj = categoriesRaw.find(c =>
+                (c.name || c.category_name || '').toLowerCase() === categoryLower
+            );
+            const categoryId = catObj?.id;
+
+            for (const attr of customAttrs) {
+                const fieldName = (attr.labelName || '').toLowerCase().replace(/\s+/g, '_');
+                setAttributeOptionsLoading(prev => ({ ...prev, [fieldName]: true }));
+                try {
+                    let values = [];
+                    if (categoryId) {
+                        values = await getAttributeValues(categoryId, attr.labelName);
+                    }
+                    setAttributeOptions(prev => ({ ...prev, [fieldName]: values }));
+                } catch (e) {
+                    setAttributeOptions(prev => ({ ...prev, [fieldName]: [] }));
+                } finally {
+                    setAttributeOptionsLoading(prev => ({ ...prev, [fieldName]: false }));
+                }
+            }
+        };
+        loadAttributeOptions();
+    }, [basicDetails.category, categoryCustomAttributes, categoriesRaw]);
+
+    // Handler to open the inline add-value modal for a custom attribute
+    const handleOpenAddValueModal = (attribute) => {
+        setAddValueModal({ open: true, attribute, inputVal: '', saving: false });
+    };
+
+    // Handler to save a new value for a custom attribute
+    const handleSaveAttributeValue = async () => {
+        const { attribute, inputVal } = addValueModal;
+        if (!inputVal.trim()) return;
+        setAddValueModal(prev => ({ ...prev, saving: true }));
+
+        const fieldName = (attribute.labelName || '').toLowerCase().replace(/\s+/g, '_');
+
+        try {
+            const categoryLower = basicDetails.category?.toLowerCase();
+            const catObj = categoriesRaw.find(c =>
+                (c.name || c.category_name || '').toLowerCase() === categoryLower
+            );
+
+            if (catObj?.id && attribute.id) {
+                await addAttributeValue(attribute.id, inputVal.trim());
+            }
+
+            const newVal = inputVal.trim();
+            setAttributeOptions(prev => ({
+                ...prev,
+                [fieldName]: [...(prev[fieldName] || []), newVal]
+            }));
+
+            setCustomAttributeValues(prev => ({ ...prev, [fieldName]: newVal }));
+            showToast('Success', `"${newVal}" added to ${attribute.labelName}!`, 'success');
+        } catch (err) {
+            const newVal = inputVal.trim();
+            setAttributeOptions(prev => ({
+                ...prev,
+                [fieldName]: [...(prev[fieldName] || []), newVal]
+            }));
+            setCustomAttributeValues(prev => ({ ...prev, [fieldName]: newVal }));
+            showToast('Warning', `"${newVal}" added locally.`, 'warning');
+        } finally {
+            setAddValueModal({ open: false, attribute: null, inputVal: '', saving: false });
+        }
+    };
+
     const validateBasicDetails = () => {
         const errors = {
             name: '',
@@ -304,18 +439,15 @@ const AddProduct = () => {
             description: ''
         };
 
-        // Validate product name
         const nameValidation = validateProductName(basicDetails.name);
         if (!nameValidation.isValid) {
             errors.name = nameValidation.message;
         }
 
-        // Validate category
         if (!basicDetails.category.trim()) {
             errors.category = 'Category is required';
         }
 
-        // Validate description
         if (!basicDetails.description.trim()) {
             errors.description = 'Description is required';
         }
@@ -324,17 +456,14 @@ const AddProduct = () => {
         return !errors.name && !errors.category && !errors.description;
     };
 
-    // Handle basic details change
     const handleBasicDetailsChange = (field, value) => {
         const updatedDetails = { ...basicDetails, [field]: value };
         setBasicDetails(updatedDetails);
 
-        // Clear validation error for this field
         if (validationErrors[field]) {
             setValidationErrors(prev => ({ ...prev, [field]: '' }));
         }
 
-        // Validate product name in real-time
         if (field === 'name') {
             const nameValidation = validateProductName(value);
             if (value.trim() !== '' && !nameValidation.isValid) {
@@ -345,7 +474,8 @@ const AddProduct = () => {
         }
 
         if (field === 'category') {
-            // Reset only custom attributes, keep default attributes
+            setCustomAttributeValues({});
+
             setProductAttributes(prev => ({
                 quantity: prev.quantity,
                 costPrice: prev.costPrice,
@@ -370,17 +500,24 @@ const AddProduct = () => {
         }
     };
 
-    // Handle attributes change
     const handleAttributesChange = (field, value) => {
-        setProductAttributes(prev => ({ ...prev, [field]: value }));
+        const isCustomAttribute = !['quantity', 'costPrice', 'sellingPrice', 'color', 'size', 'barcode'].includes(field);
+
+        if (isCustomAttribute) {
+            setCustomAttributeValues(prev => ({
+                ...prev,
+                [field]: value
+            }));
+        } else {
+            setProductAttributes(prev => ({ ...prev, [field]: value }));
+        }
     };
 
-    // Handle barcode generation - UPDATED: Only generate barcode when clicked
     const handleGenerateBarcode = () => {
         if (pendingProduct) {
             setBarcodeMode('generated');
             const generatedBarcode = `BAR${Math.floor(100000 + Math.random() * 900000)}`;
-            
+
             const newProduct = {
                 ...pendingProduct,
                 barcode: generatedBarcode,
@@ -390,13 +527,13 @@ const AddProduct = () => {
 
             setAddedProducts(prev => [...prev, newProduct]);
             setProductAttributes({ quantity: '', costPrice: '', sellingPrice: '', color: '', size: '', barcode: '' });
+            setCustomAttributeValues({});
             setBarcodePopupOpen(false);
             setPendingProduct(null);
             showToast('Success', 'Product variant added successfully with generated barcode!', 'success');
         }
     };
 
-    // Handle add barcode - UPDATED: Use custom barcode only
     const handleAddBarcode = (barcodeValue) => {
         if (pendingProduct && barcodeValue.trim() !== '') {
             setBarcodeMode('custom');
@@ -409,42 +546,47 @@ const AddProduct = () => {
 
             setAddedProducts(prev => [...prev, newProduct]);
             setProductAttributes({ quantity: '', costPrice: '', sellingPrice: '', color: '', size: '', barcode: '' });
+            setCustomAttributeValues({});
             setAddBarcodePopupOpen(false);
             setPendingProduct(null);
             showToast('Success', 'Product variant added successfully with custom barcode!', 'success');
         }
     };
 
-    // Open add barcode popup
     const handleOpenAddBarcode = () => {
         setBarcodePopupOpen(false);
         setAddBarcodePopupOpen(true);
     };
 
-    // Add product variant
     const handleAddProduct = () => {
-        // First validate basic details
         if (!validateBasicDetails()) {
             showToast('Validation Error', 'Please fix the errors in basic details before adding product', 'warning');
             return;
         }
 
         const currentAttributes = getCurrentCategoryAttributes();
-        const validationErrors = currentAttributes
+
+        const requiredErrors = currentAttributes
             .filter(attr => attr.alwaysShow && !productAttributes[attr.fieldName])
             .map(attr => attr.labelName);
 
-        if (validationErrors.length > 0) {
-            showToast('Validation Error', `Please fill in: ${validationErrors.join(', ')}`, 'warning');
+        if (requiredErrors.length > 0) {
+            showToast('Validation Error', `Please fill in: ${requiredErrors.join(', ')}`, 'warning');
             return;
         }
+
+        const customAttrsWithValues = currentAttributes
+            .filter(attr => attr.isCustom && customAttributeValues[attr.fieldName])
+            .map(attr => ({
+                ...attr,
+                value: customAttributeValues[attr.fieldName]
+            }));
 
         if (!basicDetails.name || !basicDetails.category) {
             showToast('Validation Error', 'Please enter product name and select a category', 'warning');
             return;
         }
 
-        // Validate product name again before adding
         const nameValidation = validateProductName(basicDetails.name);
         if (!nameValidation.isValid) {
             showToast('Validation Error', nameValidation.message, 'warning');
@@ -455,15 +597,17 @@ const AddProduct = () => {
             id: Date.now(),
             ...basicDetails,
             ...productAttributes,
+            ...customAttrsWithValues.reduce((acc, attr) => {
+                acc[attr.fieldName] = attr.value;
+                return acc;
+            }, {})
         };
 
         setPendingProduct(productWithoutBarcode);
         setBarcodePopupOpen(true);
     };
 
-    // Final add product
     const handleFinalAdd = () => {
-        // Validate basic details first
         if (!validateBasicDetails()) {
             showToast('Validation Error', 'Please fix the errors in basic details', 'warning');
             return;
@@ -490,10 +634,8 @@ const AddProduct = () => {
         setViewProductOpen(true);
     };
 
-    // Cancel
     const handleCancel = () => navigate('/product-management');
 
-    // Delete variant
     const handleDeleteVariant = (index) => {
         setAddedProducts(prev => prev.filter((_, i) => i !== index));
     };
@@ -517,13 +659,11 @@ const AddProduct = () => {
         setProductToDelete(null);
     };
 
-    // Save product - UPDATED: Pass correct barcode to API
     const handleNext = async () => {
         if (isSubmitting) return;
         setIsSubmitting(true);
 
         try {
-            // Validate product name one more time before saving
             const nameValidation = validateProductName(basicDetails.name);
             if (!nameValidation.isValid) {
                 showToast('Error', nameValidation.message, 'error');
@@ -593,19 +733,24 @@ const AddProduct = () => {
                         selling_price: parseFloat(product.sellingPrice),
                     };
 
-                    // Add barcode to the variation if it exists
                     if (product.barcode && product.barcode.trim() !== '') {
                         variation.barcode = product.barcode.trim();
-                        console.log(`📦 Setting barcode for variant: ${product.barcode}`);
                     }
 
                     if (colorId) variation.color_id = colorId;
                     if (sizeId) variation.size_id = sizeId;
 
+                    const customAttrs = getCurrentCategoryAttributes().filter(attr => attr.isCustom);
+                    customAttrs.forEach(attr => {
+                        const value = product[attr.fieldName];
+                        if (value && value.trim() !== '') {
+                            variation[attr.fieldName] = value;
+                        }
+                    });
+
                     return variation;
                 });
 
-                console.log('📤 Creating product with variations:', variations);
                 const result = await createProduct(productData, variations);
 
                 if (result.success) {
@@ -623,7 +768,6 @@ const AddProduct = () => {
         }
     };
 
-    // Modal handlers
     const handleOpenNewProductModal = (type) => {
         setNewProductModalType(type);
         setNewProductModalOpen(true);
@@ -634,7 +778,6 @@ const AddProduct = () => {
         setNewProductModalType(null);
     };
 
-   // Add new item (category, color, size)
     const handleAddNewItem = async (value) => {
         const capitalized = value.charAt(0).toUpperCase() + value.slice(1);
 
@@ -645,33 +788,32 @@ const AddProduct = () => {
                 return;
             }
 
-            setIsCreatingCategory(true); // Start API creation
+            setIsCreatingCategory(true);
 
             try {
-                console.log(`📤 Creating category "${capitalized}" on backend...`);
-                const createdCategory = await createCategory(capitalized); // now always works
-                const newCategoryObject = {
-                   id: createdCategory.id,
-                   name: capitalized,
-                   category_name: capitalized,
-                   attributes: []
-                };
+                const createdCategory = await createCategory(capitalized);
+                const categoryId = createdCategory.id;
 
+                const newCategoryObject = {
+                    id: categoryId,
+                    name: capitalized,
+                    category_name: capitalized,
+                    attributes: []
+                };
 
                 setCategoriesRaw(prev => [...prev, newCategoryObject]);
                 setAllCategories(prev => [...prev, capitalized]);
-                
-                // Set the category as selected immediately
+
+                setIsNewCategory(true);
                 handleBasicDetailsChange('category', capitalized);
-                
-                // Show success message
                 showToast('Success', `Category "${capitalized}" created successfully!`, 'success');
-                
+
+                window._newCategoryId = categoryId;
+
             } catch (error) {
                 console.error('❌ Failed to create category on backend:', error);
                 showToast('Error', `Failed to create category "${capitalized}" on server. Please try again.`, 'error');
-                
-                // Even if backend fails, continue with local creation
+
                 const newCategoryObject = {
                     id: Date.now(),
                     name: capitalized,
@@ -681,11 +823,12 @@ const AddProduct = () => {
 
                 setCategoriesRaw(prev => [...prev, newCategoryObject]);
                 setAllCategories(prev => [...prev, capitalized]);
-                
-                // Set the category as selected immediately
+
+                setIsNewCategory(true);
                 handleBasicDetailsChange('category', capitalized);
-                
                 showToast('Warning', `Category "${capitalized}" added locally.`, 'warning');
+
+                window._newCategoryId = newCategoryObject.id;
             } finally {
                 setIsCreatingCategory(false);
                 handleCloseNewProductModal();
@@ -717,8 +860,6 @@ const AddProduct = () => {
         }
     };
 
-
-    // Select item from popup - FIXED: Correct function names
     const handleOpenSelectPopup = (type) => {
         setSelectPopupType(type);
         setSelectPopupOpen(true);
@@ -730,22 +871,29 @@ const AddProduct = () => {
     };
 
     const handleSelectItem = (selectedValue) => {
+        if (!selectedValue) return;
         const capitalized = selectedValue.charAt(0).toUpperCase() + selectedValue.slice(1);
         if (selectPopupType === 'category') {
+            setIsNewCategory(false);
             handleBasicDetailsChange(selectPopupType, capitalized);
-        } else {
+        } else if (selectPopupType === 'color' || selectPopupType === 'size') {
             handleAttributesChange(selectPopupType, capitalized);
+        } else {
+            handleAttributesChange(selectPopupType, selectedValue);
         }
         handleCloseSelectPopup();
     };
 
-    // Get existing items for select popup
     const getExistingItems = () => {
         switch (selectPopupType) {
             case 'category': return allCategories;
             case 'color': return colors;
             case 'size': return sizes;
-            default: return [];
+            default:
+                if (selectPopupType && attributeOptions[selectPopupType]) {
+                    return attributeOptions[selectPopupType];
+                }
+                return [];
         }
     };
 
@@ -754,11 +902,16 @@ const AddProduct = () => {
             case 'category': return loadingCategories ? 'Loading categories...' : 'Select category';
             case 'color': return loadingColors ? 'Loading colors...' : 'Select colour';
             case 'size': return loadingSizes ? 'Loading sizes...' : 'Select size';
-            default: return 'Select item';
+            default:
+                if (selectPopupType) {
+                    const formattedName = selectPopupType.replace(/_/g, ' ');
+                    const titleName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
+                    return `Select ${titleName}`;
+                }
+                return 'Select item';
         }
     };
 
-    // Render attribute field
     const renderAttributeField = (attribute) => {
         const { labelName, fieldName, type } = attribute;
 
@@ -792,16 +945,49 @@ const AddProduct = () => {
                     </div>
                 </div>
             );
+        } else if (attribute.isCustom) {
+            const options = attributeOptions[fieldName] || [];
+            const loading = attributeOptionsLoading[fieldName] || false;
+            const selectedVal = customAttributeValues[fieldName] || '';
+            const placeholder = loading ? "Loading..." : `Select ${labelName.toLowerCase()}`;
+
+            return (
+                <div className={`form-group ${fieldName}-field`}>
+                    <label>{labelName}</label>
+                    <div className="custom-attr-input-container">
+                        <div className="select-wrapper custom-attr-select-wrapper">
+                            <input
+                                type="text"
+                                placeholder={placeholder}
+                                value={selectedVal}
+                                readOnly
+                                className="form-input custom-attr-select"
+                                onClick={() => !loading && handleOpenSelectPopup(fieldName)}
+                                disabled={loading}
+                            />
+                            <img src={dropdownIcon} alt="Dropdown" className="dropdown-icon custom-attr-dropdown-icon" />
+                        </div>
+                        <AddButton
+                            onClick={() => handleOpenAddValueModal(attribute)}
+                            title={`Add new ${labelName}`}
+                            className="custom-attr-add-btn"
+                        />
+                    </div>
+                </div>
+            );
         } else {
+            const value = productAttributes[fieldName] || '';
             const placeholder = `Type your ${labelName.toLowerCase()}`;
+            const onChange = (e) => handleAttributesChange(fieldName, e.target.value);
+
             return (
                 <div className={`form-group ${fieldName}-field`}>
                     <label>{labelName}</label>
                     <input
                         type={type === 'number' ? 'number' : 'text'}
                         placeholder={placeholder}
-                        value={productAttributes[fieldName] || ''}
-                        onChange={(e) => handleAttributesChange(fieldName, e.target.value)}
+                        value={value}
+                        onChange={onChange}
                         className="form-input"
                     />
                 </div>
@@ -809,13 +995,11 @@ const AddProduct = () => {
         }
     };
 
-    // Navigation handlers
     const handleDashboardClick = () => navigate('/dashboard');
     const handleProductClick = () => navigate('/product-management');
     const handleSalesClick = () => navigate('/sales-management');
     const handleLogoClick = () => navigate('/');
 
-    // Get view product data
     const getViewProductData = () => {
         if (editMode && editProductData) {
             return {
@@ -830,8 +1014,9 @@ const AddProduct = () => {
                     size: productAttributes.size,
                     quantity: productAttributes.quantity,
                     sellingPrice: productAttributes.sellingPrice,
-                    costPrice: productAttributes.costPrice
-                    // Removed barcode to match UI design
+                    costPrice: productAttributes.costPrice,
+                    customAttributes: { ...customAttributeValues },
+                    ...customAttributeValues
                 }]
             };
         } else {
@@ -841,21 +1026,94 @@ const AddProduct = () => {
                     category: addedProducts[0].category,
                     description: addedProducts[0].description
                 } : null,
-                addedProducts: addedProducts.map(p => ({
-                    id: p.id,
-                    color: p.color,
-                    size: p.size,
-                    quantity: p.quantity,
-                    sellingPrice: p.sellingPrice,
-                    costPrice: p.costPrice
-                    // Removed barcode to match UI design
-                }))
+                addedProducts: addedProducts.map(p => {
+                    const customAttrs = p.customAttributes ? { ...p.customAttributes } : {};
+                    Object.keys(p).forEach(key => {
+                        if (!['id', 'name', 'category', 'description', 'color', 'size', 'quantity', 'sellingPrice', 'costPrice', 'barcode', 'status', 'customAttributes'].includes(key)) {
+                            customAttrs[key] = p[key];
+                        }
+                    });
+                    return {
+                        id: p.id,
+                        color: p.color,
+                        size: p.size,
+                        quantity: p.quantity,
+                        sellingPrice: p.sellingPrice,
+                        costPrice: p.costPrice,
+                        customAttributes: customAttrs,
+                        ...customAttrs
+                    };
+                })
             };
         }
     };
 
     const viewProductData = getViewProductData();
     const currentCategoryAttributes = getCurrentCategoryAttributes();
+
+    const getCustomAttributesForDisplay = (product) => {
+        const customAttrs = currentCategoryAttributes.filter(attr => attr.isCustom);
+        const displayAttrs = [];
+
+        customAttrs.forEach(attr => {
+            const value = product[attr.fieldName];
+            if (value && value.trim() !== '') {
+                displayAttrs.push({
+                    label: attr.labelName,
+                    fieldName: attr.fieldName,
+                    value: value
+                });
+            }
+        });
+
+        return displayAttrs;
+    };
+
+    const handleSaveAttributes = async (newAttributes) => {
+        const categoryLower = basicDetails.category.toLowerCase();
+        const currentAttrs = categoryCustomAttributes[categoryLower] || [];
+
+        const updatedAttrs = [...currentAttrs, ...newAttributes];
+
+        setCategoryCustomAttributes(prev => ({
+            ...prev,
+            [categoryLower]: updatedAttrs
+        }));
+
+        try {
+            const categoryId = window._newCategoryId;
+            if (categoryId) {
+                const attributesForDb = newAttributes.map(attr => ({
+                    attribute_name: attr.labelName,
+                    attribute_type: attr.type || 'text',
+                    is_required: true
+                }));
+
+                const savedAttrs = await createAttributesBulk(categoryId, attributesForDb);
+                showToast('Success', `${newAttributes.length} custom attribute(s) saved to database!`, 'success');
+
+                if (savedAttrs && savedAttrs.length > 0) {
+                    const attrsWithIds = updatedAttrs.map(attr => {
+                        const dbAttr = savedAttrs.find(
+                            sa => sa.attribute_name?.toLowerCase() === attr.labelName?.toLowerCase()
+                        );
+                        return dbAttr ? { ...attr, id: dbAttr.id } : attr;
+                    });
+                    setCategoryCustomAttributes(prev => ({
+                        ...prev,
+                        [categoryLower]: attrsWithIds
+                    }));
+                }
+            } else {
+                showToast('Success', `${newAttributes.length} custom attribute(s) added locally!`, 'success');
+            }
+        } catch (error) {
+            console.error('Failed to save attributes to database:', error);
+            showToast('Warning', 'Attributes saved locally but failed to save to database.', 'warning');
+        }
+
+        setAddAttributesOpen(false);
+    };
 
     return (
         <div className="add-product-page">
@@ -874,7 +1132,6 @@ const AddProduct = () => {
 
             <div className="add-product-content">
                 <div className="form-containers-wrapper">
-                    {/* Basic Details */}
                     <div className="form-container">
                         <div className="container-header">
                             <h3 className="container-title">Basic details</h3>
@@ -943,7 +1200,6 @@ const AddProduct = () => {
                         </div>
                     </div>
 
-                    {/* Product Attributes */}
                     {showProductAttributes && (
                         <div className="form-container">
                             <div className="container-header">
@@ -953,7 +1209,7 @@ const AddProduct = () => {
                                 <div className="product-attributes-grid">
                                     <div className="attribute-row first-row">
                                         {currentCategoryAttributes
-                                            .filter(attr => ['color', 'size', 'quantity'].includes(attr.fieldName))
+                                            .filter(attr => ['quantity'].includes(attr.fieldName))
                                             .map(attribute => (
                                                 <React.Fragment key={attribute.fieldName}>
                                                     {renderAttributeField(attribute)}
@@ -963,13 +1219,12 @@ const AddProduct = () => {
 
                                     <div className="attribute-row second-row">
                                         {currentCategoryAttributes
-                                            .filter(attr => ['sellingPrice', 'costPrice'].includes(attr.fieldName))
+                                            .filter(attr => ['costPrice', 'sellingPrice'].includes(attr.fieldName))
                                             .map(attribute => (
                                                 <React.Fragment key={attribute.fieldName}>
                                                     {renderAttributeField(attribute)}
                                                 </React.Fragment>
                                             ))}
-                                        <div className="form-group empty-field"></div>
                                     </div>
 
                                     {currentCategoryAttributes
@@ -989,7 +1244,6 @@ const AddProduct = () => {
                         </div>
                     )}
 
-                    {/* Added Products */}
                     {!editMode && addedProducts.length > 0 && (
                         <div className="form-container">
                             <div className="container-header">
@@ -997,58 +1251,84 @@ const AddProduct = () => {
                             </div>
                             <div className="container-content">
                                 <div className="product-cards-grid">
-                                    {addedProducts.map((product, index) => (
-                                        <div key={product.id} className="product-card">
-                                            <div className="product-card-header">
-                                                <h4 className="product-card-title">Attributes {index + 1}</h4>
-                                                <button
-                                                    className="delete-variant-btn"
-                                                    onClick={() => handleDeleteClick(index)}
-                                                    title="Delete this variant"
-                                                >
-                                                    <img src={deleteIcon} alt="Delete" className="delete-icon" />
-                                                </button>
+                                    {addedProducts.map((product, index) => {
+                                        const customAttrs = getCustomAttributesForDisplay(product);
+
+                                        return (
+                                            <div key={product.id} className="product-card">
+                                                <div className="product-card-header">
+                                                    <h4 className="product-card-title">Attributes {index + 1}</h4>
+                                                    <button
+                                                        className="delete-variant-btn"
+                                                        onClick={() => handleDeleteClick(index)}
+                                                        title="Delete this variant"
+                                                    >
+                                                        <img src={deleteIcon} alt="Delete" className="delete-icon" />
+                                                    </button>
+                                                </div>
+                                                <div className="product-card-content">
+                                                    {product.color && product.color.trim() !== '' && (
+                                                        <div className="product-attribute">
+                                                            <img src={colorIcon} alt="Color" className="attr-icon" />
+                                                            <div className="attr-details">
+                                                                <span className="attr-label">Color</span>
+                                                                <span className="attr-value">{product.color}</span>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    {product.size && product.size.trim() !== '' && (
+                                                        <div className="product-attribute">
+                                                            <img src={sizeIcon} alt="Size" className="attr-icon" />
+                                                            <div className="attr-details">
+                                                                <span className="attr-label">Size</span>
+                                                                <span className="attr-value">{product.size}</span>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    {product.quantity && (
+                                                        <div className="product-attribute">
+                                                            <img src={quantityIcon} alt="Quantity" className="attr-icon" />
+                                                            <div className="attr-details">
+                                                                <span className="attr-label">Quantity</span>
+                                                                <span className="attr-value">{product.quantity}</span>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    {product.sellingPrice && (
+                                                        <div className="product-attribute">
+                                                            <img src={priceIcon} alt="Price" className="attr-icon" />
+                                                            <div className="attr-details">
+                                                                <span className="attr-label">Price</span>
+                                                                <span className="attr-value">Rs {product.sellingPrice}</span>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    {product.costPrice && (
+                                                        <div className="product-attribute">
+                                                            <img src={priceIcon} alt="Cost Price" className="attr-icon" />
+                                                            <div className="attr-details">
+                                                                <span className="attr-label">Cost Price</span>
+                                                                <span className="attr-value">Rs {product.costPrice}</span>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    {customAttrs.map(attr => (
+                                                        <div className="product-attribute" key={attr.fieldName}>
+                                                            <img
+                                                                src={getAttributeIcon(attr.label) || quantityIcon}
+                                                                alt={attr.label}
+                                                                className="attr-icon"
+                                                            />
+                                                            <div className="attr-details">
+                                                                <span className="attr-label">{attr.label}</span>
+                                                                <span className="attr-value">{attr.value}</span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
-                                            <div className="product-card-content">
-                                                {product.color && product.color.trim() !== '' && (
-                                                    <div className="product-attribute">
-                                                        <img src={colorIcon} alt="Color" className="attr-icon" />
-                                                        <div className="attr-details">
-                                                            <span className="attr-label">Color</span>
-                                                            <span className="attr-value">{product.color}</span>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                                {product.size && product.size.trim() !== '' && (
-                                                    <div className="product-attribute">
-                                                        <img src={sizeIcon} alt="Size" className="attr-icon" />
-                                                        <div className="attr-details">
-                                                            <span className="attr-label">Size</span>
-                                                            <span className="attr-value">{product.size}</span>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                                {product.quantity && (
-                                                    <div className="product-attribute">
-                                                        <img src={quantityIcon} alt="Quantity" className="attr-icon" />
-                                                        <div className="attr-details">
-                                                            <span className="attr-label">Quantity</span>
-                                                            <span className="attr-value">{product.quantity}</span>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                                {product.sellingPrice && (
-                                                    <div className="product-attribute">
-                                                        <img src={priceIcon} alt="Price" className="attr-icon" />
-                                                        <div className="attr-details">
-                                                            <span className="attr-label">Price</span>
-                                                            <span className="attr-value">Rs {product.sellingPrice}</span>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                                 <div className="final-actions">
                                     <button onClick={handleCancel} className="cancel-btn">Cancel</button>
@@ -1067,7 +1347,6 @@ const AddProduct = () => {
                 </div>
             </div>
 
-            {/* Modals */}
             <NewProduct
                 isOpen={newProductModalOpen}
                 onClose={handleCloseNewProductModal}
@@ -1101,7 +1380,54 @@ const AddProduct = () => {
                 onConfirm={handleConfirmDelete}
             />
 
-            {/* Removed AddAttributes modal from render */}
+            <AddAttributes
+                isOpen={addAttributesOpen}
+                onClose={() => setAddAttributesOpen(false)}
+                onSave={handleSaveAttributes}
+                categoryName={basicDetails.category}
+            />
+
+            {/* Add-Value Modal for custom attributes — styled like AddCategory */}
+            {addValueModal.open && (
+                <div className="modal-overlay" onClick={() => !addValueModal.saving && setAddValueModal({ open: false, attribute: null, inputVal: '', saving: false })}>
+                    <div className="modal-container" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Add {addValueModal.attribute?.labelName}</h2>
+                            <button
+                                className="modal-close-btn"
+                                onClick={() => setAddValueModal({ open: false, attribute: null, inputVal: '', saving: false })}
+                                disabled={addValueModal.saving}
+                            >&#x2715;</button>
+                        </div>
+
+                        <div className="modal-content">
+                            <div className="modal-form-group">
+                                <label className="modal-label">{addValueModal.attribute?.labelName}</label>
+                                <input
+                                    type="text"
+                                    className="modal-input"
+                                    placeholder={`Type your ${addValueModal.attribute?.labelName?.toLowerCase()}`}
+                                    value={addValueModal.inputVal}
+                                    autoFocus
+                                    onChange={e => setAddValueModal(prev => ({ ...prev, inputVal: e.target.value }))}
+                                    onKeyDown={e => { if (e.key === 'Enter') handleSaveAttributeValue(); }}
+                                    disabled={addValueModal.saving}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="modal-actions">
+                            <button
+                                className="add-value-confirm-btn"
+                                onClick={handleSaveAttributeValue}
+                                disabled={addValueModal.saving || !addValueModal.inputVal.trim()}
+                            >
+                                {addValueModal.saving ? 'Adding...' : 'Add'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <NewBarcode
                 isOpen={barcodePopupOpen}

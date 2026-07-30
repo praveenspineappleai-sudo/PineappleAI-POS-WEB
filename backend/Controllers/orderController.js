@@ -446,7 +446,7 @@ exports.createOrder = async (req, res) => {
 
     // 🧩 Step 5.5: Check for low stock and trigger notifications
     if (business && business.id) {
-       checkLowStock(business.id).catch(err => console.error("Low stock check failed", err));
+      checkLowStock(business.id).catch(err => console.error("Low stock check failed", err));
     }
 
     // 🧩 Step 6: Email sending (optional)
@@ -495,7 +495,7 @@ exports.createOrder = async (req, res) => {
           order_date: currentDate,
           customer_name: customerInfo.name || "N/A",
           customer_phone: customerInfo.phone_no || "N/A",
-          customer_email: customerInfo.email || "N/A",
+          customer_email: customerInfo.email || "",
           business_name: business_name,
           business_address: businessAddress,
           cashier_name: cashier_name || ownerName,
@@ -508,7 +508,7 @@ exports.createOrder = async (req, res) => {
             ordered_total_price: parseFloat(o.ordered_total_price),
           })),
         };
-        
+
         // We don't await this to avoid blocking response? Or we do. Original code awaited it implicitly?
         // Actually original code passed it to generateAndSendBill.
         // Let's call it safely.
@@ -521,9 +521,9 @@ exports.createOrder = async (req, res) => {
 
     // 🧩 Step 7: Send SMS Bill Link (New)
     if (customer && customer.phone_no) {
-       sendBillLink(customer.phone_no, orderNo, business_name)
-         .then(res => console.log("SMS result:", res))
-         .catch(err => console.error("SMS send failed", err));
+      sendBillLink(customer.phone_no, orderNo, business_name)
+        .then(res => console.log("SMS result:", res))
+        .catch(err => console.error("SMS send failed", err));
     }
 
     // 🧩 Step 8: Success
@@ -565,7 +565,7 @@ exports.getBillByOrderNo = async (req, res) => {
       ],
     });
 
-   
+
 
     // 3️⃣ Fetch the customer separately (all orders belong to same customer)
     const firstOrder = await CashierOrder.findOne({
@@ -599,7 +599,7 @@ exports.resendBillEmail = async (req, res) => {
       include: [
         {
           model: CashierOrder,
-          as: "order", 
+          as: "order",
           include: [
             {
               model: CashierPrice,

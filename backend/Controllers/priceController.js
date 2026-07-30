@@ -38,10 +38,10 @@ const getAllPrices = async (req, res) => {
   try {
     const prices = await Price.findAll({
       include: [
-        { model: Barcode, as: 'barcode' }, // Include barcode details
+        { model: Barcode, as: 'Barcode' }, // Include barcode details
         { model: Product, as: 'product' }, // Include product details
-        { model: Color, as: 'color' }, // Include color details
-        { model: Size, as: 'size' } // Include size details
+        { model: Color, as: 'Color' }, // Include color details
+        { model: Size, as: 'Size' } // Include size details
       ]
     });
 

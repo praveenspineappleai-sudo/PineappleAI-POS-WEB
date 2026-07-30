@@ -187,7 +187,8 @@ export const getSalesStats = async () => {
       return [];
     }
 
-    const url = `${SALES_BASE_URL}/stats?period=monthly&business_name=Cargills`;
+    const businessName = localStorage.getItem('business_name') || 'PAI FOOD CITY';
+    const url = `${SALES_BASE_URL}/stats?period=monthly&business_name=${encodeURIComponent(businessName)}`;
     console.log("📊 Fetching Sales Stats:", url);
 
     const response = await fetch(url, {

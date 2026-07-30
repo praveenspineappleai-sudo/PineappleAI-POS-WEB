@@ -9,8 +9,8 @@ const db = require("../models");
 // Get the 'Customer' model from the database instance
 const Customer = db.Customer;
 
-// Get the 'Order' model from the database instance
-const Order = db.Order;
+// Use the existing order model if available; fall back to the legacy model name.
+const OrderModel = db.CashierOrder || db.Order;
 
 /**
  * Search for customers by name, phone number, or email
@@ -20,50 +20,56 @@ exports.searchCustomers = async (req, res) => {
   try {
     // Extract the search query from request parameters
     const { query } = req.query;
+    const trimmedQuery = String(query || "").trim();
 
     // If no search query is provided, return a 400 error response
-    if (!query) {
+    if (!trimmedQuery) {
       return res.status(400).json({ error: "Search query is required" });
     }
 
-    // Search for customers whose name, phone number, or email contains the search query
-    const customers = await Customer.findAll({
+    const searchOptions = {
       where: {
         [Op.or]: [
-          { name: { [Op.like]: `%${query}%` } }, // Match names containing the query
-          { phone_no: { [Op.like]: `%${query}%` } }, // Match phone numbers containing the query
-          { email: { [Op.like]: `%${query}%` } }, // Match emails containing the query
+          { name: { [Op.like]: `%${trimmedQuery}%` } },
+          { phone_no: { [Op.like]: `%${trimmedQuery}%` } },
+          { email: { [Op.like]: `%${trimmedQuery}%` } },
         ],
       },
-      include: [
-        {
-          model: Order, // Include the 'Order' model
-          as: "orders", // Use alias for the relationship
-          attributes: ["ordered_total_price"], // Select only the 'total_price' field from the order
-          limit: 1, // Fetch only the first order per customer
-        },
-      ],
-      order: [["name", "ASC"]], // Sort results alphabetically by customer name
-    });
+      order: [["name", "ASC"]],
+    };
 
-    // If no customers match the query, return a 404 response
+    if (OrderModel) {
+      searchOptions.include = [
+        {
+          model: OrderModel,
+          as: "orders",
+          attributes: ["ordered_total_price"],
+          limit: 1,
+        },
+      ];
+    }
+
+    // Search for customers whose name, phone number, or email contains the search query
+    const customers = await Customer.findAll(searchOptions);
+
+    // Return an empty list for no matches so the UI can render a clean state
     if (customers.length === 0) {
-      return res.status(404).json({ message: "No customers found" });
+      return res.status(200).json([]);
     }
 
     // Format the customer data before sending the response
     const formattedCustomers = customers.map((customer) => {
+      const orders = Array.isArray(customer.orders) ? customer.orders : [];
       return {
-        id: customer.id, // Customer ID
-        name: customer.name, // Customer Name
-        phone_no: customer.phone_no, // Customer Phone Number
-        email: customer.email, // Customer Email
-        created_at: customer.createdAt, // Timestamp when the record was created
-        updated_at: customer.updatedAt, // Timestamp when the record was last updated
-        total_price:
-          customer.orders.length > 0
-            ? customer.orders[0].ordered_total_price
-            : null, // Assign first order's total price if available
+        id: customer.id,
+        name: customer.name,
+        customerName: customer.name,
+        phone_no: customer.phone_no,
+        phoneNumber: customer.phone_no,
+        email: customer.email,
+        created_at: customer.created_at || customer.createdAt,
+        updated_at: customer.updated_at || customer.updatedAt,
+        total_price: orders.length > 0 ? orders[0].ordered_total_price : null,
       };
     });
 

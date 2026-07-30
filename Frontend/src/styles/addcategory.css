@@ -104,6 +104,36 @@
     width: 100% !important;
 }
 
+/* Add value confirm button — full-width green, same as category Add button */
+.add-value-confirm-btn {
+    width: 100%;
+    padding: 12px 20px;
+    background: #2F7A3F;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+    letter-spacing: 0.3px;
+}
+
+.add-value-confirm-btn:hover:not(:disabled) {
+    background: #245f31;
+}
+
+.add-value-confirm-btn:active:not(:disabled) {
+    transform: scale(0.98);
+    background: #1e4f28;
+}
+
+.add-value-confirm-btn:disabled {
+    background: #92B99A;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
 /* Responsive Design */
 
 /* 1440px and above - Base styles maintained */

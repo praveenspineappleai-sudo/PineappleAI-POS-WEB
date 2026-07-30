@@ -72,8 +72,16 @@ const authMiddleware = (req, res, next) => {
     req.owner_id = decoded.ownerId || null;
     req.role = decoded.role || null;
 
-    // If business_id is missing (shouldn't happen after login), block access
-    if (!req.business_id) {
+    const normalizedRole = (req.role || "").toLowerCase();
+    const isSuperOrAdmin = [
+      "superadmin",
+      "super_admin",
+      "admin",
+      "super admin",
+    ].includes(normalizedRole);
+
+    // If business_id is missing (shouldn't happen after login except for global super admins), block non-admin access
+    if (!req.business_id && !isSuperOrAdmin) {
       return res.status(400).json({ error: "Business ID missing in token" });
     }
 

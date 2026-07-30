@@ -73,6 +73,13 @@ export const createProduct = async (productData, variations) => {
                     console.log(`📦 Adding custom barcode for variant: ${variation.barcode}`);
                 }
 
+                // Copy any dynamic custom attributes
+                Object.keys(variation).forEach(key => {
+                    if (!['color_id', 'size_id', 'quantity', 'cost_price', 'selling_price', 'barcode', 'id', 'name', 'category', 'description'].includes(key)) {
+                        payload[key] = variation[key];
+                    }
+                });
+
                 return payload;
             }),
         };

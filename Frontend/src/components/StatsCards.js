@@ -2,7 +2,7 @@
 import React from 'react';
 import '../styles/statscards.css';
 // A reusable component that displays key statistics in a card format, such as monthly sales, orders, new customers, and profit.
-const StatsCards = ({ stats = {} }) => {
+const StatsCards = ({ stats = {}, selectedRange = 'monthly' }) => {
   const {
     monthlySales = 0,
     monthlyOrders = 0,
@@ -10,6 +10,8 @@ const StatsCards = ({ stats = {} }) => {
     monthlyProfit = 0,
     currency = 'Rs'
   } = stats;
+
+  const rangeLabel = selectedRange === 'today' ? 'Today' : selectedRange === 'weekly' ? 'Weekly' : 'Monthly';
   // Utility function to format currency values with the specified currency symbol and thousands separators
   const formatCurrency = (amount) => {
     return `${currency} ${amount.toLocaleString()}`;
@@ -23,14 +25,14 @@ const StatsCards = ({ stats = {} }) => {
     <div className="stats-cards-container">
       <div className="stats-card">
         <div className="stats-card-content">
-          <h3 className="stats-title">Monthly sales</h3>
+          <h3 className="stats-title">{rangeLabel} sales</h3>
           <p className="stats-value">{formatCurrency(monthlySales)}</p>
         </div>
       </div>
 
       <div className="stats-card">
         <div className="stats-card-content">
-          <h3 className="stats-title">Monthly orders</h3>
+          <h3 className="stats-title">{rangeLabel} orders</h3>
           <p className="stats-value">{formatNumber(monthlyOrders)}</p>
         </div>
       </div>
@@ -44,7 +46,7 @@ const StatsCards = ({ stats = {} }) => {
 
       <div className="stats-card">
         <div className="stats-card-content">
-          <h3 className="stats-title">Monthly profit</h3>
+          <h3 className="stats-title">{rangeLabel} profit</h3>
           <p className="stats-value">{formatCurrency(monthlyProfit)}</p>
         </div>
       </div>

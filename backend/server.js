@@ -229,6 +229,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const http = require("http"); // ✅ For Socket.IO
+const net = require("net");
 const { connectDB } = require("./config/db");
 const { initSocket } = require("./config/socket"); // ✅ Import socket config
 
@@ -261,6 +262,7 @@ const notificationsRouter = require("./routes/notificationsRouter"); // ✅ Noti
 const deleteAccountRoutes = require("./routes/deleteAccountRoutes");
 const businessDetailsRouter = require("./routes/businessDetailsRouter"); // Business details
 const systemInfoRouter = require("./routes/systemInfoRouter"); // System info for debugging
+const attributesRouter = require("./routes/attributes");
 
 // -------------------- App Setup --------------------
 const app = express();
@@ -277,10 +279,10 @@ app.use(
       "https://pos-web-dev.pineappleai.cloud",
       "https://superadmin-pos-mobile-dev.pineappleai.cloud",
       "http://localhost:3000",
+      "http://localhost:3001",
       "http://localhost:5000",
       "https://pos-web-qa.pineappleai.cloud",
       "https://pos-web-beta.pineappleai.cloud",
-      
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -319,6 +321,7 @@ app.use("/api/account", deleteAccountRoutes); // Account deletion
 app.use("/api/business-details", businessDetailsRouter); // Business details
 app.use("/api/system-info", systemInfoRouter); // System info for debugging
 app.use("/api/public", require("./routes/publicBillRouter")); // Public access for bills
+app.use("/api", attributesRouter);
 
 // 404 / logging middleware
 app.use((req, res, next) => {
@@ -327,7 +330,29 @@ app.use((req, res, next) => {
 });
 
 // -------------------- DB & Server --------------------
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT || 5000);
+
+const startServer = (port) => {
+  const onError = (error) => {
+    if (error.code === "EADDRINUSE") {
+      const fallbackPort = port + 1;
+      console.warn(`⚠️ Port ${port} is already in use. Trying ${fallbackPort} instead...`);
+      server.removeListener("error", onError);
+      startServer(fallbackPort);
+    } else {
+      console.error("❌ Server failed to start:", error);
+      process.exit(1);
+    }
+  };
+
+  server.once("error", onError);
+
+  server.listen(port, () => {
+    server.removeListener("error", onError);
+    console.log(`🚀 Server running on port ${port}`);
+    console.log(`🔌 Socket.IO enabled on port ${port}`);
+  });
+};
 
 // Connect to the database
 connectDB();
@@ -338,7 +363,4 @@ app.get("/", (req, res) => {
 });
 
 // ✅ Start server with Socket.IO
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🔌 Socket.IO enabled on port ${PORT}`);
-});
+startServer(PORT);

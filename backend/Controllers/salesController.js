@@ -285,12 +285,20 @@ const fs = require("fs");
 const path = require("path");
 const os = require("os");
 
-const Bill = db.Bill;
-const Order = db.Order;
+const CashierBill = db.CashierBill;
+const CashierOrder = db.CashierOrder;
 const Customer = db.Customer;
-const Price = db.Price;
+const CashierPrice = db.CashierPrice;
+
+const normalizePeriod = (period) => {
+  if (!period) return "daily";
+  if (period === "today") return "daily";
+  return period;
+};
 
 const getDateRange = (period, startDateInput, endDateInput, monthInput) => {
+  const normalizedPeriod = normalizePeriod(period);
+
   if (startDateInput && endDateInput) {
     const startDate = new Date(startDateInput);
     const endDate = new Date(endDateInput);
@@ -302,8 +310,8 @@ const getDateRange = (period, startDateInput, endDateInput, monthInput) => {
       throw new Error("startDate must be before endDate.");
     }
 
-    startDate.setUTCHours(0, 0, 0, 0);
-    endDate.setUTCHours(23, 59, 59, 999);
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(23, 59, 59, 999);
     return { startDate, endDate, period: "custom" };
   }
 
@@ -312,39 +320,29 @@ const getDateRange = (period, startDateInput, endDateInput, monthInput) => {
     if (!year || !month || month < 1 || month > 12) {
       throw new Error("Invalid month format. Use YYYY-MM.");
     }
-    const startDate = new Date(Date.UTC(year, month - 1, 1));
-    const endDate = new Date(Date.UTC(year, month, 0));
-    startDate.setUTCHours(0, 0, 0, 0);
-    endDate.setUTCHours(23, 59, 59, 999);
+    const startDate = new Date(year, month - 1, 1, 0, 0, 0, 0);
+    const endDate = new Date(year, month, 0, 23, 59, 59, 999);
     return { startDate, endDate, period: "monthly" };
   }
 
   const today = new Date();
   let startDate, endDate;
 
-  if (period === "daily") {
-    startDate = new Date(today);
-    endDate = new Date(today);
-    startDate.setUTCHours(0, 0, 0, 0);
-    endDate.setUTCHours(23, 59, 59, 999);
-  } else if (period === "weekly") {
-    const firstDayOfWeek = today.getDate() - today.getDay();
-    startDate = new Date(today);
-    startDate.setDate(firstDayOfWeek);
-    startDate.setUTCHours(0, 0, 0, 0);
-    endDate = new Date(today);
-    endDate.setDate(firstDayOfWeek + 6);
-    endDate.setUTCHours(23, 59, 59, 999);
-  } else if (period === "monthly") {
-    startDate = new Date(Date.UTC(today.getFullYear(), today.getMonth(), 1));
-    endDate = new Date(Date.UTC(today.getFullYear(), today.getMonth() + 1, 0));
-    startDate.setUTCHours(0, 0, 0, 0);
-    endDate.setUTCHours(23, 59, 59, 999);
+  if (normalizedPeriod === "daily") {
+    startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+    endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+  } else if (normalizedPeriod === "weekly") {
+    // Past 7 days to today
+    startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6, 0, 0, 0, 0);
+    endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+  } else if (normalizedPeriod === "monthly") {
+    startDate = new Date(today.getFullYear(), today.getMonth(), 1, 0, 0, 0, 0);
+    endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
   } else {
     throw new Error("Invalid period. Use daily, weekly, or monthly.");
   }
 
-  return { startDate, endDate, period };
+  return { startDate, endDate, period: normalizedPeriod };
 };
 
 exports.getSalesStats = async (req, res) => {
@@ -357,7 +355,7 @@ exports.getSalesStats = async (req, res) => {
 
     if (
       period &&
-      !["daily", "weekly", "monthly"].includes(period) &&
+      !["daily", "weekly", "monthly", "today"].includes(normalizePeriod(period)) &&
       !(startDate && endDate) &&
       !month
     ) {
@@ -373,66 +371,87 @@ exports.getSalesStats = async (req, res) => {
       period: finalPeriod,
     } = getDateRange(period, startDate, endDate, month);
 
-    // Filter orders by business name prefix
     const businessFilter = {
       order_no: { [Op.like]: `${business_name}-%` },
-      created_at: { [Op.between]: [rangeStart, rangeEnd] },
+      date: { [Op.between]: [rangeStart, rangeEnd] },
     };
 
-    const totalOrders = await Order.count({ where: businessFilter });
+    const salesStats = await CashierOrder.findAll({
+      attributes: [
+        "order_no",
+        [fn("MAX", col("CashierOrder.id")), "id"],
+        [fn("MAX", col("customer_id")), "customer_id"],
+        [fn("MAX", col("price_id")), "price_id"],
+        [fn("MAX", col("date")), "date"],
+        [fn("MAX", col("date")), "order_date"],
+        [fn("MAX", col("CashierOrder.created_at")), "created_at"],
+        [fn("MAX", col("CashierOrder.updated_at")), "updated_at"],
+        [fn("SUM", col("ordered_total_price")), "ordered_total_price"],
+        [fn("SUM", col("ordered_total_price")), "total_price"],
+        [fn("SUM", col("ordered_quantity")), "ordered_quantity"],
+        [fn("SUM", col("ordered_quantity")), "total_quantity"],
+        [
+          fn("SUM", literal("ordered_quantity * price.Cost_price")),
+          "total_cost",
+        ],
+        [fn("MAX", col("bill.discounted_price")), "discounted_price"],
+      ],
+      include: [
+        { model: CashierPrice, as: "price", attributes: [] },
+        { model: CashierBill, as: "bill", attributes: [], required: false },
+      ],
+      where: businessFilter,
+      group: ["order_no"],
+      order: [[fn("MAX", col("date")), "DESC"], [fn("MAX", col("CashierOrder.id")), "DESC"]],
+      raw: true,
+    });
 
-    const totalSales =
-      (await Bill.sum("discounted_price", {
-        where: {
-          order_no: { [Op.like]: `${business_name}-%` },
-          created_at: { [Op.between]: [rangeStart, rangeEnd] },
-        },
-      })) || 0;
+    const totalOrders = salesStats.length;
+    let totalSales = 0;
+    let totalProfit = 0;
+
+    const cleanedSalesStats = salesStats.map((order) => {
+      const totalPrice = parseFloat(order.total_price || 0);
+      const discountedPrice = order.discounted_price !== null && order.discounted_price !== undefined
+        ? parseFloat(order.discounted_price)
+        : totalPrice;
+      const totalCost = parseFloat(order.total_cost || 0);
+      const profit = discountedPrice - totalCost;
+
+      totalSales += discountedPrice;
+      totalProfit += profit;
+
+      return {
+        ...order,
+        id: order.id,
+        order_no: order.order_no.replace(/^[^-]+-/, ""),
+        full_order_no: order.order_no,
+        price_id: order.price_id,
+        customer_id: order.customer_id,
+        date: order.date || order.order_date,
+        order_date: order.date || order.order_date,
+        created_at: order.created_at,
+        updated_at: order.updated_at,
+        ordered_total_price: totalPrice,
+        total_price: totalPrice,
+        ordered_quantity: parseInt(order.ordered_quantity || 0, 10),
+        total_quantity: parseInt(order.total_quantity || 0, 10),
+        total_cost: totalCost,
+        discounted_price: discountedPrice,
+        profit: parseFloat(profit.toFixed(2)),
+      };
+    });
 
     const newCustomers = await Customer.count({
       where: { created_at: { [Op.between]: [rangeStart, rangeEnd] } },
     });
 
-    const salesStats = await Order.findAll({
-      attributes: [
-        "order_no",
-        [fn("MAX", col("date")), "order_date"],
-        [fn("SUM", col("ordered_total_price")), "total_price"],
-        [fn("SUM", col("ordered_quantity")), "total_quantity"],
-        [
-          fn("SUM", literal("ordered_quantity * Price.cost_price")),
-          "total_cost",
-        ],
-        [fn("MAX", col("Bill.discounted_price")), "discounted_price"],
-      ],
-      include: [
-        { model: Price, attributes: [] },
-        { model: Bill, attributes: [], required: true },
-      ],
-      where: businessFilter,
-      group: ["order_no"],
-      raw: true,
-    });
-
-    let totalProfit = 0;
-    salesStats.forEach((order) => {
-      const discountedPrice = parseFloat(order.discounted_price || 0);
-      const totalCost = parseFloat(order.total_cost || 0);
-      totalProfit += discountedPrice - totalCost;
-    });
-
-    // Remove business_name prefix in order_no
-    const cleanedSalesStats = salesStats.map((order) => ({
-      ...order,
-      order_no: order.order_no.replace(/^[^-]+-/, ""),
-    }));
-
     res.json({
       period: finalPeriod,
       totalOrders,
-      totalSales,
+      totalSales: parseFloat(totalSales.toFixed(2)),
       newCustomers,
-      totalProfit,
+      totalProfit: parseFloat(totalProfit.toFixed(2)),
       orderDetails: cleanedSalesStats,
     });
   } catch (error) {

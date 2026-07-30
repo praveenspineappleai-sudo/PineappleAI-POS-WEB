@@ -4,7 +4,7 @@ import ProcessOrderButton from '../components/buttons/ProceedOrderButton';
 import { createCategory } from '../integration/CategoryAPI';
 import '../styles/addcategory.css';
 
-// This component is a popup for adding a new category to the system.
+// This component is a popup for adding a new category, color, size, or custom attribute value.
 const AddCategory = ({
     isOpen,
     onClose,
@@ -13,8 +13,9 @@ const AddCategory = ({
     existingItems = []
 }) => {
     const [inputValue, setInputValue] = useState('');
-// Handle adding new category, color, or size
-const handleAdd = () => {
+
+    // Handle adding new category, color, size, or custom attribute value
+    const handleAdd = () => {
         if (inputValue.trim() !== '') {
             // Capitalize first letter
             const capitalized = inputValue.trim().charAt(0).toUpperCase() + inputValue.trim().slice(1);
@@ -25,7 +26,7 @@ const handleAdd = () => {
             // Reset input
             setInputValue('');
 
-            // Close modal for all types including category
+            // Close modal
             onClose();
         }
     };
@@ -47,58 +48,41 @@ const handleAdd = () => {
 
     if (!isOpen) return null;
 
+    // Known built-in types
+    const builtInTypes = ['category', 'color', 'size'];
+
+    // Capitalize attribute name for display (e.g. "sample attributes" => "Sample attributes")
+    const attrDisplayName = type
+        ? type.charAt(0).toUpperCase() + type.slice(1)
+        : 'Item';
+
     // Function to determine title based on type
     const getTitle = () => {
         switch (type) {
-            case 'category':
-                return 'Add category';
-            case 'color':
-                return 'Add colour';
-            case 'size':
-                return 'Add size';
-            default:
-                return 'Add item';
+            case 'category': return 'Add category';
+            case 'color':    return 'Add colour';
+            case 'size':     return 'Add size';
+            default:         return `Add ${attrDisplayName}`;  // e.g. "Add Material"
         }
     };
 
     // Function to determine label based on type
     const getLabel = () => {
         switch (type) {
-            case 'category':
-                return 'Category';
-            case 'color':
-                return 'Colour';
-            case 'size':
-                return 'Size';
-            default:
-                return 'Item';
+            case 'category': return 'Category';
+            case 'color':    return 'Colour';
+            case 'size':     return 'Size';
+            default:         return attrDisplayName;           // e.g. "Material"
         }
     };
 
     // Function to determine placeholder based on type
     const getPlaceholder = () => {
         switch (type) {
-            case 'category':
-                return 'Type your category name';
-            case 'color':
-                return 'Type your colour name';
-            case 'size':
-                return 'Type your size';
-            default:
-                return 'Type your item name';
-        }
-    };
-
-    // Function to determine button text based on type
-    const getButtonTitle = () => {
-        switch (type) {
-            case 'category':
-                return 'Add';  // "Add" for category
-            case 'color':
-            case 'size':
-                return 'Add';   // "Add" for color and size
-            default:
-                return 'Add';
+            case 'category': return 'Type your category name';
+            case 'color':    return 'Type your colour name';
+            case 'size':     return 'Type your size';
+            default:         return `Type your ${type ? type.toLowerCase() : 'item'} value`;
         }
     };
 
@@ -111,7 +95,7 @@ const handleAdd = () => {
                         onClose();
                         setInputValue('');
                     }}>
-                        ✕
+                        &#x2715;
                     </button>
                 </div>
 
@@ -133,7 +117,7 @@ const handleAdd = () => {
                 <div className="modal-actions">
                     <ProcessOrderButton
                         onClick={handleAdd}
-                        title={getButtonTitle()}
+                        title="Add"
                         disabled={inputValue.trim() === ''}
                     />
                 </div>

@@ -130,8 +130,8 @@ const Discount = ({ isOpen, onClose, totalAmount, customer, onProceedOrder }) =>
   const payload = {};
 
   // Send customer_id ONLY if customer is selected
-  if (selectedCustomer?.id) {
-    payload.customer_id = selectedCustomer.id;
+  if (selectedCustomer?.customer_id || selectedCustomer?.id) {
+    payload.customer_id = selectedCustomer.customer_id || selectedCustomer.id;
   }
 
   onProceedOrder(

@@ -96,15 +96,15 @@ useEffect(() => {
           <div ref={invoiceRef} className="receipt">
 
             <div className="receipt-center receipt-title">
-              {businessData?.business_name}
+              {businessData?.business_name || businessData?.name || 'Foodcity'}
             </div>
 
             <div className="receipt-center">
-              {businessData?.business_address}
+              {businessData?.business_address || businessData?.address || ''}
             </div>
 
             <div className="receipt-center">
-              {businessData?.owner_phone}
+              {businessData?.owner_phone || businessData?.ownerPhone || ''}
             </div>
 
             <div className="receipt-divider" />
@@ -116,7 +116,7 @@ useEffect(() => {
 
             <div className="cashier-bill-row">
               <span>Cashier: {cashierName}</span>
-              <span>No: {orderData?.order_no?.replace("Cargills-ORD-", "")}</span>
+              <span>No: {orderData?.order_no?.split('-ORD-').pop() || orderData?.order_no}</span>
             </div>
 
             <div className="receipt-divider" />

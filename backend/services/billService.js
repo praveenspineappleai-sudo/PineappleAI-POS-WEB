@@ -50,7 +50,7 @@ const generateBillPDF = async (billData, width_mm = 80) => {
     doc
       .fontSize(14)
       .font('Helvetica-Bold')
-      .text(billData.business_name || "CARGILLS FOOD CITY", 0, 10, {
+      .text(billData.business_name || "PAI FOOD CITY", 0, 10, {
         width: pageWidth,
         align: 'center'
       });
@@ -314,8 +314,10 @@ const sendBillEmail = async (transporter, customerEmail, customerName, billPdfPa
 // Main function
 const generateAndSendBill = async (transporter, billData) => {
   try {
-    if (!billData.customer_email) {
-      throw new Error('Customer email is required');
+    const customerEmail = String(billData.customer_email || '').trim();
+    if (!customerEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail)) {
+      console.log('Skipping bill email because no valid customer email was provided.');
+      return { success: false, skipped: true, reason: 'No valid customer email' };
     }
     
     console.log('Generating PDF bill...');

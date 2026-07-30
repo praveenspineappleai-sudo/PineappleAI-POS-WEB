@@ -9,6 +9,7 @@ const AddAttributes = ({
     onClose, 
     categoryName,
     onSaveAttributes,
+    onSave,
     initialAttributes = []
 }) => {
     // Initialize with empty attributes when modal opens
@@ -64,7 +65,10 @@ const AddAttributes = ({
             return;
         }
         
-        onSaveAttributes(validAttributes);
+        const saveHandler = onSaveAttributes || onSave;
+        if (saveHandler) {
+            saveHandler(validAttributes);
+        }
         // Don't reset here - let the parent handle cleanup
     };
 

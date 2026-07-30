@@ -12,35 +12,46 @@ const OrderList = ({ orders = [], loading = false }) => {
       alert('No orders to download');
       return;
     }
-    // Define CSV headers and rows based on the orders data
+    // Define CSV headers and rows based on orders DB table attributes
     const headers = [
-      'Order ID',
+      'ID',
+      'Order No',
+      'Price ID',
+      'Customer ID',
       'Date',
-      'Total Items',
-      'Total Amount'
+      'Ordered Quantity',
+      'Ordered Total Price',
+      'Discounted Price',
+      'Profit',
+      'Created At'
     ];
-    // Map orders to CSV rows, handling different possible field names for consistency
+    
     const rows = orders.map(order => [
-      order.order_no || order.order_id || order.id || '',
-      fmtDate(order),
-      order.total_quantity || order.total_items || order.items_count || 0,
-      order.discounted_price ?? order.total_amount ?? 0
+      order.id ?? '',
+      order.order_no || order.full_order_no || '',
+      order.price_id ?? '',
+      order.customer_id ?? '',
+      order.date || order.order_date || '',
+      order.ordered_quantity ?? order.total_quantity ?? 0,
+      order.ordered_total_price ?? order.total_price ?? 0,
+      order.discounted_price ?? 0,
+      order.profit ?? 0,
+      order.created_at || ''
     ]);
-    // Create CSV content as a string
+
     const csvContent = [
       headers.join(','),
-      ...rows.map(row => row.join(','))
+      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
     ].join('\n');
-    // Create a Blob from the CSV content and trigger a download
+
     const blob = new Blob([csvContent], {
       type: 'text/csv;charset=utf-8;'
     });
-    // Create a temporary link to trigger the download
+
     const url = URL.createObjectURL(blob);
-    // Create a temporary link element
     const link = document.createElement('a');
     link.href = url;
-    link.download = `order_details_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.download = `orders_export_${new Date().toISOString().slice(0, 10)}.csv`;
 
     document.body.appendChild(link);
     link.click();

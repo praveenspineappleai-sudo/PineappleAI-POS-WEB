@@ -34,6 +34,10 @@ const ProductManagement = () => {
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
   const [productBarcodes, setProductBarcodes] = useState({});
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedStatus, setSelectedStatus] = useState('All');
+  const [activeDropdown, setActiveDropdown] = useState(null);
   const entriesPerPage = 10;
 
   useEffect(() => {
@@ -44,8 +48,16 @@ const ProductManagement = () => {
     checkMobile();
     window.addEventListener('resize', checkMobile);
 
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.th-with-icon-wrapper')) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+
     return () => {
       window.removeEventListener('resize', checkMobile);
+      document.removeEventListener('click', handleClickOutside);
     };
   }, []);
 
@@ -112,6 +124,25 @@ const ProductManagement = () => {
         existingBarcode = product.Barcode.barcode_no;
       }
 
+      // Extract custom attributes - any fields not in the standard set
+      const standardKeys = [
+        'id', 'product_id', 'price_id', 'priceId', 'name', 'product_name',
+        'barcode', 'barcode_no', 'barcodeNo', 'Barcode',
+        'category', 'category_name', 'category_id', 'categorys_id',
+        'color', 'color_name', 'color_id',
+        'size', 'size_name', 'size_id',
+        'quantity', 'stock',
+        'selling_price', 'price', 'cost_price',
+        'description', 'created_at', 'createdAt',
+        'status', 'customAttributes'
+      ];
+      const extractedCustomAttributes = { ...(product.customAttributes || {}) };
+      Object.keys(product).forEach(key => {
+        if (!standardKeys.includes(key) && product[key] !== undefined && product[key] !== null && product[key] !== '') {
+          extractedCustomAttributes[key] = product[key];
+        }
+      });
+
       return {
         id: productId,
         priceId: priceId,
@@ -130,7 +161,8 @@ const ProductManagement = () => {
         created_at: product.created_at || product.createdAt || new Date().toISOString(),
         category_id: product.category_id || product.categorys_id,
         color_id: product.color_id,
-        size_id: product.size_id
+        size_id: product.size_id,
+        customAttributes: extractedCustomAttributes
       };
     }).sort((a, b) => b.id - a.id);
   };
@@ -279,21 +311,52 @@ const ProductManagement = () => {
     }
   }, [location.state]); // Only depend on location.state
 
-  // Search filtering
+  // Search, Category, Status filtering and Sorting
   useEffect(() => {
-    if (searchTerm.trim() === '') {
-      setFilteredProducts(allProducts);
-      setCurrentPage(1);
-    } else {
+    let result = [...allProducts];
+
+    // Search filter
+    if (searchTerm.trim() !== '') {
       const searchLower = searchTerm.toLowerCase();
-      const filtered = allProducts.filter(product =>
-        product.name.toLowerCase().includes(searchLower) ||
-        (product.barcode && product.barcode.toLowerCase().includes(searchLower))
+      result = result.filter(product =>
+        (product.name && product.name.toLowerCase().includes(searchLower)) ||
+        (product.barcode && product.barcode.toLowerCase().includes(searchLower)) ||
+        (product.category && product.category.toLowerCase().includes(searchLower))
       );
-      setFilteredProducts(filtered);
-      setCurrentPage(1);
     }
-  }, [searchTerm, allProducts]);
+
+    // Category filter
+    if (selectedCategory !== 'All') {
+      result = result.filter(product =>
+        product.category && product.category.toLowerCase() === selectedCategory.toLowerCase()
+      );
+    }
+
+    // Status filter
+    if (selectedStatus !== 'All') {
+      result = result.filter(product =>
+        product.status && product.status.toLowerCase() === selectedStatus.toLowerCase()
+      );
+    }
+
+    // Sorting
+    if (sortConfig.key) {
+      result.sort((a, b) => {
+        let valA = a[sortConfig.key] || '';
+        let valB = b[sortConfig.key] || '';
+
+        if (typeof valA === 'string') valA = valA.toLowerCase();
+        if (typeof valB === 'string') valB = valB.toLowerCase();
+
+        if (valA < valB) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (valA > valB) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    setFilteredProducts(result);
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory, selectedStatus, sortConfig, allProducts]);
 
   const formatPrice = (price) => {
     if (!price) return '0';
@@ -369,7 +432,8 @@ const ProductManagement = () => {
           color_id: product.color_id,
           size_id: product.size_id,
           variantKey: product.variantKey,
-          barcode: product.barcode
+          barcode: product.barcode,
+          customAttributes: product.customAttributes
         }
       }
     });
@@ -402,7 +466,8 @@ const ProductManagement = () => {
         quantity: variant.stock,
         sellingPrice: variant.sellingPrice || variant.price.replace('Rs ', '').replace(/,/g, ''),
         costPrice: variant.costPrice || 0,
-        barcode: variantBarcode || 'Not assigned'
+        barcode: variantBarcode || 'Not assigned',
+        customAttributes: variant.customAttributes || {}
       };
     });
 
@@ -517,24 +582,192 @@ const ProductManagement = () => {
                 <thead>
                   <tr>
                     <th>
-                      <div className="th-with-icon">
-                        Product
-                        <img src={limitIcon} alt="limit" className="limit-icon" />
+                      <div className="th-with-icon-wrapper">
+                        <div 
+                          className="th-with-icon" 
+                          onClick={() => setActiveDropdown(activeDropdown === 'product' ? null : 'product')}
+                          title="Sort products"
+                        >
+                          Product
+                          {sortConfig.key === 'name' && (
+                            <span className="sort-arrow">{sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}</span>
+                          )}
+                          <img 
+                            src={limitIcon} 
+                            alt="Filter Product" 
+                            className={`limit-icon ${sortConfig.key === 'name' ? 'active-filter' : ''}`} 
+                          />
+                        </div>
+                        {activeDropdown === 'product' && (
+                          <div className="filter-dropdown-menu">
+                            <div className="dropdown-header-title">Sort Product</div>
+                            <div 
+                              className={`dropdown-item ${sortConfig.key === 'name' && sortConfig.direction === 'asc' ? 'active' : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSortConfig({ key: 'name', direction: 'asc' });
+                                setActiveDropdown(null);
+                              }}
+                            >
+                              Sort A to Z (Ascending)
+                            </div>
+                            <div 
+                              className={`dropdown-item ${sortConfig.key === 'name' && sortConfig.direction === 'desc' ? 'active' : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSortConfig({ key: 'name', direction: 'desc' });
+                                setActiveDropdown(null);
+                              }}
+                            >
+                              Sort Z to A (Descending)
+                            </div>
+                            {sortConfig.key === 'name' && (
+                              <div 
+                                className="dropdown-item reset-item"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSortConfig({ key: null, direction: null });
+                                  setActiveDropdown(null);
+                                }}
+                              >
+                                Clear Sort
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </th>
                     <th>Barcode</th>
                     <th>
-                      <div className="th-with-icon">
-                        Category
-                        <img src={limitIcon} alt="limit" className="limit-icon" />
+                      <div className="th-with-icon-wrapper">
+                        <div 
+                          className="th-with-icon"
+                          onClick={() => setActiveDropdown(activeDropdown === 'category' ? null : 'category')}
+                          title="Filter category"
+                        >
+                          Category
+                          {selectedCategory !== 'All' && <span className="active-tag">{selectedCategory}</span>}
+                          {sortConfig.key === 'category' && (
+                            <span className="sort-arrow">{sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}</span>
+                          )}
+                          <img 
+                            src={limitIcon} 
+                            alt="Filter Category" 
+                            className={`limit-icon ${selectedCategory !== 'All' || sortConfig.key === 'category' ? 'active-filter' : ''}`} 
+                          />
+                        </div>
+                        {activeDropdown === 'category' && (
+                          <div className="filter-dropdown-menu">
+                            <div className="dropdown-header-title">Filter Category</div>
+                            <div 
+                              className={`dropdown-item ${selectedCategory === 'All' ? 'active' : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedCategory('All');
+                                setActiveDropdown(null);
+                              }}
+                            >
+                              All Categories
+                            </div>
+                            {categories.map(cat => (
+                              <div 
+                                key={cat}
+                                className={`dropdown-item ${selectedCategory === cat ? 'active' : ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedCategory(cat);
+                                  setActiveDropdown(null);
+                                }}
+                              >
+                                {cat}
+                              </div>
+                            ))}
+                            <div className="dropdown-divider"></div>
+                            <div className="dropdown-header-title">Sort Category</div>
+                            <div 
+                              className={`dropdown-item ${sortConfig.key === 'category' && sortConfig.direction === 'asc' ? 'active' : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSortConfig({ key: 'category', direction: 'asc' });
+                                setActiveDropdown(null);
+                              }}
+                            >
+                              Category A to Z
+                            </div>
+                            <div 
+                              className={`dropdown-item ${sortConfig.key === 'category' && sortConfig.direction === 'desc' ? 'active' : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSortConfig({ key: 'category', direction: 'desc' });
+                                setActiveDropdown(null);
+                              }}
+                            >
+                              Category Z to A
+                            </div>
+                            {(selectedCategory !== 'All' || sortConfig.key === 'category') && (
+                              <div 
+                                className="dropdown-item reset-item"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedCategory('All');
+                                  if (sortConfig.key === 'category') setSortConfig({ key: null, direction: null });
+                                  setActiveDropdown(null);
+                                }}
+                              >
+                                Clear Category Filter
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </th>
                     <th>Price</th>
                     <th>Stock</th>
                     <th>
-                      <div className="th-with-icon">
-                        Status
-                        <img src={limitIcon} alt="limit" className="limit-icon" />
+                      <div className="th-with-icon-wrapper">
+                        <div 
+                          className="th-with-icon"
+                          onClick={() => setActiveDropdown(activeDropdown === 'status' ? null : 'status')}
+                          title="Filter status"
+                        >
+                          Status
+                          {selectedStatus !== 'All' && <span className="active-tag">{selectedStatus}</span>}
+                          <img 
+                            src={limitIcon} 
+                            alt="Filter Status" 
+                            className={`limit-icon ${selectedStatus !== 'All' ? 'active-filter' : ''}`} 
+                          />
+                        </div>
+                        {activeDropdown === 'status' && (
+                          <div className="filter-dropdown-menu">
+                            <div className="dropdown-header-title">Filter Status</div>
+                            {['All', 'In stock', 'Low stock', 'Out of stock'].map(st => (
+                              <div 
+                                key={st}
+                                className={`dropdown-item ${selectedStatus === st ? 'active' : ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedStatus(st);
+                                  setActiveDropdown(null);
+                                }}
+                              >
+                                {st === 'All' ? 'All Statuses' : st}
+                              </div>
+                            ))}
+                            {selectedStatus !== 'All' && (
+                              <div 
+                                className="dropdown-item reset-item"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedStatus('All');
+                                  setActiveDropdown(null);
+                                }}
+                              >
+                                Clear Status Filter
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </th>
                     <th>Action</th>
@@ -543,7 +776,9 @@ const ProductManagement = () => {
                 <tbody>
                   {products.map((product) => (
                     <tr key={product.variantKey}>
-                      <td className="product-name">{product.name}</td>
+                      <td className="product-name">
+                        <div style={{ fontWeight: '600', color: '#1a1a2e' }}>{product.name}</div>
+                      </td>
                       <td className="product-barcode">
                         {product.barcode || '-'}
                       </td>

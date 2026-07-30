@@ -103,7 +103,7 @@ const AddCustomer = ({ isOpen, onClose, totalAmount, onProceedOrder }) => {
       setSearchResults([]);
       return;
     }
-    
+
     const filtered = customers.filter(
       (customer) =>
         customer.name.toLowerCase().includes(term.toLowerCase()) ||
@@ -147,9 +147,16 @@ const AddCustomer = ({ isOpen, onClose, totalAmount, onProceedOrder }) => {
   // **UPDATED VALIDATION**
   const validateForm = () => {
     const newErrors = {};
-    if (!customerData.name.trim()) newErrors.name = "Name is required";
-    if (!customerData.phone.trim())
+    const trimmedName = customerData.name.trim();
+    const trimmedPhone = customerData.phone.trim();
+    const normalizedPhone = trimmedPhone.replace(/\D/g, '');
+
+    if (!trimmedName) newErrors.name = "Name is required";
+    if (!normalizedPhone) {
       newErrors.phone = "Contact number is required";
+    } else if (!/^0?\d{9}$/.test(normalizedPhone)) {
+      newErrors.phone = "Enter a valid phone number";
+    }
 
     // ✔ EMAIL OPTIONAL
     if (customerData.email.trim() && !validateEmail(customerData.email)) {
@@ -162,65 +169,83 @@ const AddCustomer = ({ isOpen, onClose, totalAmount, onProceedOrder }) => {
 
   // SAVE CUSTOMER API
   const handleSave = async () => {
-  if (selectedCustomer) {
-    showToast(
-      "Warning",
-      "Cannot save - an existing customer is already selected",
-      "info",
-      3000
-    );
-    return;
-  }
-
-  if (!validateForm()) return;
-
-  try {
-    setIsSaving(true);
-
-    // ✔ SEND EMAIL ONLY IF NOT EMPTY
-    const payload = {
-      name: customerData.name,
-      phone_no: customerData.phone,
-    };
-
-    if (customerData.email.trim() !== "") {
-      payload.email = customerData.email;
+    if (selectedCustomer) {
+      showToast(
+        "Warning",
+        "Cannot save - an existing customer is already selected",
+        "info",
+        3000
+      );
+      return;
     }
 
-    const response = await axios.post(API_BASE_URL, payload);
+    if (!validateForm()) return;
 
-    showToast("Success", "Customer created successfully", "success", 3000);
-    // CREATE A NEW CUSTOMER OBJECT TO PASS TO THE ORDER SUMMARY
-    const newCustomer = {
-      id: response.data.id || Date.now(),
-      ...response.data,
-      customerName: response.data.name,
-      phoneNumber: response.data.phone_no,
-      lastPurchaseAmount: 0,
-    };
+    try {
+      setIsSaving(true);
 
-    setSelectedCustomer(newCustomer);
+      const normalizedPhone = String(customerData.phone || '').replace(/\D/g, '');
+      const phoneNo = normalizedPhone.startsWith('0') && normalizedPhone.length === 10 ? normalizedPhone.slice(1) : normalizedPhone;
 
-    if (onProceedOrder) {
-      onProceedOrder(newCustomer);
+      // ✔ SEND EMAIL ONLY IF NOT EMPTY
+      const payload = {
+        name: customerData.name.trim(),
+        phone_no: phoneNo,
+      };
+
+      if (customerData.email.trim() !== "") {
+        payload.email = customerData.email;
+      }
+
+      const response = await axios.post(API_BASE_URL, payload);
+      const responseData = response?.data?.data ?? response?.data ?? {};
+
+      showToast("Success", "Customer created successfully", "success", 3000);
+      // CREATE A NEW CUSTOMER OBJECT TO PASS TO THE ORDER SUMMARY
+      const customerId = responseData.id ?? responseData.customer_id ?? Date.now();
+      const newCustomer = {
+        id: customerId,
+        customer_id: customerId,
+        ...responseData,
+        name: responseData.name ?? customerData.name,
+        customerName: responseData.customerName ?? responseData.name ?? customerData.name,
+        phone: responseData.phone ?? responseData.phone_no ?? customerData.phone,
+        phone_no: responseData.phone_no ?? responseData.phone ?? customerData.phone,
+        phoneNumber: responseData.phoneNumber ?? responseData.phone_no ?? responseData.phone ?? customerData.phone,
+        email: responseData.email ?? customerData.email,
+        lastPurchaseAmount: 0,
+      };
+
+      setSelectedCustomer(newCustomer);
+
+      if (onProceedOrder) {
+        onProceedOrder(newCustomer);
+      }
+    } catch (error) {
+      console.error("❌ Error creating customer:", error);
+      const backendErrors = error?.response?.data?.errors;
+      const backendMessage = error?.response?.data?.error || error?.response?.data?.message;
+      const firstValidationMessage = Array.isArray(backendErrors) && backendErrors[0]?.message
+        ? backendErrors[0].message
+        : null;
+      const message = firstValidationMessage || backendMessage || "Failed to create customer. Please try again.";
+
+      showToast("Error", message, "error", 4000);
+    } finally {
+      setIsSaving(false);
     }
-  } catch (error) {
-    console.error("❌ Error creating customer:", error);
-    showToast(
-      "Error",
-      "Failed to create customer. Please try again.",
-      "error",
-      3000
-    );
-  } finally {
-    setIsSaving(false);
-  }
-};
+  };
 
 
   // PROCEED ORDER
   const handleProceedOrder = () => {
-    const customerToUse = selectedCustomer || { id: Date.now(), ...customerData, lastPurchaseAmount: 0 };
+    const fallbackId = Date.now();
+    const customerToUse = {
+      ...(selectedCustomer || { id: fallbackId, ...customerData, lastPurchaseAmount: 0 }),
+      id: (selectedCustomer?.id ?? selectedCustomer?.customer_id ?? fallbackId),
+      customer_id: (selectedCustomer?.customer_id ?? selectedCustomer?.id ?? fallbackId),
+    };
+
     if (!selectedCustomer && !validateForm()) return;
     if (onProceedOrder) {
       onProceedOrder(customerToUse);
@@ -228,7 +253,7 @@ const AddCustomer = ({ isOpen, onClose, totalAmount, onProceedOrder }) => {
     setShowDiscount(true);
   };
 
- 
+
   // DISCOUNT MODAL HANDLERS
   const handleDiscountClose = () => {
     setShowDiscount(false);
@@ -289,9 +314,8 @@ const AddCustomer = ({ isOpen, onClose, totalAmount, onProceedOrder }) => {
                 {searchResults.map((customer) => (
                   <div
                     key={customer.id}
-                    className={`addcustomer-search-result ${
-                      selectedCustomer?.id === customer.id ? "selected" : ""
-                    }`}
+                    className={`addcustomer-search-result ${selectedCustomer?.id === customer.id ? "selected" : ""
+                      }`}
                     onClick={() => handleCustomerSelect(customer)}
                   >
                     <div className="addcustomer-info">
@@ -315,9 +339,8 @@ const AddCustomer = ({ isOpen, onClose, totalAmount, onProceedOrder }) => {
                   name="name"
                   value={customerData.name}
                   onChange={handleInputChange}
-                  className={`addcustomer-input ${
-                    errors.name ? "addcustomer-input-error" : ""
-                  }`}
+                  className={`addcustomer-input ${errors.name ? "addcustomer-input-error" : ""
+                    }`}
                   placeholder="Enter customer name"
                   disabled={selectedCustomer}
                 />
@@ -334,9 +357,8 @@ const AddCustomer = ({ isOpen, onClose, totalAmount, onProceedOrder }) => {
                   name="phone"
                   value={customerData.phone}
                   onChange={handleInputChange}
-                  className={`addcustomer-input ${
-                    errors.phone ? "addcustomer-input-error" : ""
-                  }`}
+                  className={`addcustomer-input ${errors.phone ? "addcustomer-input-error" : ""
+                    }`}
                   placeholder="Enter contact number (without leading 0 [e.g:71XXXXXXX])"
                   disabled={selectedCustomer}
                 />
@@ -349,16 +371,15 @@ const AddCustomer = ({ isOpen, onClose, totalAmount, onProceedOrder }) => {
 
               <div className="addcustomer-form-group">
                 <label className="addcustomer-label">
-                Email <span className="optional-text">(Optional)</span></label>
+                  Email <span className="optional-text">(Optional)</span></label>
                 <input
                   ref={emailRef}
                   type="email"
                   name="email"
                   value={customerData.email}
                   onChange={handleInputChange}
-                  className={`addcustomer-input ${
-                    errors.email ? "addcustomer-input-error" : ""
-                  }`}
+                  className={`addcustomer-input ${errors.email ? "addcustomer-input-error" : ""
+                    }`}
                   placeholder="example@gmail.com"
                   disabled={selectedCustomer}
                 />

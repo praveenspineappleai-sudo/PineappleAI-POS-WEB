@@ -2,39 +2,38 @@
 import React, { useState } from 'react';
 import '../styles/daterangeselector.css';
 // DateRangeSelector component with tabs for Today, Weekly, and Monthly selections
-const DateRangeSelector = ({ selectedRange, selectedDate, onRangeChange }) => {
-  // Get current date in YYYY-MM-DD format
-  const getCurrentDate = () => {
-    const now = new Date();
-    return now.toISOString().split('T')[0];
+const DateRangeSelector = ({ selectedRange = 'today', selectedDate, onRangeChange }) => {
+  const getFormattedDate = (d = new Date()) => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
-  // Get current month in YYYY-MM format
-  const getCurrentMonth = () => {
-    const now = new Date();
-    return now.toISOString().substring(0, 7);
+  const getFormattedMonth = (d = new Date()) => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    return `${year}-${month}`;
   };
 
-  // Calculate one week from now for the end date
-  const getOneWeekFromNow = () => {
+  const getSevenDaysAgoDate = () => {
     const now = new Date();
-    const oneWeekLater = new Date(now);
-    oneWeekLater.setDate(now.getDate() + 7);
-    return oneWeekLater.toISOString().split('T')[0];
+    const past = new Date(now);
+    past.setDate(now.getDate() - 6);
+    return getFormattedDate(past);
   };
-  /// State management for active tab and date selections
-  const [activeTab, setActiveTab] = useState('Today');
-  // Initialize date states based on current date and month
-  const [currentDate, setCurrentDate] = useState(getCurrentDate());
-  // For weekly range, we maintain separate states for start and end dates
-  const [startDate, setStartDate] = useState(getCurrentDate());
-  // For weekly range, we set the end date to one week from now by default
-  const [endDate, setEndDate] = useState(getOneWeekFromNow());
-  // For monthly selection, we maintain a state for the selected month
-  const [selectedMonth, setSelectedMonth] = useState(getCurrentMonth());
-  // Define the available tabs for selection
+
+  const [activeTab, setActiveTab] = useState(
+    selectedRange ? selectedRange.charAt(0).toUpperCase() + selectedRange.slice(1) : 'Today'
+  );
+
+  const [currentDate, setCurrentDate] = useState(getFormattedDate());
+  const [startDate, setStartDate] = useState(getSevenDaysAgoDate());
+  const [endDate, setEndDate] = useState(getFormattedDate());
+  const [selectedMonth, setSelectedMonth] = useState(getFormattedMonth());
+
   const tabs = ['Today', 'Weekly', 'Monthly'];
-  // Handler for tab changes - updates active tab and triggers range change callback
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
 
@@ -42,47 +41,43 @@ const DateRangeSelector = ({ selectedRange, selectedDate, onRangeChange }) => {
 
     if (tab === 'Today') {
       onRangeChange('today', currentDate);
-    }
-
-    if (tab === 'Weekly') {
+    } else if (tab === 'Weekly') {
       onRangeChange('weekly', {
         startDate,
         endDate
       });
-    }
-
-    if (tab === 'Monthly') {
+    } else if (tab === 'Monthly') {
       onRangeChange('monthly', selectedMonth);
     }
   };
 
-
   const handleDateChange = (value, type) => {
-    // eslint-disable-next-line default-case
     switch (type) {
       case 'single':
         setCurrentDate(value);
         if (onRangeChange) {
-          onRangeChange(activeTab.toLowerCase(), value);
+          onRangeChange('today', value);
         }
         break;
       case 'start':
         setStartDate(value);
-        if (onRangeChange && activeTab === 'Weekly') {
+        if (onRangeChange) {
           onRangeChange('weekly', { startDate: value, endDate });
         }
         break;
       case 'end':
         setEndDate(value);
-        if (onRangeChange && activeTab === 'Weekly') {
+        if (onRangeChange) {
           onRangeChange('weekly', { startDate, endDate: value });
         }
         break;
       case 'month':
         setSelectedMonth(value);
         if (onRangeChange) {
-          onRangeChange(activeTab.toLowerCase(), value);
+          onRangeChange('monthly', value);
         }
+        break;
+      default:
         break;
     }
   };

@@ -28,7 +28,8 @@ import OrderListPage from '../pages/Cashier/Orederlistpage';
  */
 export const getRoleBasedRedirect = () => {
   const userData = getUserData();
-  if (userData && userData.role === 'cashier') {
+  const role = (userData?.role || '').toLowerCase();
+  if (role === 'cashier') {
     return '/order-list';
   }
   return '/dashboard';
@@ -41,14 +42,15 @@ export const getRoleBasedRedirect = () => {
  * @returns {boolean} Whether route is accessible
  */
 export const isRouteAccessible = (pathname, userRole) => {
+  const normalizedRole = (userRole || '').toLowerCase();
   const adminRoutes = ['/dashboard', '/product-management', '/sales-management', '/add-product'];
   const cashierRoutes = ['/order-list'];
   
-  if (userRole === 'cashier' && adminRoutes.includes(pathname)) {
+  if (normalizedRole === 'cashier' && adminRoutes.includes(pathname)) {
     return false;
   }
   
-  if ((userRole === 'admin' || userRole === 'owner') && cashierRoutes.includes(pathname)) {
+  if (['admin', 'owner', 'superadmin', 'super_admin', 'super admin'].includes(normalizedRole) && cashierRoutes.includes(pathname)) {
     // Admin can access cashier routes too, but we'll redirect to dashboard
     return false;
   }

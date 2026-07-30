@@ -55,6 +55,7 @@ fs.readdirSync(__dirname)
     (file) =>
       file.indexOf(".") !== 0 && // Ignore hidden files (e.g., .gitignore)
       file !== basename && // Ignore the current file (index.js)
+      !file.startsWith("search") && // Exclude duplicate search models
       file.endsWith(".js") // Only process JavaScript files
   )
   .forEach((file) => {

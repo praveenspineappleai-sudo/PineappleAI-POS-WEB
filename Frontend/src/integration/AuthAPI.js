@@ -60,17 +60,21 @@ export const login = async (email, password, rememberMe = false) => {
       Cookies.set('token', data.accessToken, COOKIE_OPTIONS);
       Cookies.set('refresh_token', data.refreshToken, COOKIE_OPTIONS);
       
-      // Store user information in cookies
-      Cookies.set('business_id', data.user.businessId.toString(), COOKIE_OPTIONS);
-      Cookies.set('business_name', data.user.businessName, COOKIE_OPTIONS);
-      Cookies.set('user_id', data.user.id.toString(), COOKIE_OPTIONS);
-      Cookies.set('user_email', data.user.email, COOKIE_OPTIONS);
-      Cookies.set('user_role', data.user.role, COOKIE_OPTIONS);
+      // Store user information in cookies safely
+      if (data.user.businessId !== null && data.user.businessId !== undefined) {
+        Cookies.set('business_id', data.user.businessId.toString(), COOKIE_OPTIONS);
+      } else {
+        Cookies.set('business_id', '', COOKIE_OPTIONS);
+      }
+      Cookies.set('business_name', data.user.businessName || '', COOKIE_OPTIONS);
+      Cookies.set('user_id', (data.user.id || '').toString(), COOKIE_OPTIONS);
+      Cookies.set('user_email', data.user.email || '', COOKIE_OPTIONS);
+      Cookies.set('user_role', data.user.role || '', COOKIE_OPTIONS);
 
       // Also store in localStorage for easier access
       localStorage.setItem('token', data.accessToken);
       localStorage.setItem('user', JSON.stringify(data.user));
-      localStorage.setItem('business_name', data.user.businessName);
+      localStorage.setItem('business_name', data.user.businessName || '');
 
       
       // Set a session marker to detect dev server restarts
