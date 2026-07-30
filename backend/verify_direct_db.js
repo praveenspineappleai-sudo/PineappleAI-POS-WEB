@@ -1,6 +1,6 @@
 const { sequelize, BusinessDetail, Category, Color, Size, Barcode } = require('./models');
 const axios = require('axios');
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'http://pos-web-dev.pineappleai.cloud/api';
 
 async function verify() {
   try {
@@ -8,7 +8,7 @@ async function verify() {
     console.log("DB Connected.");
 
     // 1. Get dependencies (pick first available)
-    
+
     // Business
     const businesses = await BusinessDetail.findAll({ limit: 1 });
     if (!businesses.length) throw new Error("No Business found in DB. Please seed the DB.");
@@ -33,10 +33,10 @@ async function verify() {
 
     // 2. Create Product via API
     const productPayload = {
-        name: `Tests_${Date.now()}`,
-        description: "Test Desc",
-        categorys_id: categoryId,
-        business_id: businessId
+      name: `Tests_${Date.now()}`,
+      description: "Test Desc",
+      categorys_id: categoryId,
+      business_id: businessId
     };
 
     console.log("Creating Product via API...");
@@ -47,17 +47,17 @@ async function verify() {
     // 3. Add Pricing via API with MANUAL BARCODE
     const manualBarcode = `MANUAL_${Date.now()}`;
     const pricingPayload = {
-        product_id: productId,
-        variations: [
-            {
-                color_id: colorId,
-                size_id: sizeId,
-                quantity: 10,
-                cost_price: 100,
-                selling_price: 150,
-                barcode: manualBarcode
-            }
-        ]
+      product_id: productId,
+      variations: [
+        {
+          color_id: colorId,
+          size_id: sizeId,
+          quantity: 10,
+          cost_price: 100,
+          selling_price: 150,
+          barcode: manualBarcode
+        }
+      ]
     };
 
     console.log(`Adding Pricing with barcode ${manualBarcode}...`);
@@ -67,16 +67,16 @@ async function verify() {
     // 4. Verify DB
     const barcodeEntry = await Barcode.findOne({ where: { barcode_no: manualBarcode } });
     if (barcodeEntry) {
-        console.log("SUCCESS: Barcode found in DB:", barcodeEntry.toJSON());
+      console.log("SUCCESS: Barcode found in DB:", barcodeEntry.toJSON());
     } else {
-        console.error("FAILURE: Barcode not found in DB.");
+      console.error("FAILURE: Barcode not found in DB.");
     }
 
   } catch (error) {
     if (error.response) {
-         console.error("API Error:", error.response.status, error.response.data);
+      console.error("API Error:", error.response.status, error.response.data);
     } else {
-         console.error("Error:", error.message);
+      console.error("Error:", error.message);
     }
   } finally {
     await sequelize.close();

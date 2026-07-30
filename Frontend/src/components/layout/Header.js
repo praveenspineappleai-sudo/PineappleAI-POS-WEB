@@ -6,9 +6,9 @@ import userIcon from '../../assets/icons/user.png';
 import AdminUserSetting from '../../models/AdminUserSetting';
 import { fetchUserProfile } from '../../integration/AccountManagementAPI';
 
-const Header = ({ 
-  title = "", 
-  subtitle = "", 
+const Header = ({
+  title = "",
+  subtitle = "",
   adminUser = {
     name: "Admin user",
     icon: userIcon
@@ -30,7 +30,7 @@ const Header = ({
   const fetchSystemInfo = async () => {
     try {
       // Fetch from local backend
-      const response = await fetch('http://localhost:5000/api/system-info');
+      const response = await fetch('http://pos-web-dev.pineappleai.cloud/api/system-info');
       const result = await response.json();
       if (result.success && result.data) {
         setDbName(result.data.dbName || "");
@@ -44,7 +44,7 @@ const Header = ({
     setIsLoadingProfile(true);
     try {
       const result = await fetchUserProfile();
-      
+
       if (result.success && result.data) {
         // Set username from API response
         setUserName(result.data.username || "Admin User");
@@ -100,7 +100,7 @@ const Header = ({
           )}
         </div>
         <div className="header-right">
-          <div className="admin-user" onClick={handleAdminClick} style={{cursor: 'pointer'}}>
+          <div className="admin-user" onClick={handleAdminClick} style={{ cursor: 'pointer' }}>
             <div className="user-icon-container">
               <img src={adminUser.icon} alt="Admin User" className="user-icon" />
             </div>

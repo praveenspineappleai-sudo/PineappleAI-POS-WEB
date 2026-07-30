@@ -280,7 +280,7 @@ app.use(
       "https://superadmin-pos-mobile-dev.pineappleai.cloud",
       "http://localhost:3000",
       "http://localhost:3001",
-      "http://localhost:5000",
+      "http://pos-web-dev.pineappleai.cloud",
       "https://pos-web-qa.pineappleai.cloud",
       "https://pos-web-beta.pineappleai.cloud",
     ],
