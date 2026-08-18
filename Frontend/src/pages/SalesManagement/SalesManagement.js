@@ -60,7 +60,7 @@ const SalesManagement = () => {
 
     if (selectedRange === 'today') {
       qp.append('period', 'today');
-      if (typeof selectedDate === 'string') {
+      if (selectedDate && typeof selectedDate === 'string') {
         qp.append('startDate', selectedDate);
         qp.append('endDate', selectedDate);
       }
@@ -70,7 +70,7 @@ const SalesManagement = () => {
       qp.append('endDate', selectedDate.endDate);
     } else if (selectedRange === 'monthly') {
       qp.append('period', 'monthly');
-      if (typeof selectedDate === 'string' && selectedDate.includes('-')) {
+      if (selectedDate && typeof selectedDate === 'string' && selectedDate.includes('-')) {
         qp.append('month', selectedDate);
       }
     } else {
@@ -83,6 +83,89 @@ const SalesManagement = () => {
   }, [selectedRange, selectedDate, businessName]);
 
   //------------------------------------------
+  // Helpers
+  //------------------------------------------
+
+  const extractOrdersFromStats = (json) => {
+    if (!json) return [];
+    if (Array.isArray(json.orderDetails)) return json.orderDetails;
+    if (Array.isArray(json.orders)) return json.orders;
+    if (Array.isArray(json.data)) return json.data;
+    return [];
+  };
+
+  const getOrderTimestamp = (o) => {
+    const possible =
+      o.order_date ||
+      o.created_at ||
+      o.createdAt ||
+      o.date_time ||
+      o.transaction_date ||
+      o.created ||
+      o.date;
+    if (!possible) return null;
+    const t = Date.parse(possible);
+    return Number.isNaN(t) ? null : t;
+  };
+
+  const mergeAndDedupeOrders = (arr1 = [], arr2 = []) => {
+    const map = new Map();
+
+    const pushWithSource = (item, source) => {
+      const key =
+        item.order_no ||
+        item.order_id ||
+        item.id ||
+        item.bill_no ||
+        JSON.stringify(item);
+      const copy = { ...item, _source: source };
+      if (!map.has(key)) map.set(key, copy);
+      else {
+        const existing = map.get(key);
+        if (Object.keys(copy).length > Object.keys(existing).length) {
+          map.set(key, copy);
+        }
+      }
+    };
+
+    (arr1 || []).forEach(o => pushWithSource(o, 'stats'));
+    (arr2 || []).forEach(o => pushWithSource(o, 'orders_api'));
+
+    const merged = Array.from(map.values());
+
+    merged.sort((a, b) => {
+      const ta = getOrderTimestamp(a) ?? 0;
+      const tb = getOrderTimestamp(b) ?? 0;
+      return tb - ta;
+    });
+
+    return merged;
+  };
+
+  //------------------------------------------
+  // 🔥 FRONTEND FILTER HELPERS (ADDED)
+  //------------------------------------------
+
+  const isSameMonth = (date, month, year) => {
+    const d = new Date(date);
+    return d.getMonth() === month && d.getFullYear() === year;
+  };
+
+  const isBetweenDates = (date, start, end) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+
+    const s = new Date(start);
+    s.setHours(0, 0, 0, 0);
+
+    const e = new Date(end);
+    e.setHours(23, 59, 59, 999);
+
+    return d >= s && d <= e;
+  };
+
+  //------------------------------------------
+
   // MAIN FETCH FUNCTION
   //------------------------------------------
 

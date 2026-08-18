@@ -512,7 +512,13 @@ exports.createOrder = async (req, res) => {
         // We don't await this to avoid blocking response? Or we do. Original code awaited it implicitly?
         // Actually original code passed it to generateAndSendBill.
         // Let's call it safely.
-        generateAndSendBill(emailTransporter, completeBillData).catch(err => console.error("Email send failed", err));
+        // Guard: only attempt email if customer has a valid email address
+        const recipientEmail = String(completeBillData.customer_email || '').trim();
+        if (recipientEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipientEmail)) {
+          generateAndSendBill(emailTransporter, completeBillData).catch(err => console.error("Email send failed", err));
+        } else {
+          console.log('Skipping bill email: customer has no valid email address.');
+        }
       } catch (err) {
         console.error("Email sending failed:", err);
         // Do not return here, allow SMS to be sent if applicable

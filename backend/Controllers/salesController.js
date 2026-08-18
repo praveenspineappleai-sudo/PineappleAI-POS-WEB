@@ -438,6 +438,7 @@ exports.getSalesStats = async (req, res) => {
         total_quantity: parseInt(order.total_quantity || 0, 10),
         total_cost: totalCost,
         discounted_price: discountedPrice,
+
         profit: parseFloat(profit.toFixed(2)),
       };
     });
@@ -491,7 +492,7 @@ exports.downloadSalesStatsCSV = async (req, res) => {
     const salesStats = await Order.findAll({
       attributes: [
         "order_no",
-        [fn("MAX", col("date")), "order_date"],
+        [fn("MAX", col("CashierOrder.created_at")), "order_date"],
         [fn("SUM", col("ordered_total_price")), "total_price"],
         [fn("SUM", col("ordered_quantity")), "total_quantity"],
         [

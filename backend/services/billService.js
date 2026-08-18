@@ -231,9 +231,9 @@ const generateBillPDF = async (billData, width_mm = 80) => {
 // Send Bill Email
 const sendBillEmail = async (transporter, customerEmail, customerName, billPdfPath, billData) => {
   const mailOptions = {
-    from: `${billData.business_name} <${process.env.EMAIL_USER}>`,
+    from: billData.business_name ? `"${billData.business_name}" <${process.env.EMAIL_USER}>` : process.env.EMAIL_USER,
     to: customerEmail,
-    subject: `Invoice #${billData.bill_id} - ${billData.business_name}`,
+    subject: `Invoice #${billData.bill_id} - ${billData.business_name || 'Store'}`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <div style="background-color: #4CAF50; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0;">
@@ -303,11 +303,18 @@ const sendBillEmail = async (transporter, customerEmail, customerName, billPdfPa
   try {
     const info = await transporter.sendMail(mailOptions);
     console.log('Email sent:', info.messageId);
-    fs.unlinkSync(billPdfPath);
     return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error('Email sending failed:', error);
     throw error;
+  } finally {
+    if (fs.existsSync(billPdfPath)) {
+      try {
+        fs.unlinkSync(billPdfPath);
+      } catch (err) {
+        console.error('Error deleting temp PDF:', err);
+      }
+    }
   }
 };
 
@@ -324,19 +331,16 @@ const generateAndSendBill = async (transporter, billData) => {
     const billPdfPath = await generateBillPDF(billData);
     console.log('PDF generated at:', billPdfPath);
     
-    console.log('Sending email to:', billData.customer_email);
+    console.log('Sending email to:', customerEmail);
     const result = await sendBillEmail(
       transporter,
-      billData.customer_email,
+      customerEmail,
       billData.customer_name,
       billPdfPath,
       billData
     );
     console.log('Email sent successfully');
 
-   
-    
-    
     return result;
   } catch (error) {
     console.error('Error generating/sending bill:', error);

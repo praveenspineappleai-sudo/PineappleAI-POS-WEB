@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.*
+!.env.example
+
+backend/temp/
+Frontend/node_modules/
+backend/node_modules/
+
+*.log
+npm-debug.log*

@@ -260,26 +260,28 @@ exports.deleteAccount = async (req, res) => {
     console.log("✅ Account deletion completed");
 
     // Send Confirmation Email
-    transporter
-      .sendMail({
-        from: `"PAIPOS" <${process.env.EMAIL_USER}>`,
-        to: userEmail,
-        subject: "Your PAIPOS Account Has Been Deleted",
-        html: `
-        <h2 style="color: #E74C3C;">Account Deleted</h2>
-        <p>Your account and all related business data have been removed permanently.</p>
-        <p>This includes:</p>
-        <ul>
-          <li>Products</li>
-          <li>Customers</li>
-          <li>Orders</li>
-          <li>Cashier accounts</li>
-          <li>Business information</li>
-        </ul>
-        <p><b>This action cannot be undone.</b></p>
-      `,
-      })
-      .catch((err) => console.log("Email error:", err));
+    if (userEmail && String(userEmail).trim()) {
+      transporter
+        .sendMail({
+          from: `"PAIPOS" <${process.env.EMAIL_USER}>`,
+          to: String(userEmail).trim(),
+          subject: "Your PAIPOS Account Has Been Deleted",
+          html: `
+          <h2 style="color: #E74C3C;">Account Deleted</h2>
+          <p>Your account and all related business data have been removed permanently.</p>
+          <p>This includes:</p>
+          <ul>
+            <li>Products</li>
+            <li>Customers</li>
+            <li>Orders</li>
+            <li>Cashier accounts</li>
+            <li>Business information</li>
+          </ul>
+          <p><b>This action cannot be undone.</b></p>
+        `,
+        })
+        .catch((err) => console.log("Email error:", err));
+    }
 
     return res.status(200).json({
       success: true,

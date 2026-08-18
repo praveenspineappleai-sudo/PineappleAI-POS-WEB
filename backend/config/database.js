@@ -8,8 +8,15 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME || 'pos_dev',
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    connectTimeout: 30000,
+    multipleStatements: false,
 });
+
+const testConnection = async () => {
+    await pool.query('SELECT 1');
+    return true;
+};
 
 const initTables = async () => {
     try {
@@ -34,11 +41,27 @@ const initTables = async () => {
             );
         `);
         console.log("✅ Custom attribute tables verified/created successfully.");
+        return true;
     } catch (err) {
         console.error("❌ Failed to initialize custom attribute tables:", err);
+        return false;
     }
 };
 
-initTables();
+const initializeDatabase = async () => {
+    try {
+        await testConnection();
+        await initTables();
+        return true;
+    } catch (err) {
+        console.error('❌ Custom database initialization failed:', err);
+        return false;
+    }
+};
+
+pool.testConnection = testConnection;
+pool.initTables = initTables;
+pool.initializeDatabase = initializeDatabase;
 
 module.exports = pool;
+

@@ -357,6 +357,11 @@ const startServer = (port) => {
 // Connect to the database
 connectDB();
 
+(async () => {
+  const rawDb = require("./config/database");
+  await rawDb.initializeDatabase();
+})();
+
 // Root route
 app.get("/", (req, res) => {
   res.send("API is running with Socket.IO...");

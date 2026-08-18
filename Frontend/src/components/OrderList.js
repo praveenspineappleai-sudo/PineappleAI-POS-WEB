@@ -63,11 +63,11 @@ const OrderList = ({ orders = [], loading = false }) => {
   const fmtDate = (val) => {
     if (!val) return '—';
     const possible =
-      val.created_at ||
-      val.date ||
       val.order_date ||
+      val.created_at ||
       val.createdAt ||
-      val.date_time;
+      val.date_time ||
+      val.date;
   // Use the first valid date value found, or fallback to the original value if none are valid
     const d = possible || val;
 
