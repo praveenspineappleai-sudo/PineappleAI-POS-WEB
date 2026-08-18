@@ -383,7 +383,7 @@ exports.getSalesStats = async (req, res) => {
         [fn("MAX", col("customer_id")), "customer_id"],
         [fn("MAX", col("price_id")), "price_id"],
         [fn("MAX", col("date")), "date"],
-        [fn("MAX", col("date")), "order_date"],
+        [fn("MAX", col("CashierOrder.created_at")), "order_date"],
         [fn("MAX", col("CashierOrder.created_at")), "created_at"],
         [fn("MAX", col("CashierOrder.updated_at")), "updated_at"],
         [fn("SUM", col("ordered_total_price")), "ordered_total_price"],
@@ -402,7 +402,7 @@ exports.getSalesStats = async (req, res) => {
       ],
       where: businessFilter,
       group: ["order_no"],
-      order: [[fn("MAX", col("date")), "DESC"], [fn("MAX", col("CashierOrder.id")), "DESC"]],
+      order: [[fn("MAX", col("CashierOrder.created_at")), "DESC"], [fn("MAX", col("CashierOrder.id")), "DESC"]],
       raw: true,
     });
 
@@ -428,8 +428,8 @@ exports.getSalesStats = async (req, res) => {
         full_order_no: order.order_no,
         price_id: order.price_id,
         customer_id: order.customer_id,
-        date: order.date || order.order_date,
-        order_date: order.date || order.order_date,
+        date: order.created_at || order.order_date || order.date,
+        order_date: order.created_at || order.order_date || order.date,
         created_at: order.created_at,
         updated_at: order.updated_at,
         ordered_total_price: totalPrice,

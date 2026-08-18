@@ -31,7 +31,7 @@ const OrderList = ({ orders = [], loading = false }) => {
       order.order_no || order.full_order_no || '',
       order.price_id ?? '',
       order.customer_id ?? '',
-      order.date || order.order_date || '',
+      order.created_at || order.createdAt || order.order_date || order.date || '',
       order.ordered_quantity ?? order.total_quantity ?? 0,
       order.ordered_total_price ?? order.total_price ?? 0,
       order.discounted_price ?? 0,
@@ -63,9 +63,9 @@ const OrderList = ({ orders = [], loading = false }) => {
   const fmtDate = (val) => {
     if (!val) return '—';
     const possible =
-      val.order_date ||
       val.created_at ||
       val.createdAt ||
+      val.order_date ||
       val.date_time ||
       val.date;
   // Use the first valid date value found, or fallback to the original value if none are valid

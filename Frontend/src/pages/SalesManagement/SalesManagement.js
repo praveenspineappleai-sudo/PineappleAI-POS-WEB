@@ -96,9 +96,9 @@ const SalesManagement = () => {
 
   const getOrderTimestamp = (o) => {
     const possible =
-      o.order_date ||
       o.created_at ||
       o.createdAt ||
+      o.order_date ||
       o.date_time ||
       o.transaction_date ||
       o.created ||
