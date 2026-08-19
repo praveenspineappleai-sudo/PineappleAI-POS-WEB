@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const BASE_URL = 'http://pos-web-dev.pineappleai.cloud/api';
+const BASE_URL = 'https://pos-web-dev.pineappleai.cloud/api';
 
 async function verify() {
     try {
