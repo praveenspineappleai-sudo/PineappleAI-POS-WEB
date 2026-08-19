@@ -5,6 +5,7 @@ import '../../styles/layout.css';
 import userIcon from '../../assets/icons/user.png';
 import AdminUserSetting from '../../models/AdminUserSetting';
 import { fetchUserProfile } from '../../integration/AccountManagementAPI';
+import { API_BASE_URL } from '../../config/apiConfig';
 
 const Header = ({
   title = "",
@@ -30,7 +31,7 @@ const Header = ({
   const fetchSystemInfo = async () => {
     try {
       // Fetch from local backend
-      const response = await fetch('http://pos-web-dev.pineappleai.cloud/api/system-info');
+      const response = await fetch(`${API_BASE_URL}/api/system-info`);
       const result = await response.json();
       if (result.success && result.data) {
         setDbName(result.data.dbName || "");
