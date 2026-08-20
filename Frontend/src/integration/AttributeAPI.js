@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { API_BASE_URL } from '../config/apiConfig';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://pos-web-dev.pineappleai.cloud/api';
+const ATTRIBUTE_API_BASE_URL = `${API_BASE_URL}/api`;
 
 // Create axios instance with default config
 const api = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: ATTRIBUTE_API_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
     },
