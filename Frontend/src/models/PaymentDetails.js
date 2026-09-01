@@ -163,7 +163,9 @@ const PaymentDetails = ({
   };
 
   const displayBalance = balance !== null ? balance : 0;
-  const isConfirmDisabled = balance !== null && balance < 0;
+  const enteredAmount = paidAmount === '' ? null : Number(paidAmount);
+  const isBelowTotal = enteredAmount !== null && enteredAmount > 0 && enteredAmount < totalAmount;
+  const isConfirmDisabled = enteredAmount === null || enteredAmount <= 0 || isBelowTotal || (balance !== null && balance < 0);
 
   return (
     <>
