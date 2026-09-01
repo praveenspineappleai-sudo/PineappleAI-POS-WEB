@@ -47,6 +47,7 @@ const {
   getPrice,
   updateProductWithPrice,
 } = require("../Controllers/productController"); // ✅ Ensure correct import path
+const { authMiddleware } = require("../middlewares/authMiddleware");
 
 // // Get all products
 // router.get("/", getAllProducts);
@@ -69,7 +70,7 @@ const {
 // router.post("/add-attributes", addProductAttributes);
 
 // Product Routes
-router.post("/add-product", addProduct); // ✅ Create product
+router.post("/add-product", authMiddleware, addProduct); // ✅ Create product
 router.put("/update-product/:id", updateProduct); // ✅ Update product
 router.delete("/delete-product/:id", deleteProduct); // ✅ Delete product
 router.get("/get-product/:id", getProductById); // ✅ Get product details
@@ -80,7 +81,7 @@ router.put(
 ); // ✅ NEW: Update both together
 
 // Pricing Routes
-router.post("/add-pricing", addPricing); // ✅ Add pricing & barcode
+router.post("/add-pricing", authMiddleware, addPricing); // ✅ Add pricing & barcode
 router.put("/edit-price/:id", editPrice); // ✅ Update price details
 router.delete("/delete-price/:id", deletePrice); // ✅ Delete price entry
 router.get("/get-price/:id", getPrice); // ✅ Get price details

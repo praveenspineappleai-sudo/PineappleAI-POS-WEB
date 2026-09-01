@@ -163,6 +163,7 @@ const PaymentDetails = ({
   };
 
   const displayBalance = balance !== null ? balance : 0;
+  const isConfirmDisabled = balance !== null && balance < 0;
 
   return (
     <>
@@ -210,6 +211,7 @@ const PaymentDetails = ({
                 ref={checkBtnRef}
                 onClick={handleButtonClick}
                 title={getButtonTitle()}
+                disabled={isConfirmDisabled}
               />
             </div>
           </div>

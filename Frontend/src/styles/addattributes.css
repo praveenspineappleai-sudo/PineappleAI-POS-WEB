@@ -180,6 +180,12 @@
     gap: 10px;
 }
 
+.attribute-validation-message {
+    color: #DC2626;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
 .attribute-input {
     flex: 1;
     padding: 10px 14px;

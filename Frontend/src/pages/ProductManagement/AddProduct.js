@@ -93,6 +93,7 @@ const AddProduct = () => {
         category: '',
         description: ''
     });
+    const [attributeValidationErrors, setAttributeValidationErrors] = useState({});
 
     const [productAttributes, setProductAttributes] = useState({
         quantity: editProductData?.quantity || '',
@@ -503,6 +504,10 @@ const AddProduct = () => {
     const handleAttributesChange = (field, value) => {
         const isCustomAttribute = !['quantity', 'costPrice', 'sellingPrice', 'color', 'size', 'barcode'].includes(field);
 
+        if (value.trim() !== '') {
+            setAttributeValidationErrors(prev => ({ ...prev, [field]: '' }));
+        }
+
         if (isCustomAttribute) {
             setCustomAttributeValues(prev => ({
                 ...prev,
@@ -567,11 +572,17 @@ const AddProduct = () => {
         const currentAttributes = getCurrentCategoryAttributes();
 
         const requiredErrors = currentAttributes
-            .filter(attr => attr.alwaysShow && !productAttributes[attr.fieldName])
+            .filter(attr => attr.alwaysShow && !(productAttributes[attr.fieldName] || customAttributeValues[attr.fieldName] || '').trim())
             .map(attr => attr.labelName);
 
         if (requiredErrors.length > 0) {
-            showToast('Validation Error', `Please fill in: ${requiredErrors.join(', ')}`, 'warning');
+            const missingAttributes = currentAttributes
+                .filter(attr => attr.alwaysShow && !(productAttributes[attr.fieldName] || customAttributeValues[attr.fieldName] || '').trim())
+                .reduce((errors, attr) => ({
+                    ...errors,
+                    [attr.fieldName]: `* Please enter ${attr.labelName}`
+                }), {});
+            setAttributeValidationErrors(missingAttributes);
             return;
         }
 
@@ -943,6 +954,9 @@ const AddProduct = () => {
                             />
                         </div>
                     </div>
+                    {attributeValidationErrors[fieldName] && (
+                        <span className="validation-error">{attributeValidationErrors[fieldName]}</span>
+                    )}
                 </div>
             );
         } else if (attribute.isCustom) {
@@ -973,6 +987,9 @@ const AddProduct = () => {
                             className="custom-attr-add-btn"
                         />
                     </div>
+                    {attributeValidationErrors[fieldName] && (
+                        <span className="validation-error">{attributeValidationErrors[fieldName]}</span>
+                    )}
                 </div>
             );
         } else {
@@ -990,6 +1007,9 @@ const AddProduct = () => {
                         onChange={onChange}
                         className="form-input"
                     />
+                    {attributeValidationErrors[fieldName] && (
+                        <span className="validation-error">{attributeValidationErrors[fieldName]}</span>
+                    )}
                 </div>
             );
         }

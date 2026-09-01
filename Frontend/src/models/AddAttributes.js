@@ -16,12 +16,16 @@ const AddAttributes = ({
     const [attributes, setAttributes] = useState([
         { id: Date.now(), labelName: '' } // Start with one empty attribute
     ]);
+    const [hasSavedAttributes, setHasSavedAttributes] = useState(false);
+    const [validationMessage, setValidationMessage] = useState('');
 
     // Reset attributes when modal opens/closes
     useEffect(() => {
         if (isOpen) {
             // Always reset to one empty attribute when modal opens
             setAttributes([{ id: Date.now(), labelName: '' }]);
+            setHasSavedAttributes(false);
+            setValidationMessage('');
         }
     }, [isOpen]); // This effect runs every time isOpen changes
 
@@ -37,6 +41,7 @@ const AddAttributes = ({
     }, [isOpen, initialAttributes]);
     // Handle label name change
     const handleLabelNameChange = (id, value) => {
+        setValidationMessage('');
         setAttributes(prev => prev.map(attr => 
             attr.id === id ? { ...attr, labelName: value } : attr
         ));
@@ -61,18 +66,24 @@ const AddAttributes = ({
         const validAttributes = attributes.filter(attr => attr.labelName.trim() !== '');
         
         if (validAttributes.length === 0) {
-            alert('Please add at least one attribute with a valid name');
+            setValidationMessage('Please add at least one attribute with a valid name');
             return;
         }
         
         const saveHandler = onSaveAttributes || onSave;
         if (saveHandler) {
+            setHasSavedAttributes(true);
             saveHandler(validAttributes);
         }
         // Don't reset here - let the parent handle cleanup
     };
 
     const handleCancel = () => {
+        if (!hasSavedAttributes) {
+            setValidationMessage('* Please add at least one attribute before closing');
+            return;
+        }
+
         // Clear attributes when canceling
         setAttributes([{ id: Date.now(), labelName: '' }]);
         onClose();
@@ -120,6 +131,11 @@ const AddAttributes = ({
                                     <DeleteButton onClick={() => removeAttribute(attribute.id)} />
                                 )}
                             </div>
+                            {validationMessage && index === 0 && (
+                                <div className="attribute-validation-message" role="alert">
+                                    {validationMessage}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

@@ -13,12 +13,22 @@
   font-weight: 400;
 }
 
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
 /* Check Balance Button */
 .btn-check-balance {
   width: 558px;
   height: 45px;
   background-color: #2f7a3f;
   color: #fff;
+}
+
+.btn-check-balance:disabled {
+  background-color: #7a907f;
+  color: #edf2ee;
 }
 
 /* Sign In Button */

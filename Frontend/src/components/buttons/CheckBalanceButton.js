@@ -2,11 +2,12 @@
 import React, { forwardRef } from "react";
 import "../../styles/buttons.css";
 
-const CheckBalanceButton = forwardRef(({ onClick, title = "Check Balance" }, ref) => {
+const CheckBalanceButton = forwardRef(({ onClick, title = "Check Balance", disabled = false }, ref) => {
   return (
     <button
-      ref={ref}                          // ⭐ REF ENABLED
-      onClick={onClick}
+      ref={ref}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
       className="btn btn-green btn-check-balance"
     >
       {title}

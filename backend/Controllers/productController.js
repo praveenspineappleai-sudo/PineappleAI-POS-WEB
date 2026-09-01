@@ -1001,10 +1001,11 @@ const addProductAttributes = async (req, res) => {
 
 const addProduct = async (req, res) => {
   try {
-    const { name, description, categorys_id, business_id } = req.body;
+    const { name, description, categorys_id } = req.body;
+    const business_id = req.business_id;
 
     if (!name || !description || !categorys_id || !business_id) {
-      return res.status(400).json({ error: "Missing required fields" });
+      return res.status(400).json({ error: "Missing required fields or business in token" });
     }
 
     // Validate business
